@@ -1,0 +1,5 @@
+void calculate_velocity(float dy, float dx, float* v) {
+
+	*v = sqrt(dy*dy+dx*dx);
+
+}
