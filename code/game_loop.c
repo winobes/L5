@@ -3,10 +3,6 @@
 
 int game_loop() {
 
-//	ALLEGRO_BITMAP *parallax_m = al_load_bitmap("gfx/parallax_main.png");
-	ALLEGRO_BITMAP *background1 = al_load_bitmap("gfx/parallax_sub.png");
-	ALLEGRO_BITMAP *background3 = al_load_bitmap("gfx/parallax_super.png");
-	ALLEGRO_BITMAP *background2 = al_load_bitmap("gfx/parallax_earth.png");
 
 	bool exit_game = false;
 	bool redraw = true;
@@ -14,24 +10,6 @@ int game_loop() {
 	//penetration variables are used by collision detection and response functions
 	float penetration_scalar;
 	float penetration_vector[2];
-
-	float parallax_counter;
-	bool parallax_switch;
-
-	float parallax1_rate = .05;
-	int parallax1_x1;
-	int parallax1_x2;
-	int parallax1_y1;
-	int parallax1_y2;
-
-	float parallax2_rate = .1;
-
-	float parallax3_rate = .2;
-	int parallax3_x1;
-	int parallax3_x2;
-	int parallax3_y1;
-	int parallax3_y2;
-
 
 	// now in init_rooms.c
 	//int nrooms = 2;

@@ -8,6 +8,8 @@ typedef struct {
 	Wall **wall;
 	int nwalls;
 	bool active;
+	int nbackgrounds;
+	struct Background *background;
 } Room;
 
 

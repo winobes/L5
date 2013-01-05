@@ -357,7 +357,9 @@ for (j = 0; j < player->weapon.nactive; j++) {
 		}
 	}
 
-		
+	for (i = 0; i < room[current_room]->nbackgrounds; i++) {
+		update_background(&room[current_room]->background[i], player->cx, player->cy, room[current_room]->w, room[current_room]->h);
+	}
 	
 	redraw = true;
 

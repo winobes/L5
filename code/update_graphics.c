@@ -6,7 +6,21 @@ if(redraw && al_is_event_queue_empty(event_queue)) {
 
 	//for drawing things that move independently of the player
 
-	#include "parallax_background.c"
+
+	
+//drawing the background tiles to the screen (there are maximum of four tiles for each layer)
+	for (i = 0; i < room[current_room]->nbackgrounds; i++) {
+
+		al_draw_bitmap(room[current_room]->background[i].background_image, -room[current_room]->background[i].parallax_rate*(player->cx-room[0]->w/2) + room[current_room]->background[i].parallax_x1*width, -room[current_room]->background[i].parallax_rate*(player->cy-room[0]->h/2) + room[current_room]->background[i].parallax_y1*height , 0);
+
+		al_draw_bitmap(room[current_room]->background[i].background_image, -room[current_room]->background[i].parallax_rate*(player->cx-room[0]->w/2) + room[current_room]->background[i].parallax_x2*width, -room[current_room]->background[i].parallax_rate*(player->cy-room[0]->h/2) + room[current_room]->background[i].parallax_y2*height , 0);
+
+		al_draw_bitmap(room[current_room]->background[i].background_image, -room[current_room]->background[i].parallax_rate*(player->cx-room[0]->w/2) + room[current_room]->background[i].parallax_x1*width, -room[current_room]->background[i].parallax_rate*(player->cy-room[0]->h/2) + room[current_room]->background[i].parallax_y2*height , 0);
+
+		al_draw_bitmap(room[current_room]->background[i].background_image, -room[current_room]->background[i].parallax_rate*(player->cx-room[0]->w/2) + room[current_room]->background[i].parallax_x2*width, -room[current_room]->background[i].parallax_rate*(player->cy-room[0]->h/2) + room[current_room]->background[i].parallax_y1*height , 0);
+
+}
+
 	
 
 	for (i = 0; i < nnpcs; i++) {
@@ -145,10 +159,7 @@ for (j = 0; j < 4; j++) {
 	//words on sreen for troubleshooting, etc.
 	al_draw_textf(font10, al_map_rgb(83, 207, 46), width, 4*12, ALLEGRO_ALIGN_RIGHT,"y = %f", player->cy);
 	al_draw_textf(font10, al_map_rgb(83, 207, 46), width, 5*12, ALLEGRO_ALIGN_RIGHT,"x = %f", player->cx);
-	al_draw_textf(font10, al_map_rgb(83, 207, 46), width, 6*12, ALLEGRO_ALIGN_RIGHT,"parallax1_x1 = %i", parallax1_x1);
-	al_draw_textf(font10, al_map_rgb(83, 207, 46), width, 7*12, ALLEGRO_ALIGN_RIGHT,"parallax1_x2 = %i", parallax1_x2);
-	al_draw_textf(font10, al_map_rgb(83, 207, 46), width, 8*12, ALLEGRO_ALIGN_RIGHT,"parallax1_y1 = %i", parallax1_y1);
-	al_draw_textf(font10, al_map_rgb(83, 207, 46), width, 9*12, ALLEGRO_ALIGN_RIGHT,"parallax1_y2 = %i", parallax1_y2);
+
 	/*al_draw_textf(font10, al_map_rgb(83, 207, 46), width, 7*12, ALLEGRO_ALIGN_RIGHT,"health2 %f", npc[1].health);
 
 al_draw_textf(font10, al_map_rgb(83, 207, 46), width, 8*12, ALLEGRO_ALIGN_RIGHT,"speed = %f", player->s);
