@@ -16,7 +16,6 @@ if(event.type == ALLEGRO_EVENT_KEY_DOWN) {
 		case ALLEGRO_KEY_LCTRL:
 			keys[LCTRL] = true;
 			break;
-
 	}
 }
 

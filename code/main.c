@@ -33,7 +33,6 @@ ALLEGRO_DISPLAY* display;
 
 int main (int argc, char* argv[]) {
 
-
 	init_allegro();
 
 	game_loop();
@@ -41,7 +40,4 @@ int main (int argc, char* argv[]) {
 	shutdown();
 
 	return 0;
-
-
 }
-

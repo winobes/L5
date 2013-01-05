@@ -14,11 +14,11 @@ struct Animatic {
 	int w, h, scale_x, scale_y;
 	ALLEGRO_COLOR tint;
 	float pivot_x, pivot_y;
-//float angle;
+	//float angle;
 	int flag, type;
 	bool is_running, draw;
 	int timer, nframes, frame_rate; //60ths of a second between frames
-//float pivot_speed; //rotations per second
+	//float pivot_speed; //rotations per second
 };
 
 struct Extension {
@@ -56,9 +56,9 @@ typedef struct {
 	bool exists, solid, hot;
 	// the wall's location is fully and independenly described by verts.
 	// w and h are good for initializing.
-    // d is used for drawing the sprite appropriately.
+	// d is used for drawing the sprite appropriately.
 	float w, h, d; 
-    struct Extension ext;
+	struct Extension ext;
 	ALLEGRO_BITMAP *sprite;
 } Wall;
 

@@ -4,7 +4,6 @@
 
 int game_loop() {
 
-
 	bool exit_game = false;
 	bool redraw = true;
 
@@ -23,11 +22,9 @@ int game_loop() {
 	
 	ALLEGRO_FONT *font10 = al_load_font("fonts/Roboto-Black.ttf", 10,0);
 
-
     Player *player = init_player(); // TODO free player
     Room **room = init_rooms();  // TODO free rooms and walls etc.
 	NPC *npc = init_npcs();  // TODO free npc
-
 
 	ALLEGRO_EVENT event;
 	al_start_timer(timer);
@@ -55,7 +52,4 @@ int game_loop() {
 	#include "destroy_bitmaps.c"
 
 	return 0;
-
 }
-
-

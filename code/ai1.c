@@ -2,35 +2,34 @@
 
 void ai1 (NPC *npc, Player *target) {
 
-struct Extension visLeftCentre;
-struct Extension visRightCentre;
-struct Extension visCentre;
+	struct Extension visLeftCentre;
+	struct Extension visRightCentre;
+	struct Extension visCentre;
 
-float normaldx;
-float velangle;
+	float normaldx;
+	float velangle;
 
-bool sighted = false;
+	bool sighted = false;
 
-int i;
-float penetration_scalar;
-float penetration_vector[2];
+	int i;
+	float penetration_scalar;
+	float penetration_vector[2];
 
-visLeftCentre.nverts = 3;
-visLeftCentre.vert = malloc(3 * sizeof(float*));
+	visLeftCentre.nverts = 3;
+	visLeftCentre.vert = malloc(3 * sizeof(float*));
 	for (i = 0; i < 3; i++) {
 		visLeftCentre.vert[i] = malloc(2 * sizeof(visLeftCentre.vert[i]));
 	}
-visRightCentre.nverts = 3;
-visRightCentre.vert = malloc(3 * sizeof(float*));
+	visRightCentre.nverts = 3;
+	visRightCentre.vert = malloc(3 * sizeof(float*));
 	for (i = 0; i < 3; i++) {
 		visRightCentre.vert[i] = malloc(2 * sizeof(visRightCentre.vert[i]));
 	}
-visCentre.nverts = 3;
-visCentre.vert = malloc(3 * sizeof(float*));
+	visCentre.nverts = 3;
+	visCentre.vert = malloc(3 * sizeof(float*));
 	for (i = 0; i < 3; i++) {
 		visCentre.vert[i] = malloc(2 * sizeof(visCentre.vert[i]));
 	}
-
 
 	visLeftCentre.vert[0][0] = npc->cx;
 	visLeftCentre.vert[0][1] = npc->cy;
@@ -57,7 +56,6 @@ visCentre.vert = malloc(3 * sizeof(float*));
 	visRightCentre.vert[2][0] = 300 * sin(npc->d + ALLEGRO_PI/2) + npc->cx;
 	visRightCentre.vert[2][1] = 300 * cos(npc->d + ALLEGRO_PI/2 + ALLEGRO_PI) + npc->cy;
 
-
 	for (i = 0; i < 5; i++) {
 		npc->keys[i] = false;
 	}
@@ -81,9 +79,7 @@ visCentre.vert = malloc(3 * sizeof(float*));
 
 	}
 
-
-
-// stopping if the player is not in sight
+	// stopping if the player is not in sight
 
 	if (sighted == false)  {
 
@@ -110,11 +106,6 @@ visCentre.vert = malloc(3 * sizeof(float*));
 			else if(asin(normaldx) - npc->d > ALLEGRO_PI) {
 				npc->keys[RIGHT] = true;
 			}
-
 		}
 	}
-
-
-
-
 }

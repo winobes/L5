@@ -10,7 +10,7 @@ typedef struct {
 //used for collision testing. Vertices are calculated based on cx, cy, h, w, d.
 	float dx, dy, s, dd, ddxy;
 	ALLEGRO_BITMAP *sprite, *spritesheet;
- 	//ultimately gets drawn to the display
+	//ultimately gets drawn to the display
 	//spritesheet is used for animatics
 	int gfx_w, gfx_h, nanimatics;
 	bool *aniflags;
@@ -24,7 +24,7 @@ typedef struct {
 Player *init_player()
 {
 	Player *player = malloc(sizeof(Player));
-    int i;
+	int i;
 
 	player->exist = true;
 	player->flying = true;
@@ -53,8 +53,6 @@ Player *init_player()
 
 	player->gfx_w = 100;
 	player->gfx_h = 100;
-
-
 
 	player->sprite = al_create_bitmap(player->gfx_w, player->gfx_h);
 	player->spritesheet = al_load_bitmap("gfx/FireflySpritesheet.png");
@@ -190,7 +188,6 @@ Player *init_player()
 	player->ani[6].flag = 6;
 	player->ani[6].tint = al_map_rgba_f(1,1,1,1);
 
-
 	player->weapon.nactive = 25;
 	player->weapon.key = LCTRL;
 	player->weapon.spritesheet = al_load_bitmap("gfx/bullet1.png");
@@ -205,7 +202,6 @@ Player *init_player()
 	player->weapon.reload_time = 10;
 	player->weapon.nframes = 6;
 	player->weapon.frame_rate = 5;
-
 
 	player->weapon.sprite = malloc (player->weapon.nactive * sizeof(player->weapon.sprite));
 

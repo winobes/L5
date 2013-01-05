@@ -1,7 +1,6 @@
 
 else if(event.type == ALLEGRO_EVENT_TIMER) {
 
-
 	//updating player direction
 	if (keys[RIGHT]) {
 		player->d += .5*player->dd*ALLEGRO_PI;
@@ -11,7 +10,7 @@ else if(event.type == ALLEGRO_EVENT_TIMER) {
 			player->dy += .25*player->ddxy * sin(player->d - ALLEGRO_PI/2);
 		}
 
-/*		if(!keys[LEFT]) {
+		/*	if(!keys[LEFT]) {
 			player->cx += (-cos(player->d) - -cos(player->d - .5*player->dd*ALLEGRO_PI)) * player->w;
 			player->cy += (-sin(player->d) - -sin(player->d - .5*player->dd*ALLEGRO_PI)) * player->w;
 
@@ -26,19 +25,16 @@ else if(event.type == ALLEGRO_EVENT_TIMER) {
 			player->dy += .25*player->ddxy * sin(player->d - ALLEGRO_PI/2);
 		}
 	
-/*		if(!keys[RIGHT]) {
+		/*	if(!keys[RIGHT]) {
 			player->cx += (-cos(player->d) - -cos(player->d - .5*player->dd*ALLEGRO_PI)) * player->w;
 			player->cy += (-sin(player->d) - -sin(player->d - .5*player->dd*ALLEGRO_PI)) * player->w;
 		}*/
 
 	}
 
-
 	if (player->d > 2*ALLEGRO_PI) {
 		player->d -= 2*ALLEGRO_PI;
-	}
-
-	else if (player->d < 0) {
+	} else if (player->d < 0) {
 		player->d += 2*ALLEGRO_PI;
 	}
 
@@ -60,8 +56,6 @@ else if(event.type == ALLEGRO_EVENT_TIMER) {
 	//recalculating the player vertices
 	calculate_verts_ship(player->shape, &player->ext, player->cx, player->cy, player->w, player->h, player->d);
 
-
-
 	//updating NPC AI & Input
 	for (i = 0; i < nnpcs; i++) {
 		switch (npc[i].ai) {
@@ -72,8 +66,6 @@ else if(event.type == ALLEGRO_EVENT_TIMER) {
 
 				break;
 		}
-
-
 
 		//updating NPC direction
 		if (npc[i].keys[RIGHT]) {
@@ -111,15 +103,9 @@ else if(event.type == ALLEGRO_EVENT_TIMER) {
 
 		//recalculating the NPC vertices
 		calculate_verts_ship(npc[i].shape, &npc[i].ext, npc[i].cx, npc[i].cy, npc[i].w, npc[i].h, npc[i].d);
-
 	}
 
-
-
-
-
 	//check for player collisions with walls
-
 
 	player->hit_wall = -1;
 	for (i = 0; i < room[current_room]->nwalls; i++) {
@@ -134,28 +120,17 @@ else if(event.type == ALLEGRO_EVENT_TIMER) {
 					player->cy += penetration_vector[1] * penetration_scalar;
 			
 					reflect(&player->dx, &player->dy, penetration_vector);
-
 				}
-
 			}
-
-			
 		}
 	}
 
 	//check for player collisions with NPCs
 
-
-
 	for (i = 0; i < nnpcs; i++) {
 		if (npc[i].exists && npc[i].room == current_room) {
-
 			if (collide(player->ext, npc[i].ext, penetration_vector, &penetration_scalar)) {
-
-
-			
 				if (npc[i].solid) {
-
 					//separating by the projection vector so that they are no longer colliding
 					player->cx += penetration_vector[0] * penetration_scalar/2;
 					player->cy += penetration_vector[1] * penetration_scalar/2;
@@ -167,43 +142,24 @@ else if(event.type == ALLEGRO_EVENT_TIMER) {
 						
 					calculate_speed(player->dx, player->dy, &player->s);
 					calculate_speed(npc[i].dx, npc[i].dy, &npc[i].s);
-					
-
 				}
-
 			}
-
-			
 		}
 	}
 
-
-
-
-
-
-
-
 	//check for NPC collisions with walls
-
 
 	for (i = 0; i < nnpcs; i++) {
 		for (j = 0; j < room[npc[i].room]->nwalls; j++) {
 			if (room[npc[i].room]->wall[j]->exists) {
-
 				if (collide(npc[i].ext, room[npc[i].room]->wall[j]->ext, penetration_vector, &penetration_scalar)) {
-			
 					if (room[npc[i].room]->wall[j]->solid) {
 						npc[i].cx += penetration_vector[0] * penetration_scalar;
 						npc[i].cy += penetration_vector[1] * penetration_scalar;
 			
 						reflect(&npc[i].dx, &npc[i].dy, penetration_vector);
-
 					}
-
 				}
-
-			
 			}
 		}
 	}
@@ -228,55 +184,41 @@ else if(event.type == ALLEGRO_EVENT_TIMER) {
 		player->weapon.dx[player->weapon.current] = player->dx + 3 * cos(player->d - ALLEGRO_PI/2);
 		player->weapon.dy[player->weapon.current] = player->dy + 3 * sin(player->d - ALLEGRO_PI/2);
 		
-
-
 		player->weapon.current ++;
 		if (player->weapon.current == player->weapon.nactive) {
 			player->weapon.current = 0;
 		}
 	}
 		
+	//checking for bullet collision with NPCs & walls
+	for (j = 0; j < player->weapon.nactive; j++) {
+		
+		if(player->weapon.exists[j]) {
 
-//checking for bullet collision with NPCs & walls
-for (j = 0; j < player->weapon.nactive; j++) {
-	
-	if(player->weapon.exists[j]) {
+			player->weapon.ext.vert[0][0] = player->weapon.x[j];
+			player->weapon.ext.vert[0][1] = player->weapon.y[j];
 
-		player->weapon.ext.vert[0][0] = player->weapon.x[j];
-		player->weapon.ext.vert[0][1] = player->weapon.y[j];
+			for (i = 0; i < room[current_room]->nwalls; i++) {
+				if(room[current_room]->wall[i]->exists) {
+					if(collide(player->weapon.ext, room[current_room]->wall[i]->ext, penetration_vector, &penetration_scalar)) {
+						player->weapon.exists[j] = false;
+						room[current_room]->wall[i]->health -= player->weapon.damage;
+					}
+				}
+			}
 
-		for (i = 0; i < room[current_room]->nwalls; i++) {
-			if(room[current_room]->wall[i]->exists) {
-				if(collide(player->weapon.ext, room[current_room]->wall[i]->ext, penetration_vector, &penetration_scalar)) {
-					player->weapon.exists[j] = false;
-					room[current_room]->wall[i]->health -= player->weapon.damage;
+			for (i = 0; i < nnpcs; i++) {
+				if (npc[i].exists && npc[i].room == current_room) {
+
+					if (collide(player->weapon.ext, npc[i].ext, penetration_vector, &penetration_scalar)) {
+
+						player->weapon.exists[j] = false;
+						npc[i].health -= player->weapon.damage;
+					}	
 				}
 			}
 		}
-
-
-		for (i = 0; i < nnpcs; i++) {
-			if (npc[i].exists && npc[i].room == current_room) {
-
-				if (collide(player->weapon.ext, npc[i].ext, penetration_vector, &penetration_scalar)) {
-
-					player->weapon.exists[j] = false;
-					npc[i].health -= player->weapon.damage;
-				
-
-				}	
-			}
-		}
 	}
-}
-
-
-
-
-
-
-
-
 
 	for (i = 0; i < player->weapon.nactive; i++) {
 		if(player->weapon.exists[i]) {
@@ -308,7 +250,6 @@ for (j = 0; j < player->weapon.nactive; j++) {
 		player->aniflags[6] = true;
 	}
 
-
 	//updating player animation variables
 	for (i = 0; i < player->nanimatics; i++) {
 		switch (player->ani[i].type) {
@@ -320,12 +261,9 @@ for (j = 0; j < player->weapon.nactive; j++) {
 		}
 	}
 
-
 	for (i = 0; i < player->nanimatics; i++) {
 		player->aniflags[i] = false;
 	}
-
-
 
 	//updating player weapon animation variables
 	for (i = 0; i < player->weapon.nactive; i++) {
@@ -343,7 +281,6 @@ for (j = 0; j < player->weapon.nactive; j++) {
 		}
 	}			
 	
-
 	//updating NPC animation variables
 	for (i = 0; i < nnpcs; i++) {
 		for (j = 0; j < npc[i].nanimatics; j++) {
@@ -362,5 +299,4 @@ for (j = 0; j < player->weapon.nactive; j++) {
 	}
 	
 	redraw = true;
-
 }

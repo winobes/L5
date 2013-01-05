@@ -6,7 +6,7 @@
 NPC *init_npcs()
 {
 	int nnpcs = 2;
-    int i;
+	int i;
 
 	NPC *npc = malloc(nnpcs * sizeof(NPC));
 

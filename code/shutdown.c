@@ -12,6 +12,4 @@ void shutdown(void) {
 		al_destroy_event_queue(event_queue);
 	}
 
-
 }
- 
