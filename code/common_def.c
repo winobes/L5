@@ -38,7 +38,7 @@ struct Weapon {
 	bool *exists;
 };	
 
-struct NPC {
+typedef struct {
 	bool exists, solid;
 	float health;
 	float cx, cy, w, h, d, m;
@@ -49,7 +49,7 @@ struct NPC {
 	ALLEGRO_BITMAP *sprite, *spritesheet;
 	struct Animatic *ani;
 	bool *keys;
-};
+} NPC;
 
 typedef struct {
 	float health;

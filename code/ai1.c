@@ -1,6 +1,6 @@
 #include "player.c"
 
-void ai1 (struct NPC* npc, Player *target) {
+void ai1 (NPC *npc, Player *target) {
 
 struct Extension visLeftCentre;
 struct Extension visRightCentre;

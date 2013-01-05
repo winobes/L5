@@ -1,5 +1,6 @@
 #include "player.c"
 #include "init_rooms.c"
+#include "init_npcs.c"
 
 int game_loop() {
 
@@ -25,7 +26,7 @@ int game_loop() {
 
     Player *player = init_player(); // TODO free player
     Room **room = init_rooms();  // TODO free rooms and walls etc.
-	#include "init_npcs.c"
+	NPC *npc = init_npcs();  // TODO free npc
 
 
 	ALLEGRO_EVENT event;
