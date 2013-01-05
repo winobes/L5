@@ -16,11 +16,6 @@ void init_allegro(void)
 		abort_game("failed to initialize allegro image addon!");
 	}
 
-	al_init_font_addon();
-	if(!al_init_ttf_addon()) {
-		abort_game("failed to initialize allegro ttf addon!");
-	}
-
 
 	if (!al_install_keyboard()) {
 		abort_game("Failed to install keyboard");
@@ -42,8 +37,8 @@ void init_allegro(void)
 		abort_game("Failed to create event queue");
 	}
 
-
-
+	al_init_font_addon();
+	al_init_ttf_addon();
 
 
 
