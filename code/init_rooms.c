@@ -27,6 +27,10 @@ Room **init_rooms()
 	room[0]->nwalls = 20;
 	room[1]->nwalls = 14;
 
+	room[0]->nbackgrounds = 3;
+	room[1]->nbackgrounds = 0;
+
+
 	room[0]->w = 5000/5;
 	room[0]->h = 5000/5;
 
@@ -157,6 +161,17 @@ Room **init_rooms()
 	room[0]->wall[19]->ext.vert[0][1] = 4500/5;
 	room[0]->wall[19]->d = ALLEGRO_PI/4;
 	room[0]->wall[19]->solid = false;
+
+
+	room[0]->background = malloc(room[0]->nbackgrounds * sizeof(struct Background));
+	room[0]->background[0].parallax_rate = 1;
+	room[0]->background[1].parallax_rate = .1;
+	room[0]->background[2].parallax_rate = .2;
+
+
+	room[0]->background[0].background_image = al_load_bitmap("gfx/parallax_sub.png");
+	room[0]->background[2].background_image = al_load_bitmap("gfx/parallax_super.png");
+	room[0]->background[1].background_image = al_load_bitmap("gfx/parallax_earth.png");
 
 	for (i = 0; i < 12; i++) {
 		room[1]->wall[i]->h = 800/5;
