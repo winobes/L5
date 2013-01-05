@@ -21,7 +21,7 @@ bool collide(struct Extension a, struct Extension b, float *penetration_vector, 
 		axis[i] = malloc(2 * sizeof * axis[i]);
 	}
 
-//calculating the axes normal to the edges of the polygon there are just as many axes as vertices. Many of them will be parallel as in the case of rectangles, but we cannot assume they will be in the general case and it is (I think) at least as resource intensive to remove the parallel cases and reallocate the array as it is to go through with them
+	//calculating the axes normal to the edges of the polygon there are just as many axes as vertices. Many of them will be parallel as in the case of rectangles, but we cannot assume they will be in the general case and it is (I think) at least as resource intensive to remove the parallel cases and reallocate the array as it is to go through with them
 
 	for (i = 0; i < a.nverts; i++) {
 
@@ -53,8 +53,7 @@ bool collide(struct Extension a, struct Extension b, float *penetration_vector, 
 		normalize(axis[i]);
 	}
 		
-
-// getting the min/max for the projection of each object on each axis
+	// getting the min/max for the projection of each object on each axis
 	for (j = 0; j < a.nverts + b.nverts; j++) {	
 
 
@@ -71,7 +70,6 @@ bool collide(struct Extension a, struct Extension b, float *penetration_vector, 
 			if (a_min > projdot_h) {
 				a_min = projdot_h;
 			}
-
 		}
 
 		b_min = b_max = projdot(b.vert[0], axis[j]);
@@ -87,13 +85,11 @@ bool collide(struct Extension a, struct Extension b, float *penetration_vector, 
 			if (b_min > projdot_h) {
 				b_min = projdot_h;
 			}
-
 		}
 		
 		if (a_max < b_min || b_max < a_min) {
 		
 			return false;
-
 		}
 		
 		else {
@@ -111,13 +107,11 @@ bool collide(struct Extension a, struct Extension b, float *penetration_vector, 
 			}
 
 		}
-
 	}
 
 	penetration_vector[0] = axis[penetration_vector_h][0];
 	penetration_vector[1] = axis[penetration_vector_h][1];
 
 	return true;
-
 }
 

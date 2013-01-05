@@ -26,5 +26,4 @@ float ray = sqrt((w*w) + (h*h))/2;
 
 		break;
 	}
-
 }
