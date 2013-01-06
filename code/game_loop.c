@@ -4,13 +4,12 @@
 #include "common_def.c"
 #include "update_logic.c"
 #include "room_specific_logic.c"
+#include "update_graphics.c"
 
 int game_loop() {
 
 	bool exit_game = false;
 	bool redraw = true;
-	
-	ALLEGRO_FONT *font10 = al_load_font("fonts/Roboto-Black.ttf", 10,0);
 
 	GameState *gs = malloc(sizeof(GameState));
 
@@ -20,6 +19,7 @@ int game_loop() {
 	gs->nnpcs = 2;
 	gs->npc = init_npcs(gs);  // TODO free npc
 	gs->current_room = 0;
+	gs->font10 = al_load_font("fonts/Roboto-Black.ttf", 10,0);
 
 	bool keys[5] = {false, false, false, false, false};
 
@@ -36,11 +36,9 @@ int game_loop() {
 
 		do_room_specific_update(gs);
 
-		#include "update_graphics.c"
+		do_graphics_update(gs, &redraw);
 
 	}
-
-	#include "destroy_bitmaps.c"
 
 	return 0;
 }

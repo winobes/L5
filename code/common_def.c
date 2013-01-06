@@ -104,6 +104,7 @@ typedef struct {
 	int nrooms;
 	Room **room;
 	int current_room;
+	ALLEGRO_FONT *font10;
 } GameState;
 
 enum KEYS{RIGHT, DOWN, LEFT, UP, LCTRL};
