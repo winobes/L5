@@ -13,7 +13,7 @@ int game_loop() {
 
 	GameState *gs = malloc(sizeof(GameState));
 
-	gs->player = init_player(); // TODO free player
+	gs->player = init_player(); // TODO fix the weapon init
 	gs->nrooms = 2;
 	gs->room = init_rooms(gs);  // TODO free rooms and walls etc.
 	gs->nnpcs = 2;
