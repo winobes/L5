@@ -6,6 +6,7 @@
 #include "update_logic.c"
 #include "room_specific_logic.c"
 #include "update_graphics.c"
+#include "shutdown.c"
 
 int game_loop() {
 
@@ -129,6 +130,9 @@ int game_loop() {
 	// GameState
 	al_destroy_font(gs->font10);
 	gs->font10 = NULL;
+
+	shutdown_game(gs);
+
 	free(gs);	
 	
 #ifdef DEBUG

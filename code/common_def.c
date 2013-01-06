@@ -7,7 +7,7 @@
 #ifndef COMMON_DEF_H
 #define COMMON_DEF_H
 
-#define DEBUG
+
 
 struct Animatic {
 	ALLEGRO_BITMAP *sprite;

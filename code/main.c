@@ -23,14 +23,11 @@
 #include "ai1.c"
 #include "animatic1.c"
 #include "game_loop.c"
-#include "shutdown.c"
 
 
 int main (int argc, char* argv[]) {
 
 	game_loop();
-
-//	shutdown();
 
 	return 0;
 }
