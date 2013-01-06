@@ -118,7 +118,7 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 				case 0:
 					break;
 				case 1:
-					ai1(gs);
+					ai1(gs, i);
 					break;
 			}
 

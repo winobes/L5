@@ -1,8 +1,8 @@
 #include "player.c"
 
-void ai1 (GameState *gs) {
+void ai1 (GameState *gs, int npcid) {
 
-	NPC *npc = gs->npc;
+	NPC *npc = &gs->npc[npcid];
 	Player *target = gs->player;
 
 	struct Extension visLeftCentre;
