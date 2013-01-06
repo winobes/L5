@@ -28,7 +28,6 @@ int game_loop() {
 
 	// main update loop
 	while(!exit_game) {
-
 		al_wait_for_event(event_queue, &event);
 
 		// TODO check types and inputs
@@ -37,7 +36,6 @@ int game_loop() {
 		do_room_specific_update(gs);
 
 		do_graphics_update(gs, &redraw);
-
 	}
 
 	// free everything we ever did malloc // TODO make individual teardown functions
