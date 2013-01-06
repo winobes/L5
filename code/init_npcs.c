@@ -11,7 +11,7 @@ NPC *init_npcs(GameState *gs)
 
 	npc[0].solid = true;
 	npc[0].exists = true;
-	npc[0].health = 1;
+	npc[0].health = 10;
 	npc[0].cx = 0;
 	npc[0].cy = 0;
 	npc[0].w = 15;
@@ -98,7 +98,7 @@ NPC *init_npcs(GameState *gs)
 
 	npc[1].solid = true;
 	npc[1].exists = true;
-	npc[1].health = 1;
+	npc[1].health = 10;
 	npc[1].cx = 10;
 	npc[1].cy = 10;
 	npc[1].w = 15;
