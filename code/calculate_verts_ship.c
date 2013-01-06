@@ -1,3 +1,5 @@
+#include "common_def.c"
+
 void calculate_verts_ship(int shape, struct Extension* ext, float cx, float cy, float w, float h, float d) {
 
 /*calculates the vertices of an object based on it's shape, center position, and direction. Shape flags are as follows:

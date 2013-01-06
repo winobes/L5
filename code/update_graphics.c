@@ -5,7 +5,7 @@
 
 void do_graphics_update(GameState *gs, bool *redraw)
 {
-	if(*redraw && al_is_event_queue_empty(event_queue)) {
+	if(*redraw && al_is_event_queue_empty(gs->event_queue)) {
 				
 		*redraw = false;
 
@@ -48,7 +48,7 @@ void do_graphics_update(GameState *gs, bool *redraw)
 							0,0);
 					}
 				}
-				al_set_target_backbuffer(display);
+				al_set_target_backbuffer(gs->display);
 				//drawing the gs->npc[i] to the display
 				al_draw_scaled_rotated_bitmap(
 					gs->npc[i].sprite,
@@ -129,9 +129,9 @@ void do_graphics_update(GameState *gs, bool *redraw)
 			}
 		}
 		
-		al_set_target_backbuffer(display);
+		al_set_target_backbuffer(gs->display);
 
-		//drawing the gs->player to the display
+		//drawing the player to the display
 		al_draw_scaled_rotated_bitmap(
 			gs->player->sprite,
 			gs->player->gfx_w/2, gs->player->gfx_h/2, //center x,y

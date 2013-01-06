@@ -3,20 +3,23 @@
 #ifndef SHUTDOWN_H
 #define SHUTDOWN_H
 
-void shutdown() {
-
-	if (timer) {
-		al_destroy_timer(timer);
+void shutdown(GameState *gs) {
+/*
+	if (gs->timer) {
+		al_destroy_timer(gs->timer);
+		gs->timer = NULL;
 	}
  
-	if (display) {
-		al_destroy_display(display);
+	if (gs->display) {
+		al_destroy_display(gs->display);
+		gs->display = NULL;
 	}
  
-	if (event_queue) {
-		al_destroy_event_queue(event_queue);
+	if (gs->event_queue) {
+		al_destroy_event_queue(gs->event_queue);
+		gs->event_queue = NULL;
 	}
-
+*/
 }
 
 #endif // SHUTDOWN_H

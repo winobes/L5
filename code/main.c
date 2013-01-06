@@ -8,12 +8,7 @@
 
 #include "common_def.c"
 
-// Globals
-ALLEGRO_EVENT_QUEUE* event_queue;
-ALLEGRO_TIMER* timer;
-ALLEGRO_DISPLAY* display;
 
-#include "init_allegro.c"
 #include "dotproduct.c"
 #include "projection.c"
 #include "bounce.c" // bounce is used mostly for the collision of two ships (e.g. player with npc). The resulting collision assumes that the two ships are perfectly round (note however that it should only be called *after* a collision has been detected collide and the Extensions have been appropriately projected away from one another)
@@ -33,11 +28,9 @@ ALLEGRO_DISPLAY* display;
 
 int main (int argc, char* argv[]) {
 
-	init_allegro();
-
 	game_loop();
 
-	shutdown();
+//	shutdown();
 
 	return 0;
 }

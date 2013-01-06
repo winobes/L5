@@ -1,3 +1,5 @@
+#include "common_def.c"
+
 void calculate_verts_wall(struct Extension* ext, float w, float h, float d) {
 
 	//vert[0] must already be set.

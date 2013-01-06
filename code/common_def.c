@@ -106,6 +106,9 @@ typedef struct {
 	Room **room;
 	int current_room;
 	ALLEGRO_FONT *font10;
+	ALLEGRO_EVENT_QUEUE* event_queue;
+	ALLEGRO_TIMER* timer;
+	ALLEGRO_DISPLAY* display;
 } GameState;
 
 enum KEYS{RIGHT, DOWN, LEFT, UP, LCTRL};
