@@ -89,6 +89,10 @@ bool collide(struct Extension a, struct Extension b, float *penetration_vector, 
 		}
 		
 		if (a_max < b_min || b_max < a_min) {
+
+			for (i = 0; i < a.nverts + b.nverts; i++) {
+				free(axis[i]);
+			}
 		
 			return false;
 		}
