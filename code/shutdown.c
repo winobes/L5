@@ -5,9 +5,9 @@
 
 void shutdown_game(GameState *gs) {
 
-#ifdef DEBUG
+	#ifdef DEBUG
 	printf("in shutdown\n");
-#endif
+	#endif
 
 	if (gs->timer) {
 		#ifdef DEBUG
@@ -18,13 +18,17 @@ void shutdown_game(GameState *gs) {
 	}
 
 	if (gs->display) {
+		#ifdef DEBUG
 		printf("destroying display\n");
+		#endif
 		al_destroy_display(gs->display);
 		gs->display = NULL;
 	}
 
 	if (gs->event_queue) {
+		#ifdef DEBUG
 		printf("destroying event queue\n");
+		#endif
 		al_destroy_event_queue(gs->event_queue);
 		gs->event_queue = NULL;
 	}
