@@ -93,8 +93,10 @@ int game_loop() {
 			al_destroy_bitmap(gs->room[i]->background[j].background_image);
 			gs->room[i]->background[j].background_image = NULL;
 		}
+		if (gs->room[i]->nbackgrounds > 0) {
+			free(gs->room[i]->background);			
+		}
 		free(gs->room[i]->wall);
-		free(gs->room[i]->background);
 		free(gs->room[i]);
 	}
 	free(gs->room);
@@ -120,6 +122,8 @@ int game_loop() {
 	gs->font10 = NULL;
 	free(gs);	
 	
+	printf("exiting game_loop\n");
+
 
 	return 0;
 }
