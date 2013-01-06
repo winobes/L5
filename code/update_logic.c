@@ -271,6 +271,9 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 							gs->npc[i].health -= gs->player->weapon.damage;
 						}	
 					}
+						if (gs->npc[i].health <= 0) {
+							gs->npc[i].exists = false;
+						}
 				}
 			}
 		}

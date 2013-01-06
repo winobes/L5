@@ -26,7 +26,7 @@ void do_graphics_update(GameState *gs, bool *redraw)
 		}
 
 		for (i = 0; i < gs->nnpcs; i++) {
-			if (gs->npc[i].room == gs->current_room) {
+			if (gs->npc[i].room == gs->current_room && gs->npc[i].exists) {
 				al_set_target_bitmap(gs->npc[i].sprite);
 				al_clear_to_color(al_map_rgba(0,0,0,0));
 				//drawing the NPC animatics to its spritesheet
