@@ -226,16 +226,13 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 		}
 
 		if (keys[gs->player->weapon.key] && gs->player->weapon.reload_timer == gs->player->weapon.reload_time) {
-		
 			gs->player->weapon.reload_timer = 0;
-
 			gs->player->weapon.exists[gs->player->weapon.current] = true;
-
 			gs->player->weapon.d[gs->player->weapon.current] = gs->player->d;
-
+		
 			gs->player->weapon.x[gs->player->weapon.current] = gs->player->cx + 0;
 			gs->player->weapon.y[gs->player->weapon.current] = gs->player->cy + 0;
-			
+		
 			gs->player->weapon.dx[gs->player->weapon.current] = gs->player->dx + 3 * cos(gs->player->d - ALLEGRO_PI/2);
 			gs->player->weapon.dy[gs->player->weapon.current] = gs->player->dy + 3 * sin(gs->player->d - ALLEGRO_PI/2);
 			
@@ -247,9 +244,7 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 			
 		//checking for bullet collision with NPCs & walls
 		for (j = 0; j < gs->player->weapon.nactive; j++) {
-			
 			if(gs->player->weapon.exists[j]) {
-
 				gs->player->weapon.ext.vert[0][0] = gs->player->weapon.x[j];
 				gs->player->weapon.ext.vert[0][1] = gs->player->weapon.y[j];
 
@@ -264,16 +259,15 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 
 				for (i = 0; i < gs->nnpcs; i++) {
 					if (gs->npc[i].exists && gs->npc[i].room == gs->current_room) {
-
 						if (collide(gs->player->weapon.ext, gs->npc[i].ext, penetration_vector, &penetration_scalar)) {
 
 							gs->player->weapon.exists[j] = false;
 							gs->npc[i].health -= gs->player->weapon.damage;
 						}	
 					}
-						if (gs->npc[i].health <= 0) {
-							gs->npc[i].exists = false;
-						}
+					if (gs->npc[i].health <= 0) {
+						gs->npc[i].exists = false;
+					}
 				}
 			}
 		}
