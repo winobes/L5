@@ -43,7 +43,9 @@ int game_loop() {
 
 	// player
 	
+#ifdef DEBUG
 	printf("free player\n");
+#endif
 
 	for (j = 0; j < gs->player->ext.nverts; j++) {
 		free(gs->player->ext.vert[j]);
@@ -73,9 +75,10 @@ int game_loop() {
 	free(gs->player->weapon.sprite);
 	free(gs->player);
 	
-	
+#ifdef DEBUG
 	printf("free rooms\n");
-	
+#endif
+
 	// rooms
 	for (i = 0; i < gs->nrooms; i++) {
 		for (j = 0; j < gs->room[i]->nwalls; j++) {
@@ -99,9 +102,10 @@ int game_loop() {
 	}
 	free(gs->room);
 	
-
+#ifdef DEBUG
 	printf("free npcs\n");
-	
+#endif
+
 	// npcs
 	for (i = 0; i < gs->nnpcs; i++) {
 		free(gs->npc[i].keys);
@@ -112,16 +116,19 @@ int game_loop() {
 		free(gs->npc[i].ani);
 	}
 	free(gs->npc);
-	
+
+#ifdef DEBUG
 	printf("free game state\n");
+#endif
 	
 	// GameState
 	al_destroy_font(gs->font10);
 	gs->font10 = NULL;
 	free(gs);	
 	
+#ifdef DEBUG
 	printf("exiting game_loop\n");
-
+#endif
 
 	return 0;
 }
