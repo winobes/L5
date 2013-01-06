@@ -3,6 +3,7 @@
 #include "init_npcs.c"
 #include "common_def.c"
 #include "update_logic.c"
+#include "room_specific_logic.c"
 
 int game_loop() {
 
@@ -33,7 +34,7 @@ int game_loop() {
 		// TODO check types and inputs
 		do_update(&event, keys, &exit_game, &redraw, gs);
 
-	#include "room_specific_logic.c"
+		do_room_specific_update(gs);
 
 		#include "update_graphics.c"
 
