@@ -4,8 +4,6 @@
 #define UPDATE_LOGIC_H
 
 
-
-
 // return effects of receiving input pass by reference to calling game loop function
 void get_input(ALLEGRO_EVENT *event, bool *keys, bool *exit_game)
 {
@@ -120,8 +118,7 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 				case 0:
 					break;
 				case 1:
-					ai1(&gs->npc[i], gs->player);
-
+					ai1(gs);
 					break;
 			}
 
@@ -166,14 +163,14 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 		//check for player collisions with walls
 
 		gs->player->hit_wall = -1;
-		for (i = 0; i < gs->room[current_room]->nwalls; i++) {
-			if (gs->room[current_room]->wall[i]->exists) {
+		for (i = 0; i < gs->room[gs->current_room]->nwalls; i++) {
+			if (gs->room[gs->current_room]->wall[i]->exists) {
 
-				if (collide(gs->player->ext, gs->room[current_room]->wall[i]->ext, penetration_vector, &penetration_scalar)) {
+				if (collide(gs->player->ext, gs->room[gs->current_room]->wall[i]->ext, penetration_vector, &penetration_scalar)) {
 
 					gs->player->hit_wall = i;
 				
-					if (gs->room[current_room]->wall[i]->solid) {
+					if (gs->room[gs->current_room]->wall[i]->solid) {
 						gs->player->cx += penetration_vector[0] * penetration_scalar;
 						gs->player->cy += penetration_vector[1] * penetration_scalar;
 				
@@ -186,7 +183,7 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 		//check for gs->player collisions with NPCs
 
 		for (i = 0; i < gs->nnpcs; i++) {
-			if (gs->npc[i].exists && gs->npc[i].room == current_room) {
+			if (gs->npc[i].exists && gs->npc[i].room == gs->current_room) {
 				if (collide(gs->player->ext, gs->npc[i].ext, penetration_vector, &penetration_scalar)) {
 					if (gs->npc[i].solid) {
 						//separating by the projection vector so that they are no longer colliding
@@ -256,17 +253,17 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 				gs->player->weapon.ext.vert[0][0] = gs->player->weapon.x[j];
 				gs->player->weapon.ext.vert[0][1] = gs->player->weapon.y[j];
 
-				for (i = 0; i < gs->room[current_room]->nwalls; i++) {
-					if(gs->room[current_room]->wall[i]->exists) {
-						if(collide(gs->player->weapon.ext, gs->room[current_room]->wall[i]->ext, penetration_vector, &penetration_scalar)) {
+				for (i = 0; i < gs->room[gs->current_room]->nwalls; i++) {
+					if(gs->room[gs->current_room]->wall[i]->exists) {
+						if(collide(gs->player->weapon.ext, gs->room[gs->current_room]->wall[i]->ext, penetration_vector, &penetration_scalar)) {
 							gs->player->weapon.exists[j] = false;
-							gs->room[current_room]->wall[i]->health -= gs->player->weapon.damage;
+							gs->room[gs->current_room]->wall[i]->health -= gs->player->weapon.damage;
 						}
 					}
 				}
 
 				for (i = 0; i < gs->nnpcs; i++) {
-					if (gs->npc[i].exists && gs->npc[i].room == current_room) {
+					if (gs->npc[i].exists && gs->npc[i].room == gs->current_room) {
 
 						if (collide(gs->player->weapon.ext, gs->npc[i].ext, penetration_vector, &penetration_scalar)) {
 
@@ -352,8 +349,8 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 			}
 		}
 
-		for (i = 0; i < gs->room[current_room]->nbackgrounds; i++) {
-			update_background(&gs->room[current_room]->background[i], gs->player->cx, gs->player->cy, gs->room[current_room]->w, gs->room[current_room]->h);
+		for (i = 0; i < gs->room[gs->current_room]->nbackgrounds; i++) {
+			update_background(&gs->room[gs->current_room]->background[i], gs->player->cx, gs->player->cy, gs->room[gs->current_room]->w, gs->room[gs->current_room]->h);
 		}
 	}
 }
@@ -365,7 +362,7 @@ void do_update(ALLEGRO_EVENT *event, bool *keys, bool *exit_game, bool *redraw, 
 		event->type == ALLEGRO_EVENT_KEY_UP  ||
 		event->type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
 		get_input(event, keys, exit_game);
-	} else {
+	} else { // event->type == ALLEGRO_EVENT_TIMER
 		update_logic(event, keys, gs);
 		*redraw = true;
 	}

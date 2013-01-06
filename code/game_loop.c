@@ -8,13 +8,6 @@ int game_loop() {
 
 	bool exit_game = false;
 	bool redraw = true;
-
-	//penetration variables are used by collision detection and response functions
-	//float penetration_scalar;
-	//float penetration_vector[2];
-
-	int i;
-	int j;
 	
 	ALLEGRO_FONT *font10 = al_load_font("fonts/Roboto-Black.ttf", 10,0);
 
@@ -25,6 +18,7 @@ int game_loop() {
 	gs->room = init_rooms(gs);  // TODO free rooms and walls etc.
 	gs->nnpcs = 2;
 	gs->npc = init_npcs(gs);  // TODO free npc
+	gs->current_room = 0;
 
 	bool keys[5] = {false, false, false, false, false};
 

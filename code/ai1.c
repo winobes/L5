@@ -1,6 +1,9 @@
 #include "player.c"
 
-void ai1 (NPC *npc, Player *target) {
+void ai1 (GameState *gs) {
+
+	NPC *npc = gs->npc;
+	Player *target = gs->player;
 
 	struct Extension visLeftCentre;
 	struct Extension visRightCentre;
@@ -60,7 +63,7 @@ void ai1 (NPC *npc, Player *target) {
 		npc->keys[i] = false;
 	}
 
-	if (npc[0].room == current_room) {
+	if (npc[0].room == gs->current_room) {
 	 // going after the player if it is ahead
 		if (collide(visLeftCentre, target->ext, penetration_vector, &penetration_scalar)) {
 			npc->keys[LEFT] = true;

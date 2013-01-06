@@ -1,4 +1,4 @@
-if (current_room == 0) {
+if (gs->current_room == 0) {
 
 	parallax1_x1 = 0;
 	parallax1_x2 = -1;

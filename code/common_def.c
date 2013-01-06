@@ -103,6 +103,7 @@ typedef struct {
 	NPC *npc;
 	int nrooms;
 	Room **room;
+	int current_room;
 } GameState;
 
 enum KEYS{RIGHT, DOWN, LEFT, UP, LCTRL};
@@ -111,7 +112,5 @@ const int width = 800;
 const int height = 600;
 
 const int FPS = 60;
-
-int current_room = 0;
 
 #endif // COMMON_DEF_H
