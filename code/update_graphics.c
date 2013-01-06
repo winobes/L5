@@ -15,15 +15,27 @@ void do_graphics_update(GameState *gs, bool *redraw)
 
 		int i, j;
 		//drawing the background tiles to the screen (there are maximum of four tiles for each layer)
+
+
 		for (i = 0; i < gs->room[gs->current_room]->nbackgrounds; i++) {
-			al_draw_bitmap(gs->room[gs->current_room]->background[i].background_image, -gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->cx-gs->room[0]->w/2) + gs->room[gs->current_room]->background[i].x1*width, -gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->cy-gs->room[0]->h/2) + gs->room[gs->current_room]->background[i].y1*height , 0);
+			if (gs->room[gs->current_room]->background[i].is_tiled == true) {
+				al_draw_bitmap(gs->room[gs->current_room]->background[i].background_image, -gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->cx-gs->room[0]->w/2) + gs->room[gs->current_room]->background[i].x1*width, -gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->cy-gs->room[0]->h/2) + gs->room[gs->current_room]->background[i].y1*height , 0);
 
-			al_draw_bitmap(gs->room[gs->current_room]->background[i].background_image, -gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->cx-gs->room[0]->w/2) + gs->room[gs->current_room]->background[i].x2*width, -gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->cy-gs->room[0]->h/2) + gs->room[gs->current_room]->background[i].y2*height , 0);
+				al_draw_bitmap(gs->room[gs->current_room]->background[i].background_image, -gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->cx-gs->room[0]->w/2) + gs->room[gs->current_room]->background[i].x2*width, -gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->cy-gs->room[0]->h/2) + gs->room[gs->current_room]->background[i].y2*height , 0);
 
-			al_draw_bitmap(gs->room[gs->current_room]->background[i].background_image, -gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->cx-gs->room[0]->w/2) + gs->room[gs->current_room]->background[i].x1*width, -gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->cy-gs->room[0]->h/2) + gs->room[gs->current_room]->background[i].y2*height , 0);
+				al_draw_bitmap(gs->room[gs->current_room]->background[i].background_image, -gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->cx-gs->room[0]->w/2) + gs->room[gs->current_room]->background[i].x1*width, -gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->cy-gs->room[0]->h/2) + gs->room[gs->current_room]->background[i].y2*height , 0);
 
-			al_draw_bitmap(gs->room[gs->current_room]->background[i].background_image, -gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->cx-gs->room[0]->w/2) + gs->room[gs->current_room]->background[i].x2*width, -gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->cy-gs->room[0]->h/2) + gs->room[gs->current_room]->background[i].y1*height , 0);
+				al_draw_bitmap(gs->room[gs->current_room]->background[i].background_image, -gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->cx-gs->room[0]->w/2) + gs->room[gs->current_room]->background[i].x2*width, -gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->cy-gs->room[0]->h/2) + gs->room[gs->current_room]->background[i].y1*height , 0);
+
+			}
+			
+			else {
+				al_draw_bitmap(gs->room[gs->current_room]->background[i].background_image, gs->room[gs->current_room]->background[i].x1 - gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->cx-gs->room[0]->w/2), gs->room[gs->current_room]->background[i].y1 - gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->cy-gs->room[0]->h/2), 0);
+			}
+
 		}
+
+			
 
 		for (i = 0; i < gs->nnpcs; i++) {
 			if (gs->npc[i].room == gs->current_room && gs->npc[i].exists) {

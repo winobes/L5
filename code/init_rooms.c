@@ -152,12 +152,20 @@ Room **init_rooms(GameState *gs)
 
 	room[0]->background = malloc(room[0]->nbackgrounds * sizeof(struct Background));
 	room[0]->background[0].parallax_rate = .01;
+	room[0]->background[0].is_tiled = true;
+
 	room[0]->background[1].parallax_rate = .1;
+	room[0]->background[1].is_tiled = false;
+	room[0]->background[1].x1 = 0;
+	room[0]->background[1].y1 = 0;
+
 	room[0]->background[2].parallax_rate = .2;
+	room[0]->background[2].is_tiled = true;
 
 	room[0]->background[0].background_image = al_load_bitmap("gfx/parallax_sub.png");
-	room[0]->background[2].background_image = al_load_bitmap("gfx/parallax_super.png");
 	room[0]->background[1].background_image = al_load_bitmap("gfx/parallax_earth.png");
+	room[0]->background[2].background_image = al_load_bitmap("gfx/parallax_super.png");
+
 
 	for (i = 0; i < 12; i++) {
 		room[1]->wall[i]->h = 800/5;

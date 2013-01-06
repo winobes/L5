@@ -347,7 +347,9 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 		}
 
 		for (i = 0; i < gs->room[gs->current_room]->nbackgrounds; i++) {
+		if (gs->room[gs->current_room]->background[i].is_tiled == true) {
 			update_background(&gs->room[gs->current_room]->background[i], gs->player->cx, gs->player->cy, gs->room[gs->current_room]->w, gs->room[gs->current_room]->h);
+		}
 		}
 	}
 }

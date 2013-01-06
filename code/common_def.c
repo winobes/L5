@@ -63,6 +63,7 @@ typedef struct {
 
 struct Background {
 	float parallax_rate;
+	bool is_tiled;
 	int x1, x2, y1, y2;
 	ALLEGRO_BITMAP *background_image;
 };
