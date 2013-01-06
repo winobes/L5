@@ -96,6 +96,8 @@ void do_graphics_update(GameState *gs, bool *redraw)
 			}
 		}
 
+
+
 		for (i = 0; i < gs->player->weapon.nactive; i++) {
 			if (gs->player->weapon.exists[i]) {
 				al_draw_tinted_scaled_rotated_bitmap_region(
@@ -115,9 +117,7 @@ void do_graphics_update(GameState *gs, bool *redraw)
 			}
 		}
 
-		for (j = 0; j < 4; j++) {
-			//al_draw_pixel(gs->room[0]->wall[1]->ext.vert[j][0], gs->room[0]->wall[1]->ext.vert[j][1], al_map_rgb(83,207,46));
-		}
+
 		//drawing animatics to the gs->player's sprite
 		al_set_target_bitmap(gs->player->sprite);
 		al_clear_to_color(al_map_rgba(0,0,0,0));
@@ -159,6 +159,11 @@ void do_graphics_update(GameState *gs, bool *redraw)
 	al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 7*12, ALLEGRO_ALIGN_RIGHT,"npc[0].health = %f", gs->npc[0].health);
 al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 8*12, ALLEGRO_ALIGN_RIGHT,"npc[1].health = %f", gs->npc[1].health);
 
+
+////debugging the player ext
+		for (j = 0; j < gs->player->ext.nverts; j++) {
+			al_draw_pixel(gs->player->ext.vert[j][0]-(gs->player->cx - width/2), gs->player->ext.vert[j][1]-(gs->player->cy - height/2), al_map_rgb(83,207,46));
+		}
 		/*al_draw_textf(font10, al_map_rgb(83, 207, 46), width, 7*12, ALLEGRO_ALIGN_RIGHT,"health2 %f", gs->npc[1].health);
 		al_draw_textf(font10, al_map_rgb(83, 207, 46), width, 8*12, ALLEGRO_ALIGN_RIGHT,"speed = %f", gs->player->s);
 		*/

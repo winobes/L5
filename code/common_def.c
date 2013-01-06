@@ -111,6 +111,7 @@ typedef struct {
 } GameState;
 
 enum KEYS{RIGHT, DOWN, LEFT, UP, LCTRL};
+enum SHAPE{RECTANGLE, OCTAGON};
 
 const int width = 800;
 const int height = 600;

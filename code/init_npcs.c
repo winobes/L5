@@ -18,7 +18,7 @@ NPC *init_npcs(GameState *gs)
 	npc[0].h = 15;
 	npc[0].d = ALLEGRO_PI/2;
 	npc[0].m = 100;
-	npc[0].shape = 1;
+	npc[0].shape = RECTANGLE;
 	npc[0].room = 0;
 	npc[0].ai = 1;
 	npc[0].dx = 0;
@@ -105,7 +105,7 @@ NPC *init_npcs(GameState *gs)
 	npc[1].h = 15;
 	npc[1].d = ALLEGRO_PI/2;
 	npc[1].m = 100;
-	npc[1].shape = 1;
+	npc[1].shape = RECTANGLE;
 	npc[1].room = 0;
 	npc[1].ai = 1;
 	npc[1].dx = 0;

@@ -19,7 +19,7 @@ Player *init_player()
 	player->m = 500;
 	player->cx = 20;
 	player->cy = 20;
-	player->shape = 1; //rectangular
+	player->shape = RECTANGLE;
 
 	player->ext.nverts = 4;
 	player->ext.vert = malloc(player->ext.nverts * sizeof(float*));
