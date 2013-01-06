@@ -45,6 +45,8 @@ int game_loop() {
 
 	// player
 	
+	printf("free player\n");
+
 	for (j = 0; j < gs->player->ext.nverts; j++) {
 		free(gs->player->ext.vert[j]);
 	}
@@ -65,12 +67,16 @@ int game_loop() {
 	}
 	free(gs->player->weapon.ext.vert);
 	al_destroy_bitmap(gs->player->spritesheet);
+	gs->player->spritesheet = NULL;
 	al_destroy_bitmap(gs->player->sprite);
+	gs->player->sprite = NULL;
 	al_destroy_bitmap(gs->player->weapon.spritesheet);
+	gs->player->weapon.spritesheet = NULL;
 	free(gs->player->weapon.sprite);
 	free(gs->player);
 	
-
+	
+	printf("free rooms\n");
 	
 	// rooms
 	for (i = 0; i < gs->nrooms; i++) {
@@ -78,16 +84,14 @@ int game_loop() {
 			for (k = 0; k < gs->room[i]->wall[j]->ext.nverts; k++) {
 				free(gs->room[i]->wall[j]->ext.vert[k]);
 			}
-			al_destroy_bitmap(gs->room[i]->wall[j]->sprite);
 			free(gs->room[i]->wall[j]->ext.vert);
-		}
-		for (j = 0; j < gs->room[i]->nwalls; j++) {
 			al_destroy_bitmap(gs->room[i]->wall[j]->sprite);
+			gs->room[i]->wall[j]->sprite = NULL;
 			free(gs->room[i]->wall[j]);
 		}
 		for (j = 0; j < gs->room[i]->nbackgrounds; j++) {
 			al_destroy_bitmap(gs->room[i]->background[j].background_image);
-			free(gs->room[i]->background);
+			gs->room[i]->background[j].background_image = NULL;
 		}
 		free(gs->room[i]->wall);
 		free(gs->room[i]->background);
@@ -96,6 +100,7 @@ int game_loop() {
 	free(gs->room);
 	
 
+	printf("free npcs\n");
 	
 	// npcs
 	for (i = 0; i < gs->nnpcs; i++) {
@@ -108,9 +113,11 @@ int game_loop() {
 	}
 	free(gs->npc);
 	
-
+	printf("free game state\n");
 	
 	// GameState
+	al_destroy_font(gs->font10);
+	gs->font10 = NULL;
 	free(gs);	
 	
 
