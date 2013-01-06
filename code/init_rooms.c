@@ -151,7 +151,7 @@ Room **init_rooms(GameState *gs)
 	room[0]->wall[19]->solid = false;
 
 	room[0]->background = malloc(room[0]->nbackgrounds * sizeof(struct Background));
-	room[0]->background[0].parallax_rate = 1;
+	room[0]->background[0].parallax_rate = .01;
 	room[0]->background[1].parallax_rate = .1;
 	room[0]->background[2].parallax_rate = .2;
 
