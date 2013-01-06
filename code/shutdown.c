@@ -1,4 +1,9 @@
-void shutdown(void) {
+#include "common_def.c"
+
+#ifndef SHUTDOWN_H
+#define SHUTDOWN_H
+
+void shutdown() {
 
 	if (timer) {
 		al_destroy_timer(timer);
@@ -13,3 +18,5 @@ void shutdown(void) {
 	}
 
 }
+
+#endif // SHUTDOWN_H
