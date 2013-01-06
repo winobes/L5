@@ -1,302 +1,375 @@
+#include "common_def.c"
 
-else if(event.type == ALLEGRO_EVENT_TIMER) {
+#ifndef UPDATE_LOGIC_H
+#define UPDATE_LOGIC_H
 
-	//updating player direction
-	if (keys[RIGHT]) {
-		player->d += .5*player->dd*ALLEGRO_PI;
-		
-		if(!keys[UP]) {
-			player->dx += .25*player->ddxy * cos(player->d - ALLEGRO_PI/2);
-			player->dy += .25*player->ddxy * sin(player->d - ALLEGRO_PI/2);
-		}
 
-		/*	if(!keys[LEFT]) {
-			player->cx += (-cos(player->d) - -cos(player->d - .5*player->dd*ALLEGRO_PI)) * player->w;
-			player->cy += (-sin(player->d) - -sin(player->d - .5*player->dd*ALLEGRO_PI)) * player->w;
 
-		}*/
-	}
 
-	if (keys[LEFT]) {
-		player->d -= .5*player->dd*ALLEGRO_PI;
-		
-		if(!keys[UP]) {
-			player->dx += .25*player->ddxy * cos(player->d - ALLEGRO_PI/2);
-			player->dy += .25*player->ddxy * sin(player->d - ALLEGRO_PI/2);
-		}
-	
-		/*	if(!keys[RIGHT]) {
-			player->cx += (-cos(player->d) - -cos(player->d - .5*player->dd*ALLEGRO_PI)) * player->w;
-			player->cy += (-sin(player->d) - -sin(player->d - .5*player->dd*ALLEGRO_PI)) * player->w;
-		}*/
-
-	}
-
-	if (player->d > 2*ALLEGRO_PI) {
-		player->d -= 2*ALLEGRO_PI;
-	} else if (player->d < 0) {
-		player->d += 2*ALLEGRO_PI;
-	}
-
-	//updating player dy and dx based on acceleration & direction
-	if (keys[UP]) {
-		player->dx += player->ddxy * cos(player->d - ALLEGRO_PI/2);
-		player->dy += player->ddxy * sin(player->d - ALLEGRO_PI/2);
-	}
-	//moving backwords...
-	if (keys[DOWN]) {
-		player->dx -= player->ddxy * cos(player->d - ALLEGRO_PI/2);
-		player->dy -= player->ddxy * sin(player->d - ALLEGRO_PI/2);
-	}
-
-	//updating player position based on dx and dy
-	player->cx += player->dx;
-	player->cy += player->dy;
-
-	//recalculating the player vertices
-	calculate_verts_ship(player->shape, &player->ext, player->cx, player->cy, player->w, player->h, player->d);
-
-	//updating NPC AI & Input
-	for (i = 0; i < nnpcs; i++) {
-		switch (npc[i].ai) {
-			case 0:
+// return effects of receiving input pass by reference to calling game loop function
+void get_input(ALLEGRO_EVENT *event, bool *keys, bool *exit_game)
+{
+	if(event->type == ALLEGRO_EVENT_KEY_DOWN) {
+		switch(event->keyboard.keycode) {
+			case ALLEGRO_KEY_RIGHT:
+				keys[RIGHT] = true;
 				break;
-			case 1:
-				ai1(&npc[i], player);
-
+			case ALLEGRO_KEY_DOWN:
+				keys[DOWN] = true;
+				break;
+			case ALLEGRO_KEY_LEFT:
+				keys[LEFT] = true;
+				break;
+			case ALLEGRO_KEY_UP:
+				keys[UP] = true;
+				break;
+			case ALLEGRO_KEY_LCTRL:
+				keys[LCTRL] = true;
 				break;
 		}
+	} else if (event->type == ALLEGRO_EVENT_KEY_UP) {
+		switch(event->keyboard.keycode) {
+			case ALLEGRO_KEY_RIGHT:
+				keys[RIGHT] = false;
+				break;
+			case ALLEGRO_KEY_DOWN:
+				keys[DOWN] = false;
+				break;
+			case ALLEGRO_KEY_LEFT:
+				keys[LEFT] = false;
+				break;
+			case ALLEGRO_KEY_UP:
+				keys[UP] = false;
+				break;
+			case ALLEGRO_KEY_LCTRL:
+				keys[LCTRL] = false;
+				break;
+		}
+	} else if(event->type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
+		*exit_game = true;
+	}
+}
 
-		//updating NPC direction
-		if (npc[i].keys[RIGHT]) {
-			npc[i].d += .5*npc[i].dd*ALLEGRO_PI;
+void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
+{ 
+	//int i, j;
+	float penetration_scalar;
+	float penetration_vector[2];
+
+	if(event->type == ALLEGRO_EVENT_TIMER) {
+
+		//updating player direction
+		if (keys[RIGHT]) {
+			gs->player->d += .5*gs->player->dd*ALLEGRO_PI;
+			
+			if(!keys[UP]) {
+				gs->player->dx += .25*gs->player->ddxy * cos(gs->player->d - ALLEGRO_PI/2);
+				gs->player->dy += .25*gs->player->ddxy * sin(gs->player->d - ALLEGRO_PI/2);
+			}
+
+			/*	if(!keys[LEFT]) {
+				gs->player->cx += (-cos(gs->player->d) - -cos(gs->player->d - .5*gs->player->dd*ALLEGRO_PI)) * gs->player->w;
+				gs->player->cy += (-sin(gs->player->d) - -sin(gs->player->d - .5*gs->player->dd*ALLEGRO_PI)) * gs->player->w;
+
+			}*/
 		}
 
-		if (npc[i].keys[LEFT]) {
-			npc[i].d -= .5*npc[i].dd*ALLEGRO_PI;
+		if (keys[LEFT]) {
+			gs->player->d -= .5*gs->player->dd*ALLEGRO_PI;
+			
+			if(!keys[UP]) {
+				gs->player->dx += .25*gs->player->ddxy * cos(gs->player->d - ALLEGRO_PI/2);
+				gs->player->dy += .25*gs->player->ddxy * sin(gs->player->d - ALLEGRO_PI/2);
+			}
+		
+			/*	if(!keys[RIGHT]) {
+				gs->player->cx += (-cos(gs->player->d) - -cos(gs->player->d - .5*gs->player->dd*ALLEGRO_PI)) * gs->player->w;
+				gs->player->cy += (-sin(gs->player->d) - -sin(gs->player->d - .5*gs->player->dd*ALLEGRO_PI)) * gs->player->w;
+			}*/
+
 		}
 
-		if (npc[i].d > 2*ALLEGRO_PI) {
-			npc[i].d -= 2*ALLEGRO_PI;
+		if (gs->player->d > 2*ALLEGRO_PI) {
+			gs->player->d -= 2*ALLEGRO_PI;
+		} else if (gs->player->d < 0) {
+			gs->player->d += 2*ALLEGRO_PI;
 		}
 
-		if (npc[i].d < 0) {
-			npc[i].d += 2*ALLEGRO_PI;
-		}
-
-		//updating NPC dy and dx based on acceleration & direction
-		if (npc[i].keys[UP]) {
-			npc[i].dx += npc[i].ddxy * cos(npc[i].d - ALLEGRO_PI/2);
-			npc[i].dy += npc[i].ddxy * sin(npc[i].d - ALLEGRO_PI/2);
+		//updating gs->player dy and dx based on acceleration & direction
+		if (keys[UP]) {
+			gs->player->dx += gs->player->ddxy * cos(gs->player->d - ALLEGRO_PI/2);
+			gs->player->dy += gs->player->ddxy * sin(gs->player->d - ALLEGRO_PI/2);
 		}
 		//moving backwords...
-		if (npc[i].keys[DOWN]) {
-			npc[i].dx -= npc[i].ddxy * cos(npc[i].d - ALLEGRO_PI/2);
-			npc[i].dy -= npc[i].ddxy * sin(npc[i].d - ALLEGRO_PI/2);
+		if (keys[DOWN]) {
+			gs->player->dx -= gs->player->ddxy * cos(gs->player->d - ALLEGRO_PI/2);
+			gs->player->dy -= gs->player->ddxy * sin(gs->player->d - ALLEGRO_PI/2);
 		}
 
-		calculate_speed(npc[i].dx, npc[i].dy, &npc[i].s);
+		//updating gs->player position based on dx and dy
+		gs->player->cx += gs->player->dx;
+		gs->player->cy += gs->player->dy;
 
-		//updating NPC position based on dx and dy
-		npc[i].cx += npc[i].dx;
-		npc[i].cy += npc[i].dy;
+		//recalculating the gs->player vertices
+		calculate_verts_ship(gs->player->shape, &gs->player->ext, gs->player->cx, gs->player->cy, gs->player->w, gs->player->h, gs->player->d);
 
-		//recalculating the NPC vertices
-		calculate_verts_ship(npc[i].shape, &npc[i].ext, npc[i].cx, npc[i].cy, npc[i].w, npc[i].h, npc[i].d);
-	}
-
-	//check for player collisions with walls
-
-	player->hit_wall = -1;
-	for (i = 0; i < room[current_room]->nwalls; i++) {
-		if (room[current_room]->wall[i]->exists) {
-
-			if (collide(player->ext, room[current_room]->wall[i]->ext, penetration_vector, &penetration_scalar)) {
-
-				player->hit_wall = i;
-			
-				if (room[current_room]->wall[i]->solid) {
-					player->cx += penetration_vector[0] * penetration_scalar;
-					player->cy += penetration_vector[1] * penetration_scalar;
-			
-					reflect(&player->dx, &player->dy, penetration_vector);
-				}
-			}
-		}
-	}
-
-	//check for player collisions with NPCs
-
-	for (i = 0; i < nnpcs; i++) {
-		if (npc[i].exists && npc[i].room == current_room) {
-			if (collide(player->ext, npc[i].ext, penetration_vector, &penetration_scalar)) {
-				if (npc[i].solid) {
-					//separating by the projection vector so that they are no longer colliding
-					player->cx += penetration_vector[0] * penetration_scalar/2;
-					player->cy += penetration_vector[1] * penetration_scalar/2;
-			
-					npc[i].cx += -penetration_vector[0] * penetration_scalar/2;
-					npc[i].cy += -penetration_vector[1] * penetration_scalar/2;
-
-					bounce(player->m, npc[i].m, .9, player->cx, player->cy, npc[i].cx, npc[i].cy, &player->dx, &player->dy, &npc[i].dx, &npc[i].dy);
-						
-					calculate_speed(player->dx, player->dy, &player->s);
-					calculate_speed(npc[i].dx, npc[i].dy, &npc[i].s);
-				}
-			}
-		}
-	}
-
-	//check for NPC collisions with walls
-
-	for (i = 0; i < nnpcs; i++) {
-		for (j = 0; j < room[npc[i].room]->nwalls; j++) {
-			if (room[npc[i].room]->wall[j]->exists) {
-				if (collide(npc[i].ext, room[npc[i].room]->wall[j]->ext, penetration_vector, &penetration_scalar)) {
-					if (room[npc[i].room]->wall[j]->solid) {
-						npc[i].cx += penetration_vector[0] * penetration_scalar;
-						npc[i].cy += penetration_vector[1] * penetration_scalar;
-			
-						reflect(&npc[i].dx, &npc[i].dy, penetration_vector);
-					}
-				}
-			}
-		}
-	}
-
-	//updating player bullett position
-
-	if(player->weapon.reload_timer < player->weapon.reload_time) {
-		player->weapon.reload_timer++;
-	}
-
-	if (keys[player->weapon.key] && player->weapon.reload_timer == player->weapon.reload_time) {
-	
-		player->weapon.reload_timer = 0;
-
-		player->weapon.exists[player->weapon.current] = true;
-
-		player->weapon.d[player->weapon.current] = player->d;
-
-		player->weapon.x[player->weapon.current] = player->cx + 0;
-		player->weapon.y[player->weapon.current] = player->cy + 0;
-		
-		player->weapon.dx[player->weapon.current] = player->dx + 3 * cos(player->d - ALLEGRO_PI/2);
-		player->weapon.dy[player->weapon.current] = player->dy + 3 * sin(player->d - ALLEGRO_PI/2);
-		
-		player->weapon.current ++;
-		if (player->weapon.current == player->weapon.nactive) {
-			player->weapon.current = 0;
-		}
-	}
-		
-	//checking for bullet collision with NPCs & walls
-	for (j = 0; j < player->weapon.nactive; j++) {
-		
-		if(player->weapon.exists[j]) {
-
-			player->weapon.ext.vert[0][0] = player->weapon.x[j];
-			player->weapon.ext.vert[0][1] = player->weapon.y[j];
-
-			for (i = 0; i < room[current_room]->nwalls; i++) {
-				if(room[current_room]->wall[i]->exists) {
-					if(collide(player->weapon.ext, room[current_room]->wall[i]->ext, penetration_vector, &penetration_scalar)) {
-						player->weapon.exists[j] = false;
-						room[current_room]->wall[i]->health -= player->weapon.damage;
-					}
-				}
-			}
-
-			for (i = 0; i < nnpcs; i++) {
-				if (npc[i].exists && npc[i].room == current_room) {
-
-					if (collide(player->weapon.ext, npc[i].ext, penetration_vector, &penetration_scalar)) {
-
-						player->weapon.exists[j] = false;
-						npc[i].health -= player->weapon.damage;
-					}	
-				}
-			}
-		}
-	}
-
-	for (i = 0; i < player->weapon.nactive; i++) {
-		if(player->weapon.exists[i]) {
-			player->weapon.x[i] += player->weapon.dx[i];
-			player->weapon.y[i] += player->weapon.dy[i];
-		}
-	}
-
-	//updating player animation flags
-
-	player->aniflags[1] = true;
-
-	if (keys[UP]) {
-		player->aniflags[2] = true;
-		player->aniflags[3] = true;
-		player->aniflags[4] = true;
-	}
-
-	if (keys[RIGHT]) {
-		player->aniflags[3] = true;
-	}
-	
-	if (keys[LEFT]) {
-		player->aniflags[4] = true;
-	}
-
-	if (keys[DOWN]) {
-		player->aniflags[5] = true;
-		player->aniflags[6] = true;
-	}
-
-	//updating player animation variables
-	for (i = 0; i < player->nanimatics; i++) {
-		switch (player->ani[i].type) {
-			case 0:
-				break;
-			case 1:
-				animatic1(&player->ani[i], player->aniflags);
-				break;
-		}
-	}
-
-	for (i = 0; i < player->nanimatics; i++) {
-		player->aniflags[i] = false;
-	}
-
-	//updating player weapon animation variables
-	for (i = 0; i < player->weapon.nactive; i++) {
-		if (player->weapon.exists[i]) {
-			player->weapon.timer[i] ++;
-			if (player->weapon.timer[i] == player->weapon.frame_rate) {
-				player->weapon.timer[i] = 0;
-				if(player->weapon.source_x[i] == player->weapon.w * (player->weapon.nframes - 1)) {
-					player->weapon.source_x[i] = 0;
-				}	
-				else {
-					player->weapon.source_x[i] += player->weapon.w;
-				}
-			}
-		}
-	}			
-	
-	//updating NPC animation variables
-	for (i = 0; i < nnpcs; i++) {
-		for (j = 0; j < npc[i].nanimatics; j++) {
-			switch (npc[i].ani[j].type) {
+		//updating NPC AI & Input
+		int i, j;
+		for (i = 0; i < gs->nnpcs; i++) {
+			switch (gs->npc[i].ai) {
 				case 0:
 					break;
 				case 1:
-					animatic1(&npc[i].ani[j], npc[i].keys);
+					ai1(&gs->npc[i], gs->player);
+
+					break;
+			}
+
+			//updating NPC direction
+			if (gs->npc[i].keys[RIGHT]) {
+				gs->npc[i].d += .5*gs->npc[i].dd*ALLEGRO_PI;
+			}
+
+			if (gs->npc[i].keys[LEFT]) {
+				gs->npc[i].d -= .5*gs->npc[i].dd*ALLEGRO_PI;
+			}
+
+			if (gs->npc[i].d > 2*ALLEGRO_PI) {
+				gs->npc[i].d -= 2*ALLEGRO_PI;
+			}
+
+			if (gs->npc[i].d < 0) {
+				gs->npc[i].d += 2*ALLEGRO_PI;
+			}
+
+			//updating NPC dy and dx based on acceleration & direction
+			if (gs->npc[i].keys[UP]) {
+				gs->npc[i].dx += gs->npc[i].ddxy * cos(gs->npc[i].d - ALLEGRO_PI/2);
+				gs->npc[i].dy += gs->npc[i].ddxy * sin(gs->npc[i].d - ALLEGRO_PI/2);
+			}
+			//moving backwords...
+			if (gs->npc[i].keys[DOWN]) {
+				gs->npc[i].dx -= gs->npc[i].ddxy * cos(gs->npc[i].d - ALLEGRO_PI/2);
+				gs->npc[i].dy -= gs->npc[i].ddxy * sin(gs->npc[i].d - ALLEGRO_PI/2);
+			}
+
+			calculate_speed(gs->npc[i].dx, gs->npc[i].dy, &gs->npc[i].s);
+
+			//updating NPC position based on dx and dy
+			gs->npc[i].cx += gs->npc[i].dx;
+			gs->npc[i].cy += gs->npc[i].dy;
+
+			//recalculating the NPC vertices
+			calculate_verts_ship(gs->npc[i].shape, &gs->npc[i].ext, gs->npc[i].cx, gs->npc[i].cy, gs->npc[i].w, gs->npc[i].h, gs->npc[i].d);
+		}
+
+		//check for player collisions with walls
+
+		gs->player->hit_wall = -1;
+		for (i = 0; i < gs->room[current_room]->nwalls; i++) {
+			if (gs->room[current_room]->wall[i]->exists) {
+
+				if (collide(gs->player->ext, gs->room[current_room]->wall[i]->ext, penetration_vector, &penetration_scalar)) {
+
+					gs->player->hit_wall = i;
+				
+					if (gs->room[current_room]->wall[i]->solid) {
+						gs->player->cx += penetration_vector[0] * penetration_scalar;
+						gs->player->cy += penetration_vector[1] * penetration_scalar;
+				
+						reflect(&gs->player->dx, &gs->player->dy, penetration_vector);
+					}
+				}
+			}
+		}
+
+		//check for gs->player collisions with NPCs
+
+		for (i = 0; i < gs->nnpcs; i++) {
+			if (gs->npc[i].exists && gs->npc[i].room == current_room) {
+				if (collide(gs->player->ext, gs->npc[i].ext, penetration_vector, &penetration_scalar)) {
+					if (gs->npc[i].solid) {
+						//separating by the projection vector so that they are no longer colliding
+						gs->player->cx += penetration_vector[0] * penetration_scalar/2;
+						gs->player->cy += penetration_vector[1] * penetration_scalar/2;
+				
+						gs->npc[i].cx += -penetration_vector[0] * penetration_scalar/2;
+						gs->npc[i].cy += -penetration_vector[1] * penetration_scalar/2;
+
+						bounce(gs->player->m, gs->npc[i].m, .9, gs->player->cx, gs->player->cy, gs->npc[i].cx, gs->npc[i].cy, &gs->player->dx, &gs->player->dy, &gs->npc[i].dx, &gs->npc[i].dy);
+							
+						calculate_speed(gs->player->dx, gs->player->dy, &gs->player->s);
+						calculate_speed(gs->npc[i].dx, gs->npc[i].dy, &gs->npc[i].s);
+					}
+				}
+			}
+		}
+
+		//check for NPC collisions with walls
+
+		for (i = 0; i < gs->nnpcs; i++) {
+			for (j = 0; j < gs->room[gs->npc[i].room]->nwalls; j++) {
+				if (gs->room[gs->npc[i].room]->wall[j]->exists) {
+					if (collide(gs->npc[i].ext, gs->room[gs->npc[i].room]->wall[j]->ext, penetration_vector, &penetration_scalar)) {
+						if (gs->room[gs->npc[i].room]->wall[j]->solid) {
+							gs->npc[i].cx += penetration_vector[0] * penetration_scalar;
+							gs->npc[i].cy += penetration_vector[1] * penetration_scalar;
+				
+							reflect(&gs->npc[i].dx, &gs->npc[i].dy, penetration_vector);
+						}
+					}
+				}
+			}
+		}
+
+		//updating gs->player bullett position
+
+		if(gs->player->weapon.reload_timer < gs->player->weapon.reload_time) {
+			gs->player->weapon.reload_timer++;
+		}
+
+		if (keys[gs->player->weapon.key] && gs->player->weapon.reload_timer == gs->player->weapon.reload_time) {
+		
+			gs->player->weapon.reload_timer = 0;
+
+			gs->player->weapon.exists[gs->player->weapon.current] = true;
+
+			gs->player->weapon.d[gs->player->weapon.current] = gs->player->d;
+
+			gs->player->weapon.x[gs->player->weapon.current] = gs->player->cx + 0;
+			gs->player->weapon.y[gs->player->weapon.current] = gs->player->cy + 0;
+			
+			gs->player->weapon.dx[gs->player->weapon.current] = gs->player->dx + 3 * cos(gs->player->d - ALLEGRO_PI/2);
+			gs->player->weapon.dy[gs->player->weapon.current] = gs->player->dy + 3 * sin(gs->player->d - ALLEGRO_PI/2);
+			
+			gs->player->weapon.current ++;
+			if (gs->player->weapon.current == gs->player->weapon.nactive) {
+				gs->player->weapon.current = 0;
+			}
+		}
+			
+		//checking for bullet collision with NPCs & walls
+		for (j = 0; j < gs->player->weapon.nactive; j++) {
+			
+			if(gs->player->weapon.exists[j]) {
+
+				gs->player->weapon.ext.vert[0][0] = gs->player->weapon.x[j];
+				gs->player->weapon.ext.vert[0][1] = gs->player->weapon.y[j];
+
+				for (i = 0; i < gs->room[current_room]->nwalls; i++) {
+					if(gs->room[current_room]->wall[i]->exists) {
+						if(collide(gs->player->weapon.ext, gs->room[current_room]->wall[i]->ext, penetration_vector, &penetration_scalar)) {
+							gs->player->weapon.exists[j] = false;
+							gs->room[current_room]->wall[i]->health -= gs->player->weapon.damage;
+						}
+					}
+				}
+
+				for (i = 0; i < gs->nnpcs; i++) {
+					if (gs->npc[i].exists && gs->npc[i].room == current_room) {
+
+						if (collide(gs->player->weapon.ext, gs->npc[i].ext, penetration_vector, &penetration_scalar)) {
+
+							gs->player->weapon.exists[j] = false;
+							gs->npc[i].health -= gs->player->weapon.damage;
+						}	
+					}
+				}
+			}
+		}
+
+		for (i = 0; i < gs->player->weapon.nactive; i++) {
+			if(gs->player->weapon.exists[i]) {
+				gs->player->weapon.x[i] += gs->player->weapon.dx[i];
+				gs->player->weapon.y[i] += gs->player->weapon.dy[i];
+			}
+		}
+
+		//updating player animation flags
+
+		gs->player->aniflags[1] = true;
+
+		if (keys[UP]) {
+			gs->player->aniflags[2] = true;
+			gs->player->aniflags[3] = true;
+			gs->player->aniflags[4] = true;
+		}
+
+		if (keys[RIGHT]) {
+			gs->player->aniflags[3] = true;
+		}
+		
+		if (keys[LEFT]) {
+			gs->player->aniflags[4] = true;
+		}
+
+		if (keys[DOWN]) {
+			gs->player->aniflags[5] = true;
+			gs->player->aniflags[6] = true;
+		}
+
+		//updating player animation variables
+		for (i = 0; i < gs->player->nanimatics; i++) {
+			switch (gs->player->ani[i].type) {
+				case 0:
+					break;
+				case 1:
+					animatic1(&gs->player->ani[i], gs->player->aniflags);
 					break;
 			}
 		}
+
+		for (i = 0; i < gs->player->nanimatics; i++) {
+			gs->player->aniflags[i] = false;
+		}
+
+		//updating player weapon animation variables
+		for (i = 0; i < gs->player->weapon.nactive; i++) {
+			if (gs->player->weapon.exists[i]) {
+				gs->player->weapon.timer[i] ++;
+				if (gs->player->weapon.timer[i] == gs->player->weapon.frame_rate) {
+					gs->player->weapon.timer[i] = 0;
+					if(gs->player->weapon.source_x[i] == gs->player->weapon.w * (gs->player->weapon.nframes - 1)) {
+						gs->player->weapon.source_x[i] = 0;
+					}	
+					else {
+						gs->player->weapon.source_x[i] += gs->player->weapon.w;
+					}
+				}
+			}
+		}			
+		
+		//updating NPC animation variables
+		for (i = 0; i < gs->nnpcs; i++) {
+			for (j = 0; j < gs->npc[i].nanimatics; j++) {
+				switch (gs->npc[i].ani[j].type) {
+					case 0:
+						break;
+					case 1:
+						animatic1(&gs->npc[i].ani[j], gs->npc[i].keys);
+						break;
+				}
+			}
+		}
+
+		for (i = 0; i < gs->room[current_room]->nbackgrounds; i++) {
+			update_background(&gs->room[current_room]->background[i], gs->player->cx, gs->player->cy, gs->room[current_room]->w, gs->room[current_room]->h);
+		}
+	}
+}
+
+
+void do_update(ALLEGRO_EVENT *event, bool *keys, bool *exit_game, bool *redraw, GameState *gs)
+{
+	if(event->type == ALLEGRO_EVENT_KEY_DOWN ||
+		event->type == ALLEGRO_EVENT_KEY_UP  ||
+		event->type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
+		get_input(event, keys, exit_game);
+	} else {
+		update_logic(event, keys, gs);
+		*redraw = true;
 	}
 
-	for (i = 0; i < room[current_room]->nbackgrounds; i++) {
-		update_background(&room[current_room]->background[i], player->cx, player->cy, room[current_room]->w, room[current_room]->h);
-	}
-	
-	redraw = true;
 }
+
+#endif // UPDATE_LOGIC_H

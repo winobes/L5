@@ -3,12 +3,11 @@
 #ifndef NPC_H
 #define NPC_H
 
-NPC *init_npcs()
+NPC *init_npcs(GameState *gs)
 {
-	int nnpcs = 2;
 	int i;
 
-	NPC *npc = malloc(nnpcs * sizeof(NPC));
+	NPC *npc = malloc(gs->nnpcs * sizeof(NPC));
 
 	npc[0].solid = true;
 	npc[0].exists = true;

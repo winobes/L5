@@ -3,24 +3,13 @@
 #ifndef ROOMS_H
 #define ROOMS_H
 
-typedef struct {
-	int h, w;
-	Wall **wall;
-	int nwalls;
-	bool active;
-	int nbackgrounds;
-	struct Background *background;
-} Room;
 
-
-
-Room **init_rooms()
+Room **init_rooms(GameState *gs)
 {
-	int nrooms = 2;
 	int i, j, k;
 
-	Room **room = malloc(nrooms * sizeof(Room*));
-	for (i = 0; i < nrooms; i++) {
+	Room **room = malloc(gs->nrooms * sizeof(Room*));
+	for (i = 0; i < gs->nrooms; i++) {
 		room[i] = malloc(sizeof(Room));
 	}
 	
@@ -36,7 +25,7 @@ Room **init_rooms()
 	room[1]->w = 1700/5;
 	room[1]->h = 3400/5;
 
-	for (i = 0; i < nrooms; i++) {
+	for (i = 0; i < gs->nrooms; i++) {
 		room[i]->active = false;
 		
 		room[i]->wall = malloc(room[i]->nwalls * sizeof(Wall*));
@@ -244,7 +233,7 @@ Room **init_rooms()
 		room[1]->wall[13]->d = ALLEGRO_PI/4;
 		room[1]->wall[13]->solid = false;
 		
-	for (i = 0; i < nrooms; i++) {
+	for (i = 0; i < gs->nrooms; i++) {
 		for (j = 0; j < room[i]->nwalls; j++) {
 			calculate_verts_wall(&room[i]->wall[j]->ext, room[i]->wall[j]->w, room[i]->wall[j]->h, room[i]->wall[j]->d);
 		}

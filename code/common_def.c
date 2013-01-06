@@ -68,6 +68,43 @@ struct Background {
 	ALLEGRO_BITMAP *background_image;
 };
 
+typedef struct {
+	int h, w;
+	Wall **wall;
+	int nwalls;
+	bool active;
+	int nbackgrounds;
+	struct Background *background;
+} Room;
+
+typedef struct {
+	bool exist, flying;
+	float health;
+	float cx, cy, w, h, d, m;
+	int shape;
+	struct Extension ext; 
+	//used for collision testing. Vertices are calculated based on cx, cy, h, w, d.
+	float dx, dy, s, dd, ddxy;
+	ALLEGRO_BITMAP *sprite, *spritesheet;
+	//ultimately gets drawn to the display
+	//spritesheet is used for animatics
+	int gfx_w, gfx_h, nanimatics;
+	bool *aniflags;
+	struct Animatic *ani;
+	int hit_wall;
+	int nweapons;
+	struct Weapon weapon;
+} Player;
+
+typedef struct {
+	//int nplayers; // = 1
+	Player *player;
+	int nnpcs;
+	NPC *npc;
+	int nrooms;
+	Room **room;
+} GameState;
+
 enum KEYS{RIGHT, DOWN, LEFT, UP, LCTRL};
 
 const int width = 800;
@@ -76,7 +113,5 @@ const int height = 600;
 const int FPS = 60;
 
 int current_room = 0;
-
-bool keys [5] = {false, false, false, false, false};
 
 #endif // COMMON_DEF_H

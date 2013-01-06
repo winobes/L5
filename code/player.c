@@ -1,25 +1,6 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-typedef struct {
-	bool exist, flying;
-	float health;
-	float cx, cy, w, h, d, m;
-	int shape;
-	struct Extension ext; 
-//used for collision testing. Vertices are calculated based on cx, cy, h, w, d.
-	float dx, dy, s, dd, ddxy;
-	ALLEGRO_BITMAP *sprite, *spritesheet;
-	//ultimately gets drawn to the display
-	//spritesheet is used for animatics
-	int gfx_w, gfx_h, nanimatics;
-	bool *aniflags;
-	struct Animatic *ani;
-	int hit_wall;
-	int nweapons;
-
-	struct Weapon weapon;
-} Player;
 
 Player *init_player()
 {
