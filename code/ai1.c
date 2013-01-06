@@ -111,4 +111,18 @@ void ai1 (GameState *gs) {
 			}
 		}
 	}
+
+	for(i = 0; i < 3; i++) {
+		free(visLeftCentre.vert[i]);
+		free(visRightCentre.vert[i]);
+		free(visCentre.vert[i]);
+	}
+
+
+	free(visLeftCentre.vert);
+	free(visRightCentre.vert);
+	free(visCentre.vert);
+
+
+
 }

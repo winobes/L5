@@ -16,7 +16,8 @@ bool collide(struct Extension a, struct Extension b, float *penetration_vector, 
 	//penetration_vector[1] = 0;
 	*penetration_scalar = 0;
 
-	float **axis = malloc((a.nverts + b.nverts) * sizeof(float*));
+	float *axis[a.nverts+b.nverts];
+
 	for (i = 0; i < a.nverts + b.nverts; i++) {
 		axis[i] = malloc(2 * sizeof * axis[i]);
 	}
@@ -111,6 +112,11 @@ bool collide(struct Extension a, struct Extension b, float *penetration_vector, 
 
 	penetration_vector[0] = axis[penetration_vector_h][0];
 	penetration_vector[1] = axis[penetration_vector_h][1];
+
+	for (i = 0; i < a.nverts + b.nverts; i++) {
+		free(axis[i]);
+	}
+
 
 	return true;
 }
