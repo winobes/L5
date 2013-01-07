@@ -109,9 +109,16 @@ typedef struct {
 	ALLEGRO_EVENT_QUEUE* event_queue;
 	ALLEGRO_TIMER* timer;
 	ALLEGRO_DISPLAY* display;
+	float player_forward_speed;
+	float player_turn_speed;
+	float player_warp_speed;
+	float player_side_speed;
+	float npc_turn_speed;
+	float npc_forward_speed;
+	float npc_side_speed;
 } GameState;
 
-enum KEYS{RIGHT, DOWN, LEFT, UP, LCTRL};
+enum KEYS{RIGHT, DOWN, LEFT, UP, LCTRL, A, W, S, D};
 enum SHAPE{RECTANGLE, OCTAGON};
 
 const int width = 800;

@@ -24,6 +24,18 @@ void get_input(ALLEGRO_EVENT *event, bool *keys, bool *exit_game)
 			case ALLEGRO_KEY_LCTRL:
 				keys[LCTRL] = true;
 				break;
+			case ALLEGRO_KEY_A:
+				keys[A] = true;
+				break;
+			case ALLEGRO_KEY_W:
+				keys[W] = true;
+				break;
+			case ALLEGRO_KEY_S:
+				keys[S] = true;
+				break;
+			case ALLEGRO_KEY_D:
+				keys[D] = true;
+				break;
 		}
 	} else if (event->type == ALLEGRO_EVENT_KEY_UP) {
 		switch(event->keyboard.keycode) {
@@ -42,6 +54,18 @@ void get_input(ALLEGRO_EVENT *event, bool *keys, bool *exit_game)
 			case ALLEGRO_KEY_LCTRL:
 				keys[LCTRL] = false;
 				break;
+			case ALLEGRO_KEY_A:
+				keys[A] = false;
+				break;
+			case ALLEGRO_KEY_W:
+				keys[W] = false;
+				break;
+			case ALLEGRO_KEY_S:
+				keys[S] = false;
+				break;
+			case ALLEGRO_KEY_D:
+				keys[D] = false;
+				break;
 		}
 	} else if(event->type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
 		*exit_game = true;
@@ -49,8 +73,7 @@ void get_input(ALLEGRO_EVENT *event, bool *keys, bool *exit_game)
 }
 
 void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
-{ 
-	//int i, j;
+{
 	float penetration_scalar;
 	float penetration_vector[2];
 
@@ -58,11 +81,11 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 
 		//updating player direction
 		if (keys[RIGHT]) {
-			gs->player->d += .5*gs->player->dd*ALLEGRO_PI;
+			gs->player->d += gs->player_turn_speed * gs->player->dd*ALLEGRO_PI;
 			
 			if(!keys[UP]) {
-				gs->player->dx += .25*gs->player->ddxy * cos(gs->player->d - ALLEGRO_PI/2);
-				gs->player->dy += .25*gs->player->ddxy * sin(gs->player->d - ALLEGRO_PI/2);
+				gs->player->dx += gs->player_forward_speed * gs->player->ddxy * cos(gs->player->d - ALLEGRO_PI/2);
+				gs->player->dy += gs->player_forward_speed * gs->player->ddxy * sin(gs->player->d - ALLEGRO_PI/2);
 			}
 
 			/*	if(!keys[LEFT]) {
@@ -73,18 +96,23 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 		}
 
 		if (keys[LEFT]) {
-			gs->player->d -= .5*gs->player->dd*ALLEGRO_PI;
+			gs->player->d -= gs->player_turn_speed * gs->player->dd*ALLEGRO_PI;
 			
 			if(!keys[UP]) {
-				gs->player->dx += .25*gs->player->ddxy * cos(gs->player->d - ALLEGRO_PI/2);
-				gs->player->dy += .25*gs->player->ddxy * sin(gs->player->d - ALLEGRO_PI/2);
+				gs->player->dx += gs->player_forward_speed * gs->player->ddxy * cos(gs->player->d - ALLEGRO_PI/2);
+				gs->player->dy += gs->player_forward_speed * gs->player->ddxy * sin(gs->player->d - ALLEGRO_PI/2);
 			}
 		
 			/*	if(!keys[RIGHT]) {
 				gs->player->cx += (-cos(gs->player->d) - -cos(gs->player->d - .5*gs->player->dd*ALLEGRO_PI)) * gs->player->w;
 				gs->player->cy += (-sin(gs->player->d) - -sin(gs->player->d - .5*gs->player->dd*ALLEGRO_PI)) * gs->player->w;
 			}*/
+		}
 
+		// add thrust sideways left relative to forward vector of player ship direction
+		if (keys[A]) {
+			gs->player->dx += gs->player_side_speed * gs->player->ddxy * cos(gs->player->d - ALLEGRO_PI);
+			gs->player->dy += gs->player_side_speed * gs->player->ddxy * sin(gs->player->d - ALLEGRO_PI);		
 		}
 
 		if (gs->player->d > 2*ALLEGRO_PI) {
@@ -347,9 +375,9 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 		}
 
 		for (i = 0; i < gs->room[gs->current_room]->nbackgrounds; i++) {
-		if (gs->room[gs->current_room]->background[i].is_tiled == true) {
-			update_background(&gs->room[gs->current_room]->background[i], gs->player->cx, gs->player->cy, gs->room[gs->current_room]->w, gs->room[gs->current_room]->h);
-		}
+			if (gs->room[gs->current_room]->background[i].is_tiled == true) {
+				update_background(&gs->room[gs->current_room]->background[i], gs->player->cx, gs->player->cy, gs->room[gs->current_room]->w, gs->room[gs->current_room]->h);
+			}
 		}
 	}
 }
