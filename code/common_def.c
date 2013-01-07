@@ -40,6 +40,7 @@ struct Weapon {
 typedef struct {
 	bool exists, solid;
 	float health;
+	// current x, current y, sprite width, sprite height, direction, TODO check documentation comments
 	float cx, cy, w, h, d, m;
 	int shape, room, ai;
 	struct Extension ext; //used for collision testing. Vertices are calculated based on cx, cy, h, w, d.
