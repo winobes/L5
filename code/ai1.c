@@ -108,7 +108,7 @@ void teardown_vision(struct Extension *visLeftCentre,
 					struct Extension *visRightCentre)
 {
 	int i;
-	for(i = 0; i < 3; i++) {
+	for(i = 0; i < visCentre->nverts; i++) {
 		free(visLeftCentre->vert[i]);
 		free(visRightCentre->vert[i]);
 		free(visCentre->vert[i]);
