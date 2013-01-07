@@ -44,16 +44,18 @@ void make_cone(GameState *gs,
 //     vision left centre
 //     vision centre
 //     vision right centre
+//     dimension of the space
+//     minimum sight range
+//     maximum sight range
 void setup_vision(GameState *gs,
 					struct Extension *vlc,
 					struct Extension *vc,
-					struct Extension *vrc)
+					struct Extension *vrc,
+					int ndims,
+					int minsr,
+					int maxsr)
 {
 	int i;
-	int ndims = 2;
-	// minimum and maximum sight ranges
-    int minsr = 150;
-    int maxsr = 200;
 
     vlc->nverts = 4;
 	vlc->vert = malloc(vlc->nverts * sizeof(float*));
@@ -139,7 +141,10 @@ void ai1 (GameState *gs, int npcid) {
 	setup_vision(gs,
 				&visLeftCentre,
 				&visCentre,
-				&visRightCentre);
+				&visRightCentre,
+				2,
+				150,
+				200);
 
 	for (i = 0; i < 5; i++) {
 		npc->keys[i] = false;
