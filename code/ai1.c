@@ -4,55 +4,100 @@
 #define AI1_H
 
 
+// create a truncated cone in the given extension
+//
+// INPUT
+//     game state to access npc state and properties
+//     ext - the extension to create
+//     left - leftmost angle from forward on the npc
+//     right - rightmost angle of cone  
+//     minsr - minimum sight range
+//     maxsr - maximum sight range
+void make_cone(GameState *gs,
+				struct Extension *ext,
+				float left,
+				float right,
+				int minsr,
+				int maxsr)
+{
+	ext->vert[0][0] = minsr * sin(left) + gs->npc->cx;
+	ext->vert[0][1] = minsr * cos(left + ALLEGRO_PI) + gs->npc->cy;
 
+	ext->vert[1][0] = maxsr * sin(left) + gs->npc->cx;
+	ext->vert[1][1] = maxsr * cos(left + ALLEGRO_PI) + gs->npc->cy;
+
+	ext->vert[2][0] = maxsr * sin(right) + gs->npc->cx;
+	ext->vert[2][1] = maxsr * cos(right + ALLEGRO_PI) + gs->npc->cy;
+
+	ext->vert[3][0] = minsr * sin(right) + gs->npc->cx;
+	ext->vert[3][1] = minsr * cos(right + ALLEGRO_PI) + gs->npc->cy;
+}
+
+
+
+// setup truncated vision cone to determine ai movement and following behavior
+//
+// cone starts a distance away from npc to avoid overshooting
+//
+// INPUT :
+//     game state to access npc state and properties
+//     vision left centre
+//     vision centre
+//     vision right centre
 void setup_vision(GameState *gs,
-					struct Extension *visLeftCentre,
-					struct Extension *visCentre,
-					struct Extension *visRightCentre)
+					struct Extension *vlc,
+					struct Extension *vc,
+					struct Extension *vrc)
 {
 	int i;
-    visLeftCentre->nverts = 3;
-	visLeftCentre->vert = malloc(3 * sizeof(float*));
-	for (i = 0; i < 3; i++) {
-		visLeftCentre->vert[i] = malloc(2 * sizeof(visLeftCentre->vert[i]));
+	int ndims = 2;
+	// minimum and maximum sight ranges
+    int minsr = 150;
+    int maxsr = 200;
+
+    vlc->nverts = 4;
+	vlc->vert = malloc(vlc->nverts * sizeof(float*));
+	for (i = 0; i < vlc->nverts; i++) {
+		vlc->vert[i] = malloc(ndims * sizeof(vlc->vert[i]));
 	}
-	visRightCentre->nverts = 3;
-	visRightCentre->vert = malloc(3 * sizeof(float*));
-	for (i = 0; i < 3; i++) {
-		visRightCentre->vert[i] = malloc(2 * sizeof(visRightCentre->vert[i]));
+	vrc->nverts = 4;
+	vrc->vert = malloc(vrc->nverts * sizeof(float*));
+	for (i = 0; i < vrc->nverts; i++) {
+		vrc->vert[i] = malloc(ndims * sizeof(vrc->vert[i]));
 	}
-	visCentre->nverts = 3;
-	visCentre->vert = malloc(3 * sizeof(float*));
-	for (i = 0; i < 3; i++) {
-		visCentre->vert[i] = malloc(2 * sizeof(visCentre->vert[i]));
+	vc->nverts = 4;
+	vc->vert = malloc(vc->nverts * sizeof(float*));
+	for (i = 0; i < vc->nverts; i++) {
+		vc->vert[i] = malloc(ndims * sizeof(vc->vert[i]));
 	}
 
-	visLeftCentre->vert[0][0] = gs->npc->cx;
-	visLeftCentre->vert[0][1] = gs->npc->cy;
+	// leftmost angle of vision from the forward direction of npc unit
+    float lvis = gs->npc->d - ALLEGRO_PI/2;
+    // angle divding left and centre vision
+    float lcvis = gs->npc->d - ALLEGRO_PI/8;
+    // angle divding centre and right vision
+	float rcvis = gs->npc->d + ALLEGRO_PI/8;
+    // rightmost angle
+    float rvis = gs->npc->d + ALLEGRO_PI/2;
 
-	visCentre->vert[0][0] = visLeftCentre->vert[0][0];
-	visCentre->vert[0][1] = visLeftCentre->vert[0][1];
-
-	visRightCentre->vert[0][0] = visLeftCentre->vert[0][0];
-	visRightCentre->vert[0][1] = visLeftCentre->vert[0][1];
-
-	visLeftCentre->vert[1][0] = 300 * sin(gs->npc->d - ALLEGRO_PI/2) + gs->npc->cx;
-	visLeftCentre->vert[1][1] = 300 * cos(gs->npc->d - ALLEGRO_PI/2 + ALLEGRO_PI) + gs->npc->cy;
-
-	visLeftCentre->vert[2][0] = 300 * sin(gs->npc->d - ALLEGRO_PI/8) + gs->npc->cx;
-	visLeftCentre->vert[2][1] = 300 * cos(gs->npc->d - ALLEGRO_PI/8 + ALLEGRO_PI) + gs->npc->cy;
-
-	visCentre->vert[1][0] = visLeftCentre->vert[2][0];
-	visCentre->vert[1][1] = visLeftCentre->vert[2][1];
-
-	visCentre->vert[2][0] = 300 * sin(gs->npc->d + ALLEGRO_PI/8) + gs->npc->cx;
-	visCentre->vert[2][1] = 300 * cos(gs->npc->d + ALLEGRO_PI/8 + ALLEGRO_PI) + gs->npc->cy;
-
-	visRightCentre->vert[1][0] = visCentre->vert[2][0];
-	visRightCentre->vert[1][1] = visCentre->vert[2][1];
-
-	visRightCentre->vert[2][0] = 300 * sin(gs->npc->d + ALLEGRO_PI/2) + gs->npc->cx;
-	visRightCentre->vert[2][1] = 300 * cos(gs->npc->d + ALLEGRO_PI/2 + ALLEGRO_PI) + gs->npc->cy;
+	make_cone(gs,
+				vlc,
+				lvis,
+				lcvis,
+				minsr,
+				maxsr);
+	make_cone(gs,
+				vc,
+				lcvis,
+				rcvis,
+				minsr,
+				maxsr);
+	make_cone(gs,
+				vrc,
+				rcvis,
+				rvis,
+				minsr,
+				maxsr);
 }
 
 
