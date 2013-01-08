@@ -65,10 +65,10 @@ void do_graphics_update(GameState *gs, bool *redraw)
 				al_draw_scaled_rotated_bitmap(
 					gs->npc[i].sprite,
 					gs->npc[i].gfx_w/2, gs->npc[i].gfx_h/2, //center x,y
-					gs->npc[i].cx - (gs->player->cx - width/2), 
-					gs->npc[i].cy - (gs->player->cy - height/2), // destination of point center x,y
+					gs->npc[i].pos.cx - (gs->player->cx - width/2), 
+					gs->npc[i].pos.cy - (gs->player->cy - height/2), // destination of point center x,y
 					1, 1, //x scale, y scale
-					gs->npc[i].d, // angle		
+					gs->npc[i].pos.cd, // angle		
 					0 //flags
 				);
 			}

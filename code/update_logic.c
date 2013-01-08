@@ -165,40 +165,40 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 
 			//updating NPC direction
 			if (gs->npc[i].keys[RIGHT]) {
-				gs->npc[i].d += .5*gs->npc[i].dd*ALLEGRO_PI;
+				gs->npc[i].pos.cd += .5*gs->npc[i].mot.dd*ALLEGRO_PI;
 			}
 
 			if (gs->npc[i].keys[LEFT]) {
-				gs->npc[i].d -= .5*gs->npc[i].dd*ALLEGRO_PI;
+				gs->npc[i].pos.cd -= .5*gs->npc[i].mot.dd*ALLEGRO_PI;
 			}
 
-			if (gs->npc[i].d > 2*ALLEGRO_PI) {
-				gs->npc[i].d -= 2*ALLEGRO_PI;
+			if (gs->npc[i].pos.cd > 2*ALLEGRO_PI) {
+				gs->npc[i].pos.cd -= 2*ALLEGRO_PI;
 			}
 
-			if (gs->npc[i].d < 0) {
-				gs->npc[i].d += 2*ALLEGRO_PI;
+			if (gs->npc[i].pos.cd < 0) {
+				gs->npc[i].pos.cd += 2*ALLEGRO_PI;
 			}
 
 			//updating NPC dy and dx based on acceleration & direction
 			if (gs->npc[i].keys[UP]) {
-				gs->npc[i].dx += gs->npc[i].ddxy * cos(gs->npc[i].d - ALLEGRO_PI/2);
-				gs->npc[i].dy += gs->npc[i].ddxy * sin(gs->npc[i].d - ALLEGRO_PI/2);
+				gs->npc[i].mot.dx += gs->npc[i].mot.ddxy * cos(gs->npc[i].pos.cd - ALLEGRO_PI/2);
+				gs->npc[i].mot.dy += gs->npc[i].mot.ddxy * sin(gs->npc[i].pos.cd - ALLEGRO_PI/2);
 			}
 			//moving backwords...
 			if (gs->npc[i].keys[DOWN]) {
-				gs->npc[i].dx -= gs->npc[i].ddxy * cos(gs->npc[i].d - ALLEGRO_PI/2);
-				gs->npc[i].dy -= gs->npc[i].ddxy * sin(gs->npc[i].d - ALLEGRO_PI/2);
+				gs->npc[i].mot.dx -= gs->npc[i].mot.ddxy * cos(gs->npc[i].pos.cd - ALLEGRO_PI/2);
+				gs->npc[i].mot.dy -= gs->npc[i].mot.ddxy * sin(gs->npc[i].pos.cd - ALLEGRO_PI/2);
 			}
 
-			calculate_speed(gs->npc[i].dx, gs->npc[i].dy, &gs->npc[i].s);
+			calculate_speed(gs->npc[i].mot.dx, gs->npc[i].mot.dy, &gs->npc[i].mot.spd);
 
 			//updating NPC position based on dx and dy
-			gs->npc[i].cx += gs->npc[i].dx;
-			gs->npc[i].cy += gs->npc[i].dy;
+			gs->npc[i].pos.cx += gs->npc[i].mot.dx;
+			gs->npc[i].pos.cy += gs->npc[i].mot.dy;
 
 			//recalculating the NPC vertices
-			calculate_verts_ship(&gs->npc[i].ext, gs->npc[i].cx, gs->npc[i].cy, gs->npc[i].d);
+			calculate_verts_ship(&gs->npc[i].ext, gs->npc[i].pos.cx, gs->npc[i].pos.cy, gs->npc[i].pos.cd);
 		}
 
 		//check for player collisions with walls
@@ -231,13 +231,13 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 						gs->player->cx += penetration_vector[0] * penetration_scalar/2;
 						gs->player->cy += penetration_vector[1] * penetration_scalar/2;
 				
-						gs->npc[i].cx += -penetration_vector[0] * penetration_scalar/2;
-						gs->npc[i].cy += -penetration_vector[1] * penetration_scalar/2;
+						gs->npc[i].pos.cx += -penetration_vector[0] * penetration_scalar/2;
+						gs->npc[i].pos.cy += -penetration_vector[1] * penetration_scalar/2;
 
-						bounce(gs->player->m, gs->npc[i].m, .9, gs->player->cx, gs->player->cy, gs->npc[i].cx, gs->npc[i].cy, &gs->player->dx, &gs->player->dy, &gs->npc[i].dx, &gs->npc[i].dy);
+						bounce(gs->player->bouncy, gs->npc[i].bouncy, .9, gs->player->cx, gs->player->cy, gs->npc[i].pos.cx, gs->npc[i].pos.cy, &gs->player->dx, &gs->player->dy, &gs->npc[i].mot.dx, &gs->npc[i].mot.dy);
 							
 						calculate_speed(gs->player->dx, gs->player->dy, &gs->player->s);
-						calculate_speed(gs->npc[i].dx, gs->npc[i].dy, &gs->npc[i].s);
+						calculate_speed(gs->npc[i].mot.dx, gs->npc[i].mot.dy, &gs->npc[i].mot.spd);
 					}
 				}
 			}
@@ -250,10 +250,10 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 				if (gs->room[gs->npc[i].room]->wall[j]->exists) {
 					if (collide(gs->npc[i].ext, gs->room[gs->npc[i].room]->wall[j]->ext, penetration_vector, &penetration_scalar)) {
 						if (gs->room[gs->npc[i].room]->wall[j]->solid) {
-							gs->npc[i].cx += penetration_vector[0] * penetration_scalar;
-							gs->npc[i].cy += penetration_vector[1] * penetration_scalar;
+							gs->npc[i].pos.cx += penetration_vector[0] * penetration_scalar;
+							gs->npc[i].pos.cy += penetration_vector[1] * penetration_scalar;
 				
-							reflect(&gs->npc[i].dx, &gs->npc[i].dy, penetration_vector);
+							reflect(&gs->npc[i].mot.dx, &gs->npc[i].mot.dy, penetration_vector);
 						}
 					}
 				}

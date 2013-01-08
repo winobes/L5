@@ -14,7 +14,7 @@ Player *init_player()
 	player->nweapons = 1;
 
 	player->d = 0;
-	player->m = 500;
+	player->bouncy = 500;
 	player->cx = 20;
 	player->cy = 20;
 

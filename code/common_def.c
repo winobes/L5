@@ -40,13 +40,29 @@ struct Weapon {
 };	
 
 typedef struct {
+	// current x, current y, direction
+	float cx, cy, cd;
+} Position;
+
+typedef struct {
+	// change in x and y motion per game frame (velocity)
+	float dx, dy;
+	// magnitude of overall velocity
+	float spd;
+	// change in orientation per game frame, CCW positive
+	float dd;
+	// acceleration in x or y direction per frame, constant
+	float ddxy;
+} Motion;
+
+typedef struct {
 	bool exists, solid;
 	float health;
-	// current x, current y, sprite width, sprite height, direction, TODO check documentation comments
-	float cx, cy, d, m;
+	Position pos;
+	float bouncy;  // bounce elasticity
 	int room, ai, gfx_w, gfx_h;
 	struct Extension ext; //used for collision testing. Vertices are calculated based on cx, cy, h, w, d.
-	float dx, dy, s, dd, ddxy;
+	Motion mot;
 	int nanimatics;
 	ALLEGRO_BITMAP *sprite, *spritesheet;
 	struct Animatic *ani;
@@ -83,7 +99,7 @@ typedef struct {
 typedef struct {
 	bool exist, flying;
 	float health;
-	float cx, cy, d, m;
+	float cx, cy, d, bouncy;
 	struct Extension ext; 
 	//used for collision testing. Vertices are calculated based on cx, cy, h, w, d.
 	float dx, dy, s, dd, ddxy;

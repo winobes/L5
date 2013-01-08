@@ -1,4 +1,6 @@
+#include "common_def.c"
 #include "player.c"
+
 
 #ifndef AI1_H
 #define AI1_H
@@ -20,19 +22,18 @@ void make_cone(GameState *gs,
 				int minsr,
 				int maxsr)
 {
-	ext->vert[0][0] = minsr * sin(left) + gs->npc->cx;
-	ext->vert[0][1] = minsr * cos(left + ALLEGRO_PI) + gs->npc->cy;
+	ext->vert[0][0] = minsr * sin(left) + gs->npc->pos.cx;
+	ext->vert[0][1] = minsr * cos(left + ALLEGRO_PI) + gs->npc->pos.cy;
 
-	ext->vert[1][0] = maxsr * sin(left) + gs->npc->cx;
-	ext->vert[1][1] = maxsr * cos(left + ALLEGRO_PI) + gs->npc->cy;
+	ext->vert[1][0] = maxsr * sin(left) + gs->npc->pos.cx;
+	ext->vert[1][1] = maxsr * cos(left + ALLEGRO_PI) + gs->npc->pos.cy;
 
-	ext->vert[2][0] = maxsr * sin(right) + gs->npc->cx;
-	ext->vert[2][1] = maxsr * cos(right + ALLEGRO_PI) + gs->npc->cy;
+	ext->vert[2][0] = maxsr * sin(right) + gs->npc->pos.cx;
+	ext->vert[2][1] = maxsr * cos(right + ALLEGRO_PI) + gs->npc->pos.cy;
 
-	ext->vert[3][0] = minsr * sin(right) + gs->npc->cx;
-	ext->vert[3][1] = minsr * cos(right + ALLEGRO_PI) + gs->npc->cy;
+	ext->vert[3][0] = minsr * sin(right) + gs->npc->pos.cx;
+	ext->vert[3][1] = minsr * cos(right + ALLEGRO_PI) + gs->npc->pos.cy;
 }
-
 
 
 // setup truncated vision cone to determine ai movement and following behavior
@@ -74,13 +75,13 @@ void setup_vision(GameState *gs,
 	}
 
 	// leftmost angle of vision from the forward direction of npc unit
-    float lvis = gs->npc->d - ALLEGRO_PI/2;
+    float lvis = gs->npc->pos.cd - ALLEGRO_PI/2;
     // angle divding left and centre vision
-    float lcvis = gs->npc->d - ALLEGRO_PI/8;
+    float lcvis = gs->npc->pos.cd - ALLEGRO_PI/8;
     // angle divding centre and right vision
-	float rcvis = gs->npc->d + ALLEGRO_PI/8;
+	float rcvis = gs->npc->pos.cd + ALLEGRO_PI/8;
     // rightmost angle
-    float rvis = gs->npc->d + ALLEGRO_PI/2;
+    float rvis = gs->npc->pos.cd + ALLEGRO_PI/2;
 
 	make_cone(gs,
 				vlc,
@@ -119,6 +120,35 @@ void teardown_vision(struct Extension *visLeftCentre,
 }
 
 
+// bring ship closer to stopping its motion
+// INPUT
+// pos    - position of ship
+// motion - motion/position struct of ship
+// keys   - key press control vector of ship
+void stopping(Position *pos, Motion* motion, bool *keys)
+{
+	float velangle;
+	float normaldx = motion->dx / sqrt(motion->dx*motion->dx + motion->dy*motion->dy);
+	if (motion->dy < 0) {
+		velangle = asin(normaldx);
+		if (motion->dx < 0) {
+			velangle += 2*ALLEGRO_PI;
+		}
+	} else {
+		velangle = ALLEGRO_PI - asin(normaldx);
+	}
+	if (sqrt(motion->dx*motion->dx + motion->dy*motion->dy) > .05) {
+		if(velangle - pos->cd < ALLEGRO_PI/8 && velangle - pos->cd > -ALLEGRO_PI/8) {
+			keys[DOWN] = true;
+		} else if(asin(normaldx) - pos->cd < ALLEGRO_PI) {
+			keys[LEFT] = true;
+		} else if(asin(normaldx) - pos->cd > ALLEGRO_PI) {
+			keys[RIGHT] = true;
+		}
+	}
+}
+
+
 void ai1 (GameState *gs, int npcid) {
 
 	NPC *npc = &gs->npc[npcid];
@@ -127,9 +157,6 @@ void ai1 (GameState *gs, int npcid) {
 	struct Extension visLeftCentre;
 	struct Extension visRightCentre;
 	struct Extension visCentre;
-
-	float normaldx;
-	float velangle;
 
 	bool sighted = false;
 
@@ -165,27 +192,8 @@ void ai1 (GameState *gs, int npcid) {
 		}
 	}
 
-	// stopping if the player is not in sight
-
 	if (sighted == false)  {
-		normaldx = npc->dx / sqrt(npc->dx*npc->dx + npc->dy*npc->dy);
-		if (npc->dy < 0) {
-			velangle = asin(normaldx);
-			if (npc->dx < 0) {
-				velangle += 2*ALLEGRO_PI;
-			}
-		} else {
-			velangle = ALLEGRO_PI - asin(normaldx);
-		}
-		if (sqrt(npc->dx*npc->dx + npc->dy*npc->dy) > .05) {
-			if(velangle - npc->d < ALLEGRO_PI/8 && velangle - npc->d > - ALLEGRO_PI/8) {
-				npc->keys[DOWN] = true;
-			} else if(asin(normaldx) - npc->d < ALLEGRO_PI) {
-				npc->keys[LEFT] = true;
-			} else if(asin(normaldx) - npc->d > ALLEGRO_PI) {
-				npc->keys[RIGHT] = true;
-			}
-		}
+		stopping(&npc->pos, &npc->mot, npc->keys);
 	}
 	teardown_vision(&visLeftCentre, &visCentre, &visRightCentre);
 }
