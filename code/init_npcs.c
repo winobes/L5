@@ -14,7 +14,7 @@ NPC *init_npcs(GameState *gs)
 	npc[0].health = 10;
 	npc[0].pos.cx = 0;
 	npc[0].pos.cy = 0;
-	npc[0].pos.cd = ALLEGRO_PI/2;
+	npc[0].pos.cd = PI/2;
 	npc[0].bouncy = 100;
 	npc[0].gfx_w = 15;
 	npc[0].gfx_h = 15;
@@ -49,8 +49,8 @@ NPC *init_npcs(GameState *gs)
 
 	npc[0].ext.ang[0] = -atan(1);
 	npc[0].ext.ang[1] = atan(1);
-	npc[0].ext.ang[2] = -atan(1) + ALLEGRO_PI;
-	npc[0].ext.ang[3] = atan(1) + ALLEGRO_PI;
+	npc[0].ext.ang[2] = -atan(1) + PI;
+	npc[0].ext.ang[3] = atan(1) + PI;
 
 	npc[0].nanimatics = 3;
 	npc[0].ani = malloc(npc[0].nanimatics * sizeof(struct Animatic));
@@ -112,7 +112,7 @@ NPC *init_npcs(GameState *gs)
 	npc[1].health = 10;
 	npc[1].pos.cx = 10;
 	npc[1].pos.cy = 10;
-	npc[1].pos.cd = ALLEGRO_PI/2;
+	npc[1].pos.cd = PI/2;
 	npc[1].bouncy = 100;
 	npc[1].gfx_w = 15;
 	npc[1].gfx_h = 15;
@@ -148,8 +148,8 @@ NPC *init_npcs(GameState *gs)
 
 	npc[1].ext.ang[1] = -atan(1);
 	npc[1].ext.ang[1] = atan(1);
-	npc[1].ext.ang[2] = -atan(1) + ALLEGRO_PI;
-	npc[1].ext.ang[3] = atan(1) + ALLEGRO_PI;
+	npc[1].ext.ang[2] = -atan(1) + PI;
+	npc[1].ext.ang[3] = atan(1) + PI;
 
 	npc[1].nanimatics = 3;
 	npc[1].ani = malloc(npc[1].nanimatics * sizeof(struct Animatic));

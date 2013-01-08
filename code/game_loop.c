@@ -22,10 +22,11 @@ int game_loop() {
 	gs->player_forward_speed = 0.5;
 	gs->player_turn_speed = 0.25;
 	gs->player_warp_speed = 5.0;
-	gs->player_side_speed = 0.1;
+	gs->player_side_speed = 0.2;
 	gs->npc_turn_speed = 0.3;
 	gs->npc_forward_speed = 0.6;
-	gs->npc_side_speed = 0.15;
+	gs->npc_side_speed = 0.25;
+	gs->s_held = false;
 	
 	gs->player = init_player(); // TODO fix the weapon init
 	gs->nrooms = 2;

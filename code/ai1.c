@@ -23,16 +23,16 @@ void make_cone(GameState *gs,
 				int maxsr)
 {
 	ext->vert[0][0] = minsr * sin(left) + gs->npc->pos.cx;
-	ext->vert[0][1] = minsr * cos(left + ALLEGRO_PI) + gs->npc->pos.cy;
+	ext->vert[0][1] = minsr * cos(left + PI) + gs->npc->pos.cy;
 
 	ext->vert[1][0] = maxsr * sin(left) + gs->npc->pos.cx;
-	ext->vert[1][1] = maxsr * cos(left + ALLEGRO_PI) + gs->npc->pos.cy;
+	ext->vert[1][1] = maxsr * cos(left + PI) + gs->npc->pos.cy;
 
 	ext->vert[2][0] = maxsr * sin(right) + gs->npc->pos.cx;
-	ext->vert[2][1] = maxsr * cos(right + ALLEGRO_PI) + gs->npc->pos.cy;
+	ext->vert[2][1] = maxsr * cos(right + PI) + gs->npc->pos.cy;
 
 	ext->vert[3][0] = minsr * sin(right) + gs->npc->pos.cx;
-	ext->vert[3][1] = minsr * cos(right + ALLEGRO_PI) + gs->npc->pos.cy;
+	ext->vert[3][1] = minsr * cos(right + PI) + gs->npc->pos.cy;
 }
 
 
@@ -75,13 +75,13 @@ void setup_vision(GameState *gs,
 	}
 
 	// leftmost angle of vision from the forward direction of npc unit
-    float lvis = gs->npc->pos.cd - ALLEGRO_PI/2;
+    float lvis = gs->npc->pos.cd - PI/2;
     // angle divding left and centre vision
-    float lcvis = gs->npc->pos.cd - ALLEGRO_PI/8;
+    float lcvis = gs->npc->pos.cd - PI/8;
     // angle divding centre and right vision
-	float rcvis = gs->npc->pos.cd + ALLEGRO_PI/8;
+	float rcvis = gs->npc->pos.cd + PI/8;
     // rightmost angle
-    float rvis = gs->npc->pos.cd + ALLEGRO_PI/2;
+    float rvis = gs->npc->pos.cd + PI/2;
 
 	make_cone(gs,
 				vlc,

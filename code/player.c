@@ -13,10 +13,10 @@ Player *init_player()
 	player->hit_wall = -1;
 	player->nweapons = 1;
 
-	player->d = 0;
 	player->bouncy = 500;
-	player->cx = 20;
-	player->cy = 20;
+	player->pos.cx = 20;
+	player->pos.cy = 20;
+	player->pos.cd = 0;
 
 	player->ext.nverts = 4;
 	player->ext.dis = malloc(player->ext.nverts * sizeof(float));
@@ -32,14 +32,14 @@ Player *init_player()
 
 	player->ext.ang[0] = -atan(1);
 	player->ext.ang[1] = atan(1);
-	player->ext.ang[2] = -atan(1) + ALLEGRO_PI;
-	player->ext.ang[3] = atan(1) + ALLEGRO_PI;
+	player->ext.ang[2] = -atan(1) + PI;
+	player->ext.ang[3] = atan(1) + PI;
 
 
-	player->dx = 0;
-	player->dy = 0;
-	player->dd = .03;
-	player->ddxy = .03;
+	player->mot.dx = 0;
+	player->mot.dy = 0;
+	player->mot.dd = .03;
+	player->mot.ddxy = .03;
 
 	player->gfx_w = 100;
 	player->gfx_h = 100;

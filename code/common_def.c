@@ -99,10 +99,11 @@ typedef struct {
 typedef struct {
 	bool exist, flying;
 	float health;
-	float cx, cy, d, bouncy;
+	Position pos; 
+	float bouncy;
 	struct Extension ext; 
 	//used for collision testing. Vertices are calculated based on cx, cy, h, w, d.
-	float dx, dy, s, dd, ddxy;
+	Motion mot;
 	ALLEGRO_BITMAP *sprite, *spritesheet;
 	//ultimately gets drawn to the display
 	//spritesheet is used for animatics
@@ -133,15 +134,18 @@ typedef struct {
 	float npc_turn_speed;
 	float npc_forward_speed;
 	float npc_side_speed;
+	bool s_held;
 } GameState;
 
 int NKEYS = 9;
-enum KEYS{RIGHT, DOWN, LEFT, UP, LCTRL, A, W, S, D};
+enum KEYS{RIGHT, DOWN, LEFT, UP, LCTRL, KEYA, KEYW, KEYS, KEYD};
 enum SHAPE{RECTANGLE, OCTAGON};
 
 const int width = 800;
 const int height = 600;
 
 const int FPS = 60;
+
+const float PI = ALLEGRO_PI;
 
 #endif // COMMON_DEF_H

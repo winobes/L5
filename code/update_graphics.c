@@ -19,18 +19,33 @@ void do_graphics_update(GameState *gs, bool *redraw)
 
 		for (i = 0; i < gs->room[gs->current_room]->nbackgrounds; i++) {
 			if (gs->room[gs->current_room]->background[i].is_tiled == true) {
-				al_draw_bitmap(gs->room[gs->current_room]->background[i].background_image, -gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->cx-gs->room[0]->w/2) + gs->room[gs->current_room]->background[i].x1*width, -gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->cy-gs->room[0]->h/2) + gs->room[gs->current_room]->background[i].y1*height , 0);
+				al_draw_bitmap(gs->room[gs->current_room]->background[i].background_image,
+					-gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->pos.cx-gs->room[0]->w/2) + gs->room[gs->current_room]->background[i].x1*width,
+					-gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->pos.cy-gs->room[0]->h/2) + gs->room[gs->current_room]->background[i].y1*height,
+					0);
 
-				al_draw_bitmap(gs->room[gs->current_room]->background[i].background_image, -gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->cx-gs->room[0]->w/2) + gs->room[gs->current_room]->background[i].x2*width, -gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->cy-gs->room[0]->h/2) + gs->room[gs->current_room]->background[i].y2*height , 0);
+				al_draw_bitmap(gs->room[gs->current_room]->background[i].background_image,
+					-gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->pos.cx-gs->room[0]->w/2) + gs->room[gs->current_room]->background[i].x2*width,
+					-gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->pos.cy-gs->room[0]->h/2) + gs->room[gs->current_room]->background[i].y2*height,
+					0);
 
-				al_draw_bitmap(gs->room[gs->current_room]->background[i].background_image, -gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->cx-gs->room[0]->w/2) + gs->room[gs->current_room]->background[i].x1*width, -gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->cy-gs->room[0]->h/2) + gs->room[gs->current_room]->background[i].y2*height , 0);
+				al_draw_bitmap(gs->room[gs->current_room]->background[i].background_image,
+					-gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->pos.cx-gs->room[0]->w/2) + gs->room[gs->current_room]->background[i].x1*width,
+					-gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->pos.cy-gs->room[0]->h/2) + gs->room[gs->current_room]->background[i].y2*height,
+					0);
 
-				al_draw_bitmap(gs->room[gs->current_room]->background[i].background_image, -gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->cx-gs->room[0]->w/2) + gs->room[gs->current_room]->background[i].x2*width, -gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->cy-gs->room[0]->h/2) + gs->room[gs->current_room]->background[i].y1*height , 0);
+				al_draw_bitmap(gs->room[gs->current_room]->background[i].background_image,
+					-gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->pos.cx-gs->room[0]->w/2) + gs->room[gs->current_room]->background[i].x2*width,
+					-gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->pos.cy-gs->room[0]->h/2) + gs->room[gs->current_room]->background[i].y1*height,
+					0);
 
 			}
 			
 			else {
-				al_draw_bitmap(gs->room[gs->current_room]->background[i].background_image, gs->room[gs->current_room]->background[i].x1 - gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->cx-gs->room[0]->w/2), gs->room[gs->current_room]->background[i].y1 - gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->cy-gs->room[0]->h/2), 0);
+				al_draw_bitmap(gs->room[gs->current_room]->background[i].background_image,
+					gs->room[gs->current_room]->background[i].x1 - gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->pos.cx-gs->room[0]->w/2),
+					gs->room[gs->current_room]->background[i].y1 - gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->pos.cy-gs->room[0]->h/2),
+					0);
 			}
 
 		}
@@ -65,8 +80,8 @@ void do_graphics_update(GameState *gs, bool *redraw)
 				al_draw_scaled_rotated_bitmap(
 					gs->npc[i].sprite,
 					gs->npc[i].gfx_w/2, gs->npc[i].gfx_h/2, //center x,y
-					gs->npc[i].pos.cx - (gs->player->cx - width/2), 
-					gs->npc[i].pos.cy - (gs->player->cy - height/2), // destination of point center x,y
+					gs->npc[i].pos.cx - (gs->player->pos.cx - width/2), 
+					gs->npc[i].pos.cy - (gs->player->pos.cy - height/2), // destination of point center x,y
 					1, 1, //x scale, y scale
 					gs->npc[i].pos.cd, // angle		
 					0 //flags
@@ -78,17 +93,17 @@ void do_graphics_update(GameState *gs, bool *redraw)
 			//all of the walls in the current room
 			// TODO check line break does not affect logic
 			if (gs->room[gs->current_room]->wall[i]->exists &&
-				gs->room[gs->current_room]->wall[i]->ext.vert[0][0] - gs->player->cx < width/2 +
+				gs->room[gs->current_room]->wall[i]->ext.vert[0][0] - gs->player->pos.cx < width/2 +
 					gs->room[gs->current_room]->wall[i]->h + gs->room[gs->current_room]->wall[i]->w &&
-				gs->room[gs->current_room]->wall[i]->ext.vert[0][1] - gs->player->cy < height/2 +
+				gs->room[gs->current_room]->wall[i]->ext.vert[0][1] - gs->player->pos.cy < height/2 +
 					gs->room[gs->current_room]->wall[i]->w + gs->room[gs->current_room]->wall[i]->h) {
 				//only draw if it exists and is close enough to the gs->player that it might possibly be in view of the screen
 				al_draw_scaled_rotated_bitmap(
 					gs->room[gs->current_room]->wall[i]->sprite,
 					0, //center x,y
 					0,
-					gs->room[gs->current_room]->wall[i]->ext.vert[0][0] - (gs->player->cx - width/2),
-					gs->room[gs->current_room]->wall[i]->ext.vert[0][1] - (gs->player->cy - height/2), //destination of point center x,y
+					gs->room[gs->current_room]->wall[i]->ext.vert[0][0] - (gs->player->pos.cx - width/2),
+					gs->room[gs->current_room]->wall[i]->ext.vert[0][1] - (gs->player->pos.cy - height/2), //destination of point center x,y
 					1, 1, //x scale, y scale
 					gs->room[gs->current_room]->wall[i]->d, // angle		
 					0 //flags
@@ -109,8 +124,8 @@ void do_graphics_update(GameState *gs, bool *redraw)
 						al_map_rgba_f(1,1,1,1),
 						gs->player->weapon.w/2,
 						gs->player->weapon.h/2,
-						gs->player->weapon.x[i] - (gs->player->cx - width/2),
-						gs->player->weapon.y[i] - (gs->player->cy - height/2),
+						gs->player->weapon.x[i] - (gs->player->pos.cx - width/2),
+						gs->player->weapon.y[i] - (gs->player->pos.cy - height/2),
 						1,
 						1,
 						0,0);
@@ -149,20 +164,20 @@ void do_graphics_update(GameState *gs, bool *redraw)
 			gs->player->gfx_w/2, gs->player->gfx_h/2, //center x,y
 			width/2, height/2, // destination of point center x,y
 			1, 1, //x scale, y scale
-			gs->player->d, // angle		
+			gs->player->pos.cd, // angle		
 			0 //flags
 		);
 
 		//words on sreen for troubleshooting, etc.
-		al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 4*12, ALLEGRO_ALIGN_RIGHT,"y = %f", gs->player->cy);
-		al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 5*12, ALLEGRO_ALIGN_RIGHT,"x = %f", gs->player->cx);
+		al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 4*12, ALLEGRO_ALIGN_RIGHT,"y = %f", gs->player->pos.cy);
+		al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 5*12, ALLEGRO_ALIGN_RIGHT,"x = %f", gs->player->pos.cx);
 	al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 7*12, ALLEGRO_ALIGN_RIGHT,"npc[0].health = %f", gs->npc[0].health);
 al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 8*12, ALLEGRO_ALIGN_RIGHT,"npc[1].health = %f", gs->npc[1].health);
 
 
 ////debugging the player ext
 		for (j = 0; j < gs->player->ext.nverts; j++) {
-			al_draw_pixel(gs->player->ext.vert[j][0]-(gs->player->cx - width/2), gs->player->ext.vert[j][1]-(gs->player->cy - height/2), al_map_rgb(83,207,46));
+			al_draw_pixel(gs->player->ext.vert[j][0]-(gs->player->pos.cx - width/2), gs->player->ext.vert[j][1]-(gs->player->pos.cy - height/2), al_map_rgb(83,207,46));
 		}
 		/*al_draw_textf(font10, al_map_rgb(83, 207, 46), width, 7*12, ALLEGRO_ALIGN_RIGHT,"health2 %f", gs->npc[1].health);
 		al_draw_textf(font10, al_map_rgb(83, 207, 46), width, 8*12, ALLEGRO_ALIGN_RIGHT,"speed = %f", gs->player->s);

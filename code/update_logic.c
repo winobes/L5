@@ -25,16 +25,16 @@ void get_input(ALLEGRO_EVENT *event, bool *keys, bool *exit_game)
 				keys[LCTRL] = true;
 				break;
 			case ALLEGRO_KEY_A:
-				keys[A] = true;
+				keys[KEYA] = true;
 				break;
 			case ALLEGRO_KEY_W:
-				keys[W] = true;
+				keys[KEYW] = true;
 				break;
 			case ALLEGRO_KEY_S:
-				keys[S] = true;
+				keys[KEYS] = true;
 				break;
 			case ALLEGRO_KEY_D:
-				keys[D] = true;
+				keys[KEYD] = true;
 				break;
 		}
 	} else if (event->type == ALLEGRO_EVENT_KEY_UP) {
@@ -55,16 +55,16 @@ void get_input(ALLEGRO_EVENT *event, bool *keys, bool *exit_game)
 				keys[LCTRL] = false;
 				break;
 			case ALLEGRO_KEY_A:
-				keys[A] = false;
+				keys[KEYA] = false;
 				break;
 			case ALLEGRO_KEY_W:
-				keys[W] = false;
+				keys[KEYW] = false;
 				break;
 			case ALLEGRO_KEY_S:
-				keys[S] = false;
+				keys[KEYS] = false;
 				break;
 			case ALLEGRO_KEY_D:
-				keys[D] = false;
+				keys[KEYD] = false;
 				break;
 		}
 	} else if(event->type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
@@ -81,76 +81,89 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 
 		//updating player direction
 		if (keys[RIGHT]) {
-			gs->player->d += gs->player_turn_speed * gs->player->dd*ALLEGRO_PI;
+			gs->player->pos.cd += gs->player_turn_speed * gs->player->mot.dd*PI;
 			
 			if(!keys[UP]) {
-				gs->player->dx += gs->player_forward_speed * gs->player->ddxy * cos(gs->player->d - ALLEGRO_PI/2);
-				gs->player->dy += gs->player_forward_speed * gs->player->ddxy * sin(gs->player->d - ALLEGRO_PI/2);
+				gs->player->mot.dx += gs->player_forward_speed * gs->player->mot.ddxy * cos(gs->player->pos.cd - PI/2);
+				gs->player->mot.dy += gs->player_forward_speed * gs->player->mot.ddxy * sin(gs->player->pos.cd - PI/2);
 			}
 
 			/*	if(!keys[LEFT]) {
-				gs->player->cx += (-cos(gs->player->d) - -cos(gs->player->d - .5*gs->player->dd*ALLEGRO_PI)) * gs->player->w;
-				gs->player->cy += (-sin(gs->player->d) - -sin(gs->player->d - .5*gs->player->dd*ALLEGRO_PI)) * gs->player->w;
+				gs->player->pos.cx += (-cos(gs->player->pos.cd) - -cos(gs->player->pos.cd - .5*gs->player->mot.dd*PI)) * gs->player->w;
+				gs->player->pos.cy += (-sin(gs->player->pos.cd) - -sin(gs->player->pos.cd - .5*gs->player->mot.dd*PI)) * gs->player->w;
 
 			}*/
 		}
 
 		if (keys[LEFT]) {
-			gs->player->d -= gs->player_turn_speed * gs->player->dd*ALLEGRO_PI;
+			gs->player->pos.cd -= gs->player_turn_speed * gs->player->mot.dd*PI;
 			
 			if(!keys[UP]) {
-				gs->player->dx += gs->player_forward_speed * gs->player->ddxy * cos(gs->player->d - ALLEGRO_PI/2);
-				gs->player->dy += gs->player_forward_speed * gs->player->ddxy * sin(gs->player->d - ALLEGRO_PI/2);
+				gs->player->mot.dx += gs->player_forward_speed * gs->player->mot.ddxy * cos(gs->player->pos.cd - PI/2);
+				gs->player->mot.dy += gs->player_forward_speed * gs->player->mot.ddxy * sin(gs->player->pos.cd - PI/2);
 			}
 		
 			/*	if(!keys[RIGHT]) {
-				gs->player->cx += (-cos(gs->player->d) - -cos(gs->player->d - .5*gs->player->dd*ALLEGRO_PI)) * gs->player->w;
-				gs->player->cy += (-sin(gs->player->d) - -sin(gs->player->d - .5*gs->player->dd*ALLEGRO_PI)) * gs->player->w;
+				gs->player->pos.cx += (-cos(gs->player->pos.cd) - -cos(gs->player->pos.cd - .5*gs->player->mot.dd*PI)) * gs->player->w;
+				gs->player->pos.cy += (-sin(gs->player->pos.cd) - -sin(gs->player->pos.cd - .5*gs->player->mot.dd*PI)) * gs->player->w;
 			}*/
 		}
 
 		// wrap orientation to the range [0,2*PI]
-		if (gs->player->d > 2*ALLEGRO_PI) {
-			gs->player->d -= 2*ALLEGRO_PI;
-		} else if (gs->player->d < 0) {
-			gs->player->d += 2*ALLEGRO_PI;
+		if (gs->player->pos.cd > 2*PI) {
+			gs->player->pos.cd -= 2*PI;
+		} else if (gs->player->pos.cd < 0) {
+			gs->player->pos.cd += 2*PI;
 		}
 
 		// add thrust sideways left relative to forward vector of player ship direction
-		if (keys[A]) {
-			gs->player->dx += gs->player_side_speed * gs->player->ddxy * cos(gs->player->d - ALLEGRO_PI);
-			gs->player->dy += gs->player_side_speed * gs->player->ddxy * sin(gs->player->d - ALLEGRO_PI);		
+		if (keys[KEYA]) {
+			gs->player->mot.dx += gs->player_side_speed * gs->player->mot.ddxy * cos(gs->player->pos.cd - PI);
+			gs->player->mot.dy += gs->player_side_speed * gs->player->mot.ddxy * sin(gs->player->pos.cd - PI);		
 		}
 
 		// player thrust forward full speed
-		if (keys[W]) {
-			gs->player->dx += gs->player->ddxy * 5 * cos(gs->player->d - ALLEGRO_PI/2);
-			gs->player->dy += gs->player->ddxy * 5 * sin(gs->player->d - ALLEGRO_PI/2);
+		if (keys[KEYW]) {
+			gs->player->mot.dx += gs->player->mot.ddxy * 5 * cos(gs->player->pos.cd - PI/2);
+			gs->player->mot.dy += gs->player->mot.ddxy * 5 * sin(gs->player->pos.cd - PI/2);
+		}
+
+		// slow to stop
+		if (keys[KEYS]) {
+			gs->s_held = true;
+			stopping(&gs->player->pos, &gs->player->mot, keys);		
+		} else if (gs->s_held) {
+			// still the stopping thrusters
+			gs->s_held = false;
+			int i;
+			for (i = 0; i < NKEYS; i++) {
+				keys[i] = false;
+			}
 		}
 
 		// add thrust sideways right relative to forward vector of player ship direction
-		if (keys[D]) {
-			gs->player->dx += gs->player_side_speed * gs->player->ddxy * cos(gs->player->d);
-			gs->player->dy += gs->player_side_speed * gs->player->ddxy * sin(gs->player->d);		
+		if (keys[KEYD]) {
+			gs->player->mot.dx += gs->player_side_speed * gs->player->mot.ddxy * cos(gs->player->pos.cd);
+			gs->player->mot.dy += gs->player_side_speed * gs->player->mot.ddxy * sin(gs->player->pos.cd);		
 		}
 
 		//updating player dy and dx based on acceleration & direction
 		if (keys[UP]) {
-			gs->player->dx += gs->player->ddxy * cos(gs->player->d - ALLEGRO_PI/2);
-			gs->player->dy += gs->player->ddxy * sin(gs->player->d - ALLEGRO_PI/2);
+			gs->player->mot.dx += gs->player->mot.ddxy * cos(gs->player->pos.cd - PI/2);
+			gs->player->mot.dy += gs->player->mot.ddxy * sin(gs->player->pos.cd - PI/2);
 		}
 		//moving backwords...
 		if (keys[DOWN]) {
-			gs->player->dx -= gs->player->ddxy * cos(gs->player->d - ALLEGRO_PI/2);
-			gs->player->dy -= gs->player->ddxy * sin(gs->player->d - ALLEGRO_PI/2);
+			gs->player->mot.dx -= gs->player->mot.ddxy * cos(gs->player->pos.cd - PI/2);
+			gs->player->mot.dy -= gs->player->mot.ddxy * sin(gs->player->pos.cd - PI/2);
 		}
 
 		//updating gs->player position based on dx and dy
-		gs->player->cx += gs->player->dx;
-		gs->player->cy += gs->player->dy;
+		gs->player->pos.cx += gs->player->mot.dx;
+		gs->player->pos.cy += gs->player->mot.dy;
 
 		//recalculating the gs->player vertices
-		calculate_verts_ship(&gs->player->ext, gs->player->cx, gs->player->cy, gs->player->d);
+		calculate_verts_ship(&gs->player->ext, gs->player->pos.cx, gs->player->pos.cy, gs->player->pos.cd);
 
 		//updating NPC AI & Input
 		int i, j;
@@ -165,30 +178,30 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 
 			//updating NPC direction
 			if (gs->npc[i].keys[RIGHT]) {
-				gs->npc[i].pos.cd += .5*gs->npc[i].mot.dd*ALLEGRO_PI;
+				gs->npc[i].pos.cd += .5*gs->npc[i].mot.dd*PI;
 			}
 
 			if (gs->npc[i].keys[LEFT]) {
-				gs->npc[i].pos.cd -= .5*gs->npc[i].mot.dd*ALLEGRO_PI;
+				gs->npc[i].pos.cd -= .5*gs->npc[i].mot.dd*PI;
 			}
 
-			if (gs->npc[i].pos.cd > 2*ALLEGRO_PI) {
-				gs->npc[i].pos.cd -= 2*ALLEGRO_PI;
+			if (gs->npc[i].pos.cd > 2*PI) {
+				gs->npc[i].pos.cd -= 2*PI;
 			}
 
 			if (gs->npc[i].pos.cd < 0) {
-				gs->npc[i].pos.cd += 2*ALLEGRO_PI;
+				gs->npc[i].pos.cd += 2*PI;
 			}
 
 			//updating NPC dy and dx based on acceleration & direction
 			if (gs->npc[i].keys[UP]) {
-				gs->npc[i].mot.dx += gs->npc[i].mot.ddxy * cos(gs->npc[i].pos.cd - ALLEGRO_PI/2);
-				gs->npc[i].mot.dy += gs->npc[i].mot.ddxy * sin(gs->npc[i].pos.cd - ALLEGRO_PI/2);
+				gs->npc[i].mot.dx += gs->npc[i].mot.ddxy * cos(gs->npc[i].pos.cd - PI/2);
+				gs->npc[i].mot.dy += gs->npc[i].mot.ddxy * sin(gs->npc[i].pos.cd - PI/2);
 			}
 			//moving backwords...
 			if (gs->npc[i].keys[DOWN]) {
-				gs->npc[i].mot.dx -= gs->npc[i].mot.ddxy * cos(gs->npc[i].pos.cd - ALLEGRO_PI/2);
-				gs->npc[i].mot.dy -= gs->npc[i].mot.ddxy * sin(gs->npc[i].pos.cd - ALLEGRO_PI/2);
+				gs->npc[i].mot.dx -= gs->npc[i].mot.ddxy * cos(gs->npc[i].pos.cd - PI/2);
+				gs->npc[i].mot.dy -= gs->npc[i].mot.ddxy * sin(gs->npc[i].pos.cd - PI/2);
 			}
 
 			calculate_speed(gs->npc[i].mot.dx, gs->npc[i].mot.dy, &gs->npc[i].mot.spd);
@@ -212,10 +225,10 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 					gs->player->hit_wall = i;
 				
 					if (gs->room[gs->current_room]->wall[i]->solid) {
-						gs->player->cx += penetration_vector[0] * penetration_scalar;
-						gs->player->cy += penetration_vector[1] * penetration_scalar;
+						gs->player->pos.cx += penetration_vector[0] * penetration_scalar;
+						gs->player->pos.cy += penetration_vector[1] * penetration_scalar;
 				
-						reflect(&gs->player->dx, &gs->player->dy, penetration_vector);
+						reflect(&gs->player->mot.dx, &gs->player->mot.dy, penetration_vector);
 					}
 				}
 			}
@@ -228,15 +241,23 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 				if (collide(gs->player->ext, gs->npc[i].ext, penetration_vector, &penetration_scalar)) {
 					if (gs->npc[i].solid) {
 						//separating by the projection vector so that they are no longer colliding
-						gs->player->cx += penetration_vector[0] * penetration_scalar/2;
-						gs->player->cy += penetration_vector[1] * penetration_scalar/2;
-				
+						gs->player->pos.cx += penetration_vector[0] * penetration_scalar/2;
+						gs->player->pos.cy += penetration_vector[1] * penetration_scalar/2;
+
 						gs->npc[i].pos.cx += -penetration_vector[0] * penetration_scalar/2;
 						gs->npc[i].pos.cy += -penetration_vector[1] * penetration_scalar/2;
-
-						bounce(gs->player->bouncy, gs->npc[i].bouncy, .9, gs->player->cx, gs->player->cy, gs->npc[i].pos.cx, gs->npc[i].pos.cy, &gs->player->dx, &gs->player->dy, &gs->npc[i].mot.dx, &gs->npc[i].mot.dy);
-							
-						calculate_speed(gs->player->dx, gs->player->dy, &gs->player->s);
+						bounce(gs->player->bouncy,
+								gs->npc[i].bouncy,
+								.9,
+								gs->player->pos.cx,
+								gs->player->pos.cy,
+								gs->npc[i].pos.cx,
+								gs->npc[i].pos.cy,
+								&gs->player->mot.dx,
+								&gs->player->mot.dy,
+								&gs->npc[i].mot.dx,
+								&gs->npc[i].mot.dy);
+						calculate_speed(gs->player->mot.dx, gs->player->mot.dy, &gs->player->mot.spd);
 						calculate_speed(gs->npc[i].mot.dx, gs->npc[i].mot.dy, &gs->npc[i].mot.spd);
 					}
 				}
@@ -269,13 +290,13 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 		if (keys[gs->player->weapon.key] && gs->player->weapon.reload_timer == gs->player->weapon.reload_time) {
 			gs->player->weapon.reload_timer = 0;
 			gs->player->weapon.exists[gs->player->weapon.current] = true;
-			gs->player->weapon.d[gs->player->weapon.current] = gs->player->d;
+			gs->player->weapon.d[gs->player->weapon.current] = gs->player->pos.cd;
 		
-			gs->player->weapon.x[gs->player->weapon.current] = gs->player->cx + 0;
-			gs->player->weapon.y[gs->player->weapon.current] = gs->player->cy + 0;
+			gs->player->weapon.x[gs->player->weapon.current] = gs->player->pos.cx + 0;
+			gs->player->weapon.y[gs->player->weapon.current] = gs->player->pos.cy + 0;
 		
-			gs->player->weapon.dx[gs->player->weapon.current] = gs->player->dx + 3 * cos(gs->player->d - ALLEGRO_PI/2);
-			gs->player->weapon.dy[gs->player->weapon.current] = gs->player->dy + 3 * sin(gs->player->d - ALLEGRO_PI/2);
+			gs->player->weapon.dx[gs->player->weapon.current] = gs->player->mot.dx + 3 * cos(gs->player->pos.cd - PI/2);
+			gs->player->weapon.dy[gs->player->weapon.current] = gs->player->mot.dy + 3 * sin(gs->player->pos.cd - PI/2);
 			
 			gs->player->weapon.current ++;
 			if (gs->player->weapon.current == gs->player->weapon.nactive) {
@@ -373,7 +394,6 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 				}
 			}
 		}			
-		
 		//updating NPC animation variables
 		for (i = 0; i < gs->nnpcs; i++) {
 			for (j = 0; j < gs->npc[i].nanimatics; j++) {
@@ -386,10 +406,13 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 				}
 			}
 		}
-
 		for (i = 0; i < gs->room[gs->current_room]->nbackgrounds; i++) {
 			if (gs->room[gs->current_room]->background[i].is_tiled == true) {
-				update_background(&gs->room[gs->current_room]->background[i], gs->player->cx, gs->player->cy, gs->room[gs->current_room]->w, gs->room[gs->current_room]->h);
+				update_background(&gs->room[gs->current_room]->background[i],
+									gs->player->pos.cx,
+									gs->player->pos.cy,
+									gs->room[gs->current_room]->w,
+									gs->room[gs->current_room]->h);
 			}
 		}
 	}
