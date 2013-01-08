@@ -150,7 +150,7 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 		gs->player->cy += gs->player->dy;
 
 		//recalculating the gs->player vertices
-		calculate_verts_ship(gs->player->shape, &gs->player->ext, gs->player->cx, gs->player->cy, gs->player->w, gs->player->h, gs->player->d);
+		calculate_verts_ship(&gs->player->ext, gs->player->cx, gs->player->cy, gs->player->d);
 
 		//updating NPC AI & Input
 		int i, j;
@@ -198,7 +198,7 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 			gs->npc[i].cy += gs->npc[i].dy;
 
 			//recalculating the NPC vertices
-			calculate_verts_ship(gs->npc[i].shape, &gs->npc[i].ext, gs->npc[i].cx, gs->npc[i].cy, gs->npc[i].w, gs->npc[i].h, gs->npc[i].d);
+			calculate_verts_ship(&gs->npc[i].ext, gs->npc[i].cx, gs->npc[i].cy, gs->npc[i].d);
 		}
 
 		//check for player collisions with walls

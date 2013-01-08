@@ -22,6 +22,8 @@ struct Animatic {
 
 struct Extension {
 	float **vert;
+	float *dis;
+	float *ang; //d and a describe the location of each vert with respect to some point (usually the subject's centerpoint)
 	int nverts;
 };
 
@@ -41,8 +43,8 @@ typedef struct {
 	bool exists, solid;
 	float health;
 	// current x, current y, sprite width, sprite height, direction, TODO check documentation comments
-	float cx, cy, w, h, d, m;
-	int shape, room, ai;
+	float cx, cy, d, m;
+	int room, ai, gfx_w, gfx_h;
 	struct Extension ext; //used for collision testing. Vertices are calculated based on cx, cy, h, w, d.
 	float dx, dy, s, dd, ddxy;
 	int nanimatics;
@@ -81,8 +83,7 @@ typedef struct {
 typedef struct {
 	bool exist, flying;
 	float health;
-	float cx, cy, w, h, d, m;
-	int shape;
+	float cx, cy, d, m;
 	struct Extension ext; 
 	//used for collision testing. Vertices are calculated based on cx, cy, h, w, d.
 	float dx, dy, s, dd, ddxy;
