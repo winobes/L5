@@ -13,19 +13,28 @@ Player *init_player()
 	player->hit_wall = -1;
 	player->nweapons = 1;
 
-	player->w = 35;
-	player->h = 35;
 	player->d = 0;
 	player->m = 500;
 	player->cx = 20;
 	player->cy = 20;
-	player->shape = RECTANGLE;
 
 	player->ext.nverts = 4;
+	player->ext.dis = malloc(player->ext.nverts * sizeof(float));
+	player->ext.ang = malloc(player->ext.nverts * sizeof(float));
 	player->ext.vert = malloc(player->ext.nverts * sizeof(float*));
 	for (i = 0; i < player->ext.nverts; i++) {
 		player->ext.vert[i] = malloc(2 * sizeof(player->ext.vert[i]));
 	}
+
+	for (i = 0; i < 4; i++) {
+		player->ext.dis[i] = sqrt((35*35) + (35*35))/2;
+	}
+
+	player->ext.ang[0] = -atan(1);
+	player->ext.ang[1] = atan(1);
+	player->ext.ang[2] = -atan(1) + ALLEGRO_PI;
+	player->ext.ang[3] = atan(1) + ALLEGRO_PI;
+
 
 	player->dx = 0;
 	player->dy = 0;
