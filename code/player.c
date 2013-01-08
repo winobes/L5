@@ -13,10 +13,10 @@ Player *init_player()
 	player->hit_wall = -1;
 	player->nweapons = 1;
 
-	player->d = 0;
-	player->m = 500;
-	player->cx = 20;
-	player->cy = 20;
+	player->bouncy = 500;
+	player->pos.cx = 20;
+	player->pos.cy = 20;
+	player->pos.cd = 0;
 
 	player->ext.nverts = 8;
 
@@ -38,21 +38,28 @@ Player *init_player()
 
 	player->ext.ang[1] = 0.23109067;
 
+<<<<<<< HEAD
 	player->ext.ang[2] = atan(16/3);
 	player->ext.ang[3] = atan(9/17) + ALLEGRO_PI/2;
 	player->ext.ang[4] = atan(17/9) + ALLEGRO_PI/2;
 	player->ext.ang[5] = -atan(17/9) - ALLEGRO_PI/2;
 	player->ext.ang[6] = -atan(9/17) - ALLEGRO_PI/2;
 	player->ext.ang[7] = -atan(16/3);
+=======
+	player->ext.ang[0] = -atan(1);
+	player->ext.ang[1] = atan(1);
+	player->ext.ang[2] = -atan(1) + PI;
+	player->ext.ang[3] = atan(1) + PI;
+>>>>>>> e3f9ecc175d0fd5939774e8c1d1c2b13294a1981
 
     for ( i= 0; i<8; i++) {
     printf("%f\n", player->ext.ang[i]);
     }
 
-	player->dx = 0;
-	player->dy = 0;
-	player->dd = .03;
-	player->ddxy = .03;
+	player->mot.dx = 0;
+	player->mot.dy = 0;
+	player->mot.dd = .03;
+	player->mot.ddxy = .03;
 
 	player->gfx_w = 100;
 	player->gfx_h = 100;

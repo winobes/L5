@@ -70,7 +70,7 @@ Room **init_rooms(GameState *gs)
 
 	room[0]->wall[0]->ext.vert[0][0] = 600/5;
 	room[0]->wall[0]->ext.vert[0][1] = 900/5;
-	room[0]->wall[0]->d = 3*ALLEGRO_PI/2;
+	room[0]->wall[0]->d = 3*PI/2;
 
 	room[0]->wall[1]->ext.vert[0][0] = 1400/5;
 	room[0]->wall[1]->ext.vert[0][1] = 800/5;
@@ -82,11 +82,11 @@ Room **init_rooms(GameState *gs)
 
 	room[0]->wall[3]->ext.vert[0][0] = 2800/5;
 	room[0]->wall[3]->ext.vert[0][1] = 1100/5;
-	room[0]->wall[3]->d = ALLEGRO_PI/4;
+	room[0]->wall[3]->d = PI/4;
 
 	room[0]->wall[4]->ext.vert[0][0] = 2600/5;
 	room[0]->wall[4]->ext.vert[0][1] = 1550/5;
-	room[0]->wall[4]->d = 3*ALLEGRO_PI/2;
+	room[0]->wall[4]->d = 3*PI/2;
 
 	room[0]->wall[5]->ext.vert[0][0] = 3400/5;
 	room[0]->wall[5]->ext.vert[0][1] = 1450/5;
@@ -110,11 +110,11 @@ Room **init_rooms(GameState *gs)
 
 	room[0]->wall[10]->ext.vert[0][0] = 1300/5;
 	room[0]->wall[10]->ext.vert[0][1] = 2500/5;
-	room[0]->wall[10]->d = ALLEGRO_PI/4;
+	room[0]->wall[10]->d = PI/4;
 
 	room[0]->wall[11]->ext.vert[0][0] = 500/5;
 	room[0]->wall[11]->ext.vert[0][1] = 4450/5;
-	room[0]->wall[11]->d = 3*ALLEGRO_PI/2;
+	room[0]->wall[11]->d = 3*PI/2;
 
 	room[0]->wall[12]->ext.vert[0][0] = 400/5;
 	room[0]->wall[12]->ext.vert[0][1] = 400/5;
@@ -142,12 +142,12 @@ Room **init_rooms(GameState *gs)
 
 	room[0]->wall[18]->ext.vert[0][0] = 1500/5;
 	room[0]->wall[18]->ext.vert[0][1] = 500/5;
-	room[0]->wall[18]->d = ALLEGRO_PI/4;
+	room[0]->wall[18]->d = PI/4;
 	room[0]->wall[18]->solid = false;
 
 	room[0]->wall[19]->ext.vert[0][0] = 2500/5;
 	room[0]->wall[19]->ext.vert[0][1] = 4500/5;
-	room[0]->wall[19]->d = ALLEGRO_PI/4;
+	room[0]->wall[19]->d = PI/4;
 	room[0]->wall[19]->solid = false;
 
 	room[0]->background = malloc(room[0]->nbackgrounds * sizeof(struct Background));
@@ -185,11 +185,11 @@ Room **init_rooms(GameState *gs)
 
 		room[1]->wall[0]->ext.vert[0][0] = 100/5;
 		room[1]->wall[0]->ext.vert[0][1] = 100/5;
-		room[1]->wall[0]->d = 3*ALLEGRO_PI/2;
+		room[1]->wall[0]->d = 3*PI/2;
 
 		room[1]->wall[1]->ext.vert[0][0] = 900/5;
 		room[1]->wall[1]->ext.vert[0][1] = 100/5;
-		room[1]->wall[1]->d = 3*ALLEGRO_PI/2;
+		room[1]->wall[1]->d = 3*PI/2;
 		
 		room[1]->wall[2]->ext.vert[0][0] = 1600/5;
 		room[1]->wall[2]->ext.vert[0][1] = 100/5;
@@ -209,11 +209,11 @@ Room **init_rooms(GameState *gs)
 		
 		room[1]->wall[6]->ext.vert[0][0] = 800/5;
 		room[1]->wall[6]->ext.vert[0][1] = 3300/5;
-		room[1]->wall[6]->d = 3*ALLEGRO_PI/2;
+		room[1]->wall[6]->d = 3*PI/2;
 		
 		room[1]->wall[7]->ext.vert[0][0] = 0;
 		room[1]->wall[7]->ext.vert[0][1] = 3300/5;
-		room[1]->wall[7]->d = 3*ALLEGRO_PI/2;
+		room[1]->wall[7]->d = 3*PI/2;
 		
 		room[1]->wall[8]->ext.vert[0][0] = 0;
 		room[1]->wall[8]->ext.vert[0][1] = 2400/5;
@@ -233,12 +233,12 @@ Room **init_rooms(GameState *gs)
 		
 		room[1]->wall[12]->ext.vert[0][0] = 400/5;
 		room[1]->wall[12]->ext.vert[0][1] = 400/5;
-		room[1]->wall[12]->d = ALLEGRO_PI/4;
+		room[1]->wall[12]->d = PI/4;
 		room[1]->wall[12]->solid = false;
 		
 		room[1]->wall[13]->ext.vert[0][0] = 1300/5;
 		room[1]->wall[13]->ext.vert[0][1] = 2900/5;
-		room[1]->wall[13]->d = ALLEGRO_PI/4;
+		room[1]->wall[13]->d = PI/4;
 		room[1]->wall[13]->solid = false;
 		
 	for (i = 0; i < gs->nrooms; i++) {

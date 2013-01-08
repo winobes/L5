@@ -12,18 +12,18 @@ NPC *init_npcs(GameState *gs)
 	npc[0].solid = true;
 	npc[0].exists = true;
 	npc[0].health = 10;
-	npc[0].cx = 0;
-	npc[0].cy = 0;
-	npc[0].d = ALLEGRO_PI/2;
-	npc[0].m = 100;
+	npc[0].pos.cx = 0;
+	npc[0].pos.cy = 0;
+	npc[0].pos.cd = PI/2;
+	npc[0].bouncy = 100;
 	npc[0].gfx_w = 15;
 	npc[0].gfx_h = 15;
 	npc[0].room = 0;
 	npc[0].ai = 1;
-	npc[0].dx = 0;
-	npc[0].dy = -1;
-	npc[0].dd = .05;
-	npc[0].ddxy = .05;
+	npc[0].mot.dx = 0;
+	npc[0].mot.dy = -1;
+	npc[0].mot.dd = .05;
+	npc[0].mot.ddxy = .05;
 	npc[0].sprite = al_create_bitmap(npc[0].gfx_w, npc[0].gfx_h);
 	npc[0].spritesheet = al_load_bitmap("gfx/firefly_spritesheet.png");
 	npc[0].nanimatics = 3;
@@ -34,11 +34,7 @@ NPC *init_npcs(GameState *gs)
 		npc[0].keys[i] = false;
 	}
 
-
-
-
 	npc[0].ext.nverts = 4;
-
 
 	npc[0].ext.vert = malloc(npc[0].ext.nverts * sizeof(float*));
 	for (i = 0; i < npc[0].ext.nverts; i++) {
@@ -53,8 +49,8 @@ NPC *init_npcs(GameState *gs)
 
 	npc[0].ext.ang[0] = -atan(1);
 	npc[0].ext.ang[1] = atan(1);
-	npc[0].ext.ang[2] = -atan(1) + ALLEGRO_PI;
-	npc[0].ext.ang[3] = atan(1) + ALLEGRO_PI;
+	npc[0].ext.ang[2] = -atan(1) + PI;
+	npc[0].ext.ang[3] = atan(1) + PI;
 
 	npc[0].nanimatics = 3;
 	npc[0].ani = malloc(npc[0].nanimatics * sizeof(struct Animatic));
@@ -114,18 +110,18 @@ NPC *init_npcs(GameState *gs)
 	npc[1].solid = true;
 	npc[1].exists = true;
 	npc[1].health = 10;
-	npc[1].cx = 10;
-	npc[1].cy = 10;
-	npc[1].d = ALLEGRO_PI/2;
-	npc[1].m = 100;
+	npc[1].pos.cx = 10;
+	npc[1].pos.cy = 10;
+	npc[1].pos.cd = PI/2;
+	npc[1].bouncy = 100;
 	npc[1].gfx_w = 15;
 	npc[1].gfx_h = 15;
 	npc[1].room = 0;
 	npc[1].ai = 1;
-	npc[1].dx = 0;
-	npc[1].dy = -1;
-	npc[1].dd = .05;
-	npc[1].ddxy = .05;
+	npc[1].mot.dx = 0;
+	npc[1].mot.dy = -1;
+	npc[1].mot.dd = .05;
+	npc[1].mot.ddxy = .05;
 	npc[1].sprite = al_create_bitmap(npc[1].gfx_w, npc[1].gfx_h);
 	npc[1].spritesheet = al_load_bitmap("gfx/firefly_spritesheet.png");
 	npc[1].nanimatics = 3;
@@ -152,8 +148,8 @@ NPC *init_npcs(GameState *gs)
 
 	npc[1].ext.ang[1] = -atan(1);
 	npc[1].ext.ang[1] = atan(1);
-	npc[1].ext.ang[2] = -atan(1) + ALLEGRO_PI;
-	npc[1].ext.ang[3] = atan(1) + ALLEGRO_PI;
+	npc[1].ext.ang[2] = -atan(1) + PI;
+	npc[1].ext.ang[3] = atan(1) + PI;
 
 	npc[1].nanimatics = 3;
 	npc[1].ani = malloc(npc[1].nanimatics * sizeof(struct Animatic));
