@@ -120,35 +120,6 @@ void teardown_vision(struct Extension *visLeftCentre,
 }
 
 
-// bring ship closer to stopping its motion
-// INPUT
-// pos    - position of ship
-// motion - motion/position struct of ship
-// keys   - key press control vector of ship
-void stopping(Position *pos, Motion* motion, bool *keys)
-{
-	float velangle;
-	float normaldx = motion->dx / sqrt(motion->dx*motion->dx + motion->dy*motion->dy);
-	if (motion->dy < 0) {
-		velangle = asin(normaldx);
-		if (motion->dx < 0) {
-			velangle += 2*ALLEGRO_PI;
-		}
-	} else {
-		velangle = ALLEGRO_PI - asin(normaldx);
-	}
-	if (sqrt(motion->dx*motion->dx + motion->dy*motion->dy) > .05) {
-		if(velangle - pos->cd < ALLEGRO_PI/8 && velangle - pos->cd > -ALLEGRO_PI/8) {
-			keys[DOWN] = true;
-		} else if(asin(normaldx) - pos->cd < ALLEGRO_PI) {
-			keys[LEFT] = true;
-		} else if(asin(normaldx) - pos->cd > ALLEGRO_PI) {
-			keys[RIGHT] = true;
-		}
-	}
-}
-
-
 void ai1 (GameState *gs, int npcid) {
 
 	NPC *npc = &gs->npc[npcid];
