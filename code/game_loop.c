@@ -13,6 +13,8 @@ int game_loop() {
 	bool exit_game = false;
 	bool redraw = true;
 
+	int i, j, k;
+
 	GameState *gs = malloc(sizeof(GameState));
 
 	init_allegro(gs);
@@ -33,7 +35,10 @@ int game_loop() {
 	gs->current_room = 0;
 	gs->font10 = al_load_font("fonts/Roboto-Black.ttf", 10,0);
 
-	bool keys[5] = {false, false, false, false, false};
+	bool *keys = malloc(NKEYS * sizeof(bool));
+	for (i = 0; i < NKEYS; i++) {
+		keys[i] = false;
+	}
 
 	ALLEGRO_EVENT event;
 	al_start_timer(gs->timer);
@@ -51,7 +56,8 @@ int game_loop() {
 	}
 
 	// free everything we ever did malloc // TODO make individual teardown functions
-	int i, j, k;
+
+	free(keys);
 
 	// player
 	

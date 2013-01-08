@@ -83,8 +83,11 @@ typedef struct {
 	float health;
 	float cx, cy, w, h, d, m;
 	int shape;
-	struct Extension ext; 
 	//used for collision testing. Vertices are calculated based on cx, cy, h, w, d.
+	struct Extension ext;
+	// present velocity on plot x and y components
+	// present rotational and linear accelerations
+	//
 	float dx, dy, s, dd, ddxy;
 	ALLEGRO_BITMAP *sprite, *spritesheet;
 	//ultimately gets drawn to the display
@@ -109,6 +112,7 @@ typedef struct {
 	ALLEGRO_EVENT_QUEUE* event_queue;
 	ALLEGRO_TIMER* timer;
 	ALLEGRO_DISPLAY* display;
+	// TODO rename these constants, they are misleading
 	float player_forward_speed;
 	float player_turn_speed;
 	float player_warp_speed;
@@ -118,6 +122,7 @@ typedef struct {
 	float npc_side_speed;
 } GameState;
 
+int NKEYS = 9;
 enum KEYS{RIGHT, DOWN, LEFT, UP, LCTRL, A, W, S, D};
 enum SHAPE{RECTANGLE, OCTAGON};
 
