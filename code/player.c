@@ -18,23 +18,36 @@ Player *init_player()
 	player->cx = 20;
 	player->cy = 20;
 
-	player->ext.nverts = 4;
-	player->ext.dis = malloc(player->ext.nverts * sizeof(float));
-	player->ext.ang = malloc(player->ext.nverts * sizeof(float));
+	player->ext.nverts = 8;
+
 	player->ext.vert = malloc(player->ext.nverts * sizeof(float*));
 	for (i = 0; i < player->ext.nverts; i++) {
 		player->ext.vert[i] = malloc(2 * sizeof(player->ext.vert[i]));
 	}
 
-	for (i = 0; i < 4; i++) {
-		player->ext.dis[i] = sqrt((35*35) + (35*35))/2;
-	}
+	player->ext.dis = malloc(player->ext.nverts * sizeof(float));
+	player->ext.ang = malloc(player->ext.nverts * sizeof(float));
 
-	player->ext.ang[0] = -atan(1);
-	player->ext.ang[1] = atan(1);
-	player->ext.ang[2] = -atan(1) + ALLEGRO_PI;
-	player->ext.ang[3] = atan(1) + ALLEGRO_PI;
 
+	player->ext.dis[0] = player->ext.dis[1] = sqrt((4*4) + (17*17));
+	player->ext.dis[2] = player->ext.dis[7] = sqrt((16*16) + (3*3));
+	player->ext.dis[3] = player->ext.dis[6] = sqrt((17*17) + (9*9));
+	player->ext.dis[4] = player->ext.dis[5] = sqrt((9*9) + (17*17));
+
+	player->ext.ang[0] = -0.23109067;
+
+	player->ext.ang[1] = 0.23109067;
+
+	player->ext.ang[2] = atan(16/3);
+	player->ext.ang[3] = atan(9/17) + ALLEGRO_PI/2;
+	player->ext.ang[4] = atan(17/9) + ALLEGRO_PI/2;
+	player->ext.ang[5] = -atan(17/9) - ALLEGRO_PI/2;
+	player->ext.ang[6] = -atan(9/17) - ALLEGRO_PI/2;
+	player->ext.ang[7] = -atan(16/3);
+
+    for ( i= 0; i<8; i++) {
+    printf("%f\n", player->ext.ang[i]);
+    }
 
 	player->dx = 0;
 	player->dy = 0;
