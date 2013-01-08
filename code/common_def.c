@@ -118,6 +118,7 @@ typedef struct {
 	float npc_side_speed;
 } GameState;
 
+int NKEYS = 9;
 enum KEYS{RIGHT, DOWN, LEFT, UP, LCTRL, A, W, S, D};
 enum SHAPE{RECTANGLE, OCTAGON};
 
