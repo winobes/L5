@@ -70,8 +70,8 @@ int game_loop() {
 		free(gs->player->ext.vert[j]);
 	}
 	free(gs->player->ext.vert);
-	free(gs->player->ext.dis);
-	free(gs->player->ext.ang);
+	free(gs->player->ext.y);
+	free(gs->player->ext.x);
 	free(gs->player->ani);
 	free(gs->player->aniflags);
 	
@@ -132,8 +132,8 @@ int game_loop() {
 		free(gs->npc[i].keys);
 		for (j = 0; j < gs->npc[i].ext.nverts; j++) {
 			free(gs->npc[i].ext.vert[j]);
-		//	free(gs->npc[i].ext.dis);
-		//	free(gs->npc[i].ext.ang);
+		//	free(gs->npc[i].ext.x);
+		//	free(gs->npc[i].ext.y);
 		}
 		free(gs->npc[i].ext.vert);
 		free(gs->npc[i].ani);

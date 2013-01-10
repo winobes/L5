@@ -57,12 +57,41 @@ void reflect(float *x, float *y, float N[2]) {
 // calculates the position of the vertices given their vector position
 // (dis,ang) relative to some point (cx,cy) on the subject and the subject's
 // rotational direction (d)*/
-void calculate_verts_ship(struct Extension* ext, float cx, float cy, float d) {
+void calculate_verts_ship(struct Extension* ext, float cx, float cy, float d) { //TODO fix behaviour for 0 values for ext->x,y
+
 	int i;
+    float dis;
+    
 	for (i = 0; i < ext->nverts; i++) {
-		ext->vert[i][0] = ext->dis[i] * sin(d + ext->ang[i]) + cx;
-		ext->vert[i][1] = ext->dis[i] * -cos(d + ext->ang[i]) + cy;
-		//the y axis is inverted
+
+        dis = sqrt((ext->x[i]*ext->x[i]) + (ext->y[i]*ext->y[i]));
+
+        if (ext->y[i] < 0) {
+		    ext->vert[i][0] = dis * sin(d - atan(ext->x[i]/ext->y[i])) + cx;
+		    ext->vert[i][1] = dis * -cos(d - atan(ext->x[i]/ext->y[i])) + cy;
+        }
+
+        else if (ext->y[i] > 0) {
+            if (ext->x[i] > 0) {
+                ext->vert[i][0] = dis * sin(d + atan(ext->y[i]/ext->x[i]) + ALLEGRO_PI/2) + cx;
+		        ext->vert[i][1] = dis * -cos(d + atan(ext->y[i]/ext->x[i]) + ALLEGRO_PI/2) + cy;
+            }
+            
+            else if (ext->x[i] < 0) {
+                ext->vert[i][0] = dis * sin(d + atan(ext->y[i]/ext->x[i]) - ALLEGRO_PI/2) + cx;
+		        ext->vert[i][1] = dis * -cos(d + atan(ext->y[i]/ext->x[i]) - ALLEGRO_PI/2) + cy;
+            }
+
+            else { //x[i] == 0
+                 ext->vert[i][0] = dis * sin(d + 0) + cx;
+		         ext->vert[i][1] = dis * -cos(d + 0) + cy;
+            }
+        }
+
+        /*else { //y[i] == [
+                 ext->vert[i][0] = dis * sin(d + 0) - ALLEGRO_PI/2) + cx;
+		         ext->vert[i][1] = dis * -cos(d + 0) - ALLEGRO_PI/2) + cy;
+        }*/
 	}
 }
 

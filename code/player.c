@@ -25,36 +25,53 @@ Player *init_player()
 		player->ext.vert[i] = malloc(2 * sizeof(player->ext.vert[i]));
 	}
 
-	player->ext.dis = malloc(player->ext.nverts * sizeof(float));
-	player->ext.ang = malloc(player->ext.nverts * sizeof(float));
+	player->ext.x = malloc(player->ext.nverts * sizeof(float));
+	player->ext.y = malloc(player->ext.nverts * sizeof(float));
+
+    player->ext.x[0] = -5;
+    player->ext.y[0] = -17;
+
+    player->ext.x[1] = 5;
+    player->ext.y[1] = -17;
+
+    player->ext.x[2] = 16;
+    player->ext.y[2] = -3;
+
+    player->ext.x[3] = 17;
+    player->ext.y[3] = 9;
+
+    player->ext.x[4] = 9;
+    player->ext.y[4] = 17;
+
+    player->ext.x[5] = -9;
+    player->ext.y[5] = 17;
+
+    player->ext.x[6] = -17;
+    player->ext.y[6] = 9;
+
+    player->ext.x[7] = -16;
+    player->ext.y[7] = -3;
 
 
+/*
 	player->ext.dis[0] = player->ext.dis[1] = sqrt((4*4) + (17*17));
 	player->ext.dis[2] = player->ext.dis[7] = sqrt((16*16) + (3*3));
 	player->ext.dis[3] = player->ext.dis[6] = sqrt((17*17) + (9*9));
 	player->ext.dis[4] = player->ext.dis[5] = sqrt((9*9) + (17*17));
 
-	player->ext.ang[0] = -0.23109067;
+	player->ext.ang[0] = -atanf((float)5/(float)17);
+	player->ext.ang[1] = atanf((float)5/(float)17);
+	player->ext.ang[2] = atanf((float)16/(float)3);
+	player->ext.ang[3] = atanf((float)9/(float)17) + ALLEGRO_PI/2; 
+	player->ext.ang[4] = atanf((float)17/(float)9) + ALLEGRO_PI/2; 
+	player->ext.ang[5] = -atanf((float)17/(float)9) - ALLEGRO_PI/2;
+	player->ext.ang[6] = -atanf((float)9/(float)17) - ALLEGRO_PI/2;
+	player->ext.ang[7] = -atanf((float)16/(float)3);*/
 
-	player->ext.ang[1] = 0.23109067;
-
-<<<<<<< HEAD
-	player->ext.ang[2] = atan(16/3);
-	player->ext.ang[3] = atan(9/17) + ALLEGRO_PI/2;
-	player->ext.ang[4] = atan(17/9) + ALLEGRO_PI/2;
-	player->ext.ang[5] = -atan(17/9) - ALLEGRO_PI/2;
-	player->ext.ang[6] = -atan(9/17) - ALLEGRO_PI/2;
-	player->ext.ang[7] = -atan(16/3);
-=======
-	player->ext.ang[0] = -atan(1);
-	player->ext.ang[1] = atan(1);
-	player->ext.ang[2] = -atan(1) + PI;
-	player->ext.ang[3] = atan(1) + PI;
->>>>>>> e3f9ecc175d0fd5939774e8c1d1c2b13294a1981
-
-    for ( i= 0; i<8; i++) {
-    printf("%f\n", player->ext.ang[i]);
+    for (i = 0; i < 8; i++) {
+ //       printf("ang[%i] = %f\n", i, player->ext.ang[i]);
     }
+
 
 	player->mot.dx = 0;
 	player->mot.dy = 0;
@@ -80,8 +97,8 @@ Player *init_player()
 	player->ani[0].h = 35;
 	player->ani[0].pivot_x = 0;
 	player->ani[0].pivot_y = 0;
-	player->ani[0].destination_x = 32;
-	player->ani[0].destination_y = 32;
+	player->ani[0].destination_x = 33;
+	player->ani[0].destination_y = 33;
 	player->ani[0].scale_x = 1;
 	player->ani[0].scale_y = 1;
 	player->ani[0].is_running = false;

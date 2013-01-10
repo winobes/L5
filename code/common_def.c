@@ -22,8 +22,7 @@ struct Animatic {
 
 struct Extension {
 	float **vert;
-	float *dis;
-	float *ang; //d and a describe the location of each vert with respect to some point (usually the subject's centerpoint)
+	float *x, *y; //x and y describe the location of each vert with respect to some point (usually the subject's centerpoint)
 	int nverts;
 };
 
@@ -61,7 +60,7 @@ typedef struct {
 	Position pos;
 	float bouncy;  // bounce elasticity
 	int room, ai, gfx_w, gfx_h;
-	struct Extension ext; //used for collision testing. Vertices are calculated based on cx, cy, h, w, d.
+	struct Extension ext;
 	Motion mot;
 	int nanimatics;
 	ALLEGRO_BITMAP *sprite, *spritesheet;
@@ -102,7 +101,6 @@ typedef struct {
 	Position pos; 
 	float bouncy;
 	struct Extension ext; 
-	//used for collision testing. Vertices are calculated based on cx, cy, h, w, d.
 	Motion mot;
 	ALLEGRO_BITMAP *sprite, *spritesheet;
 	//ultimately gets drawn to the display

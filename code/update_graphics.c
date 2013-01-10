@@ -16,7 +16,7 @@ void do_graphics_update(GameState *gs, bool *redraw)
 		int i, j;
 		//drawing the background tiles to the screen (there are maximum of four tiles for each layer)
 
-/*
+
 		for (i = 0; i < gs->room[gs->current_room]->nbackgrounds; i++) {
 			if (gs->room[gs->current_room]->background[i].is_tiled == true) {
 				al_draw_bitmap(gs->room[gs->current_room]->background[i].background_image,
@@ -49,7 +49,7 @@ void do_graphics_update(GameState *gs, bool *redraw)
 			}
 
 		}
-*/
+
 			
 
 		for (i = 0; i < gs->nnpcs; i++) {
@@ -174,20 +174,13 @@ void do_graphics_update(GameState *gs, bool *redraw)
 	al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 7*12, ALLEGRO_ALIGN_RIGHT,"npc[0].health = %f", gs->npc[0].health);
 al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 8*12, ALLEGRO_ALIGN_RIGHT,"npc[1].health = %f", gs->npc[1].health);
 
-al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 10*12, ALLEGRO_ALIGN_RIGHT,"ang[0] = %f", gs->player->ext.ang[2]);
-
 
 ////debugging the player ext
-		for (j = 0; j < gs->player->ext.nverts; j++) {
+		/*for (j = 0; j < gs->player->ext.nverts; j++) {
 			al_draw_pixel(gs->player->ext.vert[j][0]-(gs->player->pos.cx - width/2), gs->player->ext.vert[j][1]-(gs->player->pos.cy - height/2), al_map_rgb(83,207,46));
 		}
-		/*al_draw_textf(font10, al_map_rgb(83, 207, 46), width, 7*12, ALLEGRO_ALIGN_RIGHT,"health2 %f", gs->npc[1].health);
-		al_draw_textf(font10, al_map_rgb(83, 207, 46), width, 8*12, ALLEGRO_ALIGN_RIGHT,"speed = %f", gs->player->s);
 		*/
 
-		if (gs->player->ani[2].draw) {
-			al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 9*12, ALLEGRO_ALIGN_RIGHT,"draw");
-		}
 		al_flip_display();
 	}
 }

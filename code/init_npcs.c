@@ -41,16 +41,17 @@ NPC *init_npcs(GameState *gs)
 		npc[0].ext.vert[i] = malloc(2 * sizeof(npc[0].ext.vert[i]));
 	}
 
-	npc[0].ext.dis = malloc(npc[0].ext.nverts * sizeof(float));
-	npc[0].ext.ang = malloc(npc[0].ext.nverts * sizeof(float));
-	for (i = 0; i < 4; i++) {
-		npc[0].ext.dis[i] = sqrt((15*15) + (15*15))/2;
-	}
+	npc[0].ext.x = malloc(npc[0].ext.nverts * sizeof(float));
+	npc[0].ext.y = malloc(npc[0].ext.nverts * sizeof(float));
 
-	npc[0].ext.ang[0] = -atan(1);
-	npc[0].ext.ang[1] = atan(1);
-	npc[0].ext.ang[2] = -atan(1) + PI;
-	npc[0].ext.ang[3] = atan(1) + PI;
+	npc[0].ext.x[0] = -7.5; 
+    npc[0].ext.y[0] = -7.5;
+	npc[0].ext.x[1] = 7.5; 
+    npc[0].ext.y[1] = -7.5;
+	npc[0].ext.x[2] = 7.5; 
+    npc[0].ext.y[2] = 7.5;
+	npc[0].ext.x[3] = -7.5; 
+    npc[0].ext.y[3] = 7.5;
 
 	npc[0].nanimatics = 3;
 	npc[0].ani = malloc(npc[0].nanimatics * sizeof(struct Animatic));
@@ -139,17 +140,17 @@ NPC *init_npcs(GameState *gs)
 		npc[1].ext.vert[i] = malloc(2 * sizeof(npc[1].ext.vert[i]));
 	}
 
-	npc[1].ext.dis = malloc(npc[1].ext.nverts * sizeof(float));
-	npc[1].ext.ang = malloc(npc[1].ext.nverts * sizeof(float));
+	npc[1].ext.x = malloc(npc[1].ext.nverts * sizeof(float));
+	npc[1].ext.y = malloc(npc[1].ext.nverts * sizeof(float));
 
-	for (i = 0; i < 4; i++) {
-		npc[1].ext.dis[i] = sqrt((15*15) + (15*15))/2;
-	}
-
-	npc[1].ext.ang[1] = -atan(1);
-	npc[1].ext.ang[1] = atan(1);
-	npc[1].ext.ang[2] = -atan(1) + PI;
-	npc[1].ext.ang[3] = atan(1) + PI;
+	npc[1].ext.x[0] = -7.5; 
+    npc[1].ext.y[0] = -7.5;
+	npc[1].ext.x[1] = 7.5; 
+    npc[1].ext.y[1] = -7.5;
+	npc[1].ext.x[2] = 7.5; 
+    npc[1].ext.y[2] = 7.5;
+	npc[1].ext.x[3] = -7.5; 
+    npc[1].ext.y[3] = 7.5;
 
 	npc[1].nanimatics = 3;
 	npc[1].ani = malloc(npc[1].nanimatics * sizeof(struct Animatic));
