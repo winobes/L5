@@ -130,10 +130,10 @@ int game_loop() {
 	// npcs
 	for (i = 0; i < gs->nnpcs; i++) {
 		free(gs->npc[i].keys);
+		free(gs->npc[i].ext.x);
+		free(gs->npc[i].ext.y);
 		for (j = 0; j < gs->npc[i].ext.nverts; j++) {
 			free(gs->npc[i].ext.vert[j]);
-		//	free(gs->npc[i].ext.x);
-		//	free(gs->npc[i].ext.y);
 		}
 		free(gs->npc[i].ext.vert);
 		free(gs->npc[i].ani);

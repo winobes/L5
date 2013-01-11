@@ -52,27 +52,6 @@ Player *init_player()
     player->ext.x[7] = -16;
     player->ext.y[7] = -3;
 
-
-/*
-	player->ext.dis[0] = player->ext.dis[1] = sqrt((4*4) + (17*17));
-	player->ext.dis[2] = player->ext.dis[7] = sqrt((16*16) + (3*3));
-	player->ext.dis[3] = player->ext.dis[6] = sqrt((17*17) + (9*9));
-	player->ext.dis[4] = player->ext.dis[5] = sqrt((9*9) + (17*17));
-
-	player->ext.ang[0] = -atanf((float)5/(float)17);
-	player->ext.ang[1] = atanf((float)5/(float)17);
-	player->ext.ang[2] = atanf((float)16/(float)3);
-	player->ext.ang[3] = atanf((float)9/(float)17) + ALLEGRO_PI/2; 
-	player->ext.ang[4] = atanf((float)17/(float)9) + ALLEGRO_PI/2; 
-	player->ext.ang[5] = -atanf((float)17/(float)9) - ALLEGRO_PI/2;
-	player->ext.ang[6] = -atanf((float)9/(float)17) - ALLEGRO_PI/2;
-	player->ext.ang[7] = -atanf((float)16/(float)3);*/
-
-    for (i = 0; i < 8; i++) {
- //       printf("ang[%i] = %f\n", i, player->ext.ang[i]);
-    }
-
-
 	player->mot.dx = 0;
 	player->mot.dy = 0;
 	player->mot.dd = .03;

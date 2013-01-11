@@ -64,35 +64,37 @@ void calculate_verts_ship(struct Extension* ext, float cx, float cy, float d) { 
     
 	for (i = 0; i < ext->nverts; i++) {
 
-        dis = sqrt((ext->x[i]*ext->x[i]) + (ext->y[i]*ext->y[i]));
+        dis = sqrt((ext->y[i]*ext->y[i]) + (ext->x[i]*ext->x[i]));
 
-        if (ext->y[i] < 0) {
-		    ext->vert[i][0] = dis * sin(d - atan(ext->x[i]/ext->y[i])) + cx;
-		    ext->vert[i][1] = dis * -cos(d - atan(ext->x[i]/ext->y[i])) + cy;
+
+        if (ext->x[i] > 0) {
+            ext->vert[i][0] = dis * cos(d + atan(ext->y[i]/ext->x[i])) + cx;
+            ext->vert[i][1] = dis * sin(d + atan(ext->y[i]/ext->x[i])) + cy;
+        }
+        
+        else if (ext->x[i] < 0) {
+            ext->vert[i][0] = dis * -cos(d + atan(ext->y[i]/ext->x[i])) + cx;
+            ext->vert[i][1] = dis * -sin(d + atan(ext->y[i]/ext->x[i])) + cy;
         }
 
-        else if (ext->y[i] > 0) {
-            if (ext->x[i] > 0) {
-                ext->vert[i][0] = dis * sin(d + atan(ext->y[i]/ext->x[i]) + ALLEGRO_PI/2) + cx;
-		        ext->vert[i][1] = dis * -cos(d + atan(ext->y[i]/ext->x[i]) + ALLEGRO_PI/2) + cy;
+        else { //ext->x[i] ==0
+            if (ext->y[i] > 0) {
+                ext->vert[0][0] = dis * -sin(d) + cx;
+                ext->vert[0][1] = dis * cos(d) + cy;
             }
-            
-            else if (ext->x[i] < 0) {
-                ext->vert[i][0] = dis * sin(d + atan(ext->y[i]/ext->x[i]) - ALLEGRO_PI/2) + cx;
-		        ext->vert[i][1] = dis * -cos(d + atan(ext->y[i]/ext->x[i]) - ALLEGRO_PI/2) + cy;
-            }
+            else if (ext->y[i] < 0) {
+                ext->vert[0][0] = dis * sin(d) + cx;
+                ext->vert[0][1] = dis * -cos(d) + cy;
 
-            else { //x[i] == 0
-                 ext->vert[i][0] = dis * sin(d + 0) + cx;
-		         ext->vert[i][1] = dis * -cos(d + 0) + cy;
+            }
+            else { // ext->y[i] = 0
+                ext->vert[i][0] = cx;  
+                ext->vert[i][1] = cy;
             }
         }
 
-        /*else { //y[i] == [
-                 ext->vert[i][0] = dis * sin(d + 0) - ALLEGRO_PI/2) + cx;
-		         ext->vert[i][1] = dis * -cos(d + 0) - ALLEGRO_PI/2) + cy;
-        }*/
-	}
+
+    }
 }
 
 
