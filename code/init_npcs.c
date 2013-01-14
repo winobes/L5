@@ -54,7 +54,7 @@ NPC *init_npcs(GameState *gs)
     npc[0].ext.y[3] = 7.5;
 
 	npc[0].nanimatics = 3;
-	npc[0].ani = malloc(npc[0].nanimatics * sizeof(struct Animatic));
+	npc[0].ani = malloc(npc[0].nanimatics * sizeof(Animatic));
 
 	npc[0].ani[0].source_x = 0;
 	npc[0].ani[0].source_y = 0;
@@ -153,7 +153,7 @@ NPC *init_npcs(GameState *gs)
     npc[1].ext.y[3] = 7.5;
 
 	npc[1].nanimatics = 3;
-	npc[1].ani = malloc(npc[1].nanimatics * sizeof(struct Animatic));
+	npc[1].ani = malloc(npc[1].nanimatics * sizeof(Animatic));
 
 	npc[1].ani[0].source_x = 0;
 	npc[1].ani[0].source_y = 0;

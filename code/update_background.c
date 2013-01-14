@@ -1,4 +1,4 @@
-void update_background(struct Background *background, float x, float y, int w, int h) {
+void update_background(Background *background, float x, float y, int w, int h) {
 
 	float parallax_counter = x;
 	bool parallax_switch = false;

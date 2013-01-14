@@ -57,7 +57,7 @@ void reflect(float *x, float *y, float N[2]) {
 // calculates the position of the vertices given their vector position
 // (dis,ang) relative to some point (cx,cy) on the subject and the subject's
 // rotational direction (d)*/
-void calculate_verts_ship(struct Extension* ext, float cx, float cy, float d) {
+void calculate_verts_ship(Extension* ext, float cx, float cy, float d) {
 
 	int i;
     float dis;
@@ -101,7 +101,7 @@ void calculate_verts_ship(struct Extension* ext, float cx, float cy, float d) {
 // calculates the three remaining vertices based on vert[0], width, height,
 // and direction. Assumes that the wall is rectangular. May have to add a shape
 // flag as in the above.
-void calculate_verts_wall(struct Extension* ext, float w, float h, float d) {
+void calculate_verts_wall(Extension* ext, float w, float h, float d) {
 	//vert[0] must already be set.
 	ext->vert[1][0] = w * sin(PI/2 - d) + ext->vert[0][0];
 	ext->vert[1][1] = w * cos(PI/2 - d) + ext->vert[0][1];

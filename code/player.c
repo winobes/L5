@@ -63,7 +63,7 @@ Player *init_player()
 	player->sprite = al_create_bitmap(player->gfx_w, player->gfx_h);
 	player->spritesheet = al_load_bitmap("gfx/FireflySpritesheet.png");
 	player->nanimatics = 7;
-	player->ani = malloc(player->nanimatics * sizeof(struct Animatic));
+	player->ani = malloc(player->nanimatics * sizeof(Animatic));
 
 	player->aniflags = malloc(player->nanimatics * sizeof(bool));
 	for (i = 0; i < player->nanimatics; i++) {

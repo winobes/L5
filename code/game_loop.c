@@ -30,9 +30,9 @@ int game_loop() {
 	
 	gs->player = init_player(); // TODO fix the weapon init
 	gs->nrooms = 2;
-	gs->room = init_rooms(gs);  // TODO free rooms and walls etc.
+	gs->room = init_rooms(gs);
 	gs->nnpcs = 2;
-	gs->npc = init_npcs(gs);  // TODO free npc
+	gs->npc = init_npcs(gs);  
 	gs->current_room = 0;
 	gs->font10 = al_load_font("fonts/Roboto-Black.ttf", 10,0);
 

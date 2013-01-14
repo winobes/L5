@@ -11,7 +11,7 @@
 //
 // Thank you to Raigan Burns and Mare Sheppard of http://www.metanetsoftware.com/
 //  for introducing me to the separating axis theorem
-bool collide(struct Extension a, struct Extension b, float *penetration_vector, float *penetration_scalar) {
+bool collide(Extension a, Extension b, float *penetration_vector, float *penetration_scalar) {
 
 	int i, j;
 

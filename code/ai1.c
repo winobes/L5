@@ -16,7 +16,7 @@
 //     minsr - minimum sight range
 //     maxsr - maximum sight range
 void make_cone(GameState *gs,
-				struct Extension *ext,
+				Extension *ext,
 				float left,
 				float right,
 				int minsr,
@@ -49,9 +49,9 @@ void make_cone(GameState *gs,
 //     minimum sight range
 //     maximum sight range
 void setup_vision(GameState *gs,
-					struct Extension *vlc,
-					struct Extension *vc,
-					struct Extension *vrc,
+					Extension *vlc,
+					Extension *vc,
+					Extension *vrc,
 					int ndims,
 					int minsr,
 					int maxsr)
@@ -104,9 +104,9 @@ void setup_vision(GameState *gs,
 }
 
 
-void teardown_vision(struct Extension *visLeftCentre,
-					struct Extension *visCentre,
-					struct Extension *visRightCentre)
+void teardown_vision(Extension *visLeftCentre,
+					Extension *visCentre,
+					Extension *visRightCentre)
 {
 	int i;
 	for(i = 0; i < visCentre->nverts; i++) {
@@ -125,9 +125,9 @@ void ai1 (GameState *gs, int npcid) {
 	NPC *npc = &gs->npc[npcid];
 	Player *target = gs->player;
 
-	struct Extension visLeftCentre;
-	struct Extension visRightCentre;
-	struct Extension visCentre;
+	Extension visLeftCentre;
+	Extension visRightCentre;
+	Extension visCentre;
 
 	bool sighted = false;
 

@@ -1,4 +1,4 @@
-void animatic1 (struct Animatic* animatic, bool *anikeys) {
+void animatic1 (Animatic* animatic, bool *anikeys) {
 
 	
 	//if the key is not pressed and the animation loop is on its last frame, stop running the animation

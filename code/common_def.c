@@ -7,7 +7,7 @@
 #ifndef COMMON_DEF_H
 #define COMMON_DEF_H
 
-struct Animatic {
+typedef struct {
 	ALLEGRO_BITMAP *sprite;
 	float source_x, source_y, destination_x, destination_y;
 	int w, h, scale_x, scale_y;
@@ -18,25 +18,25 @@ struct Animatic {
 	bool is_running, draw;
 	int timer, nframes, frame_rate; //60ths of a second between frames
 	//float pivot_speed; //rotations per second
-};
+} Animatic;
 
-struct Extension {
+typedef struct {
 	float **vert;
 	float *x, *y; //x and y describe the location of each vert with respect to some point (usually the subject's centerpoint)
 	int nverts;
-};
+} Extension;
 
-struct Weapon {
+typedef struct {
 	int current, nactive, key, nframes, frame_rate;
 	ALLEGRO_BITMAP *spritesheet;
 	int w, h, origin_x, origin_y, movement_type, reload_time, reload_timer; //origin of the bullet in distance from the center
 	float damage;
-	struct Extension ext;
+	Extension ext;
 	ALLEGRO_BITMAP **sprite;
 	float *dx, *dy, *d, *x, *y, *source_x;
 	int *timer;
 	bool *exists;
-};	
+} Weapon;	
 
 typedef struct {
 	// current x, current y, direction
@@ -60,11 +60,11 @@ typedef struct {
 	Position pos;
 	float bouncy;  // bounce elasticity
 	int room, ai, gfx_w, gfx_h;
-	struct Extension ext;
+	Extension ext;
 	Motion mot;
 	int nanimatics;
 	ALLEGRO_BITMAP *sprite, *spritesheet;
-	struct Animatic *ani;
+	Animatic *ani;
 	bool *keys;
 } NPC;
 
@@ -75,16 +75,16 @@ typedef struct {
 	// w and h are good for initializing.
 	// d is used for drawing the sprite appropriately.
 	float w, h, d; 
-	struct Extension ext;
+	Extension ext;
 	ALLEGRO_BITMAP *sprite;
 } Wall;
 
-struct Background {
+typedef struct {
 	float parallax_rate;
 	bool is_tiled;
 	int x1, x2, y1, y2;
 	ALLEGRO_BITMAP *background_image;
-};
+} Background;
 
 typedef struct {
 	int h, w;
@@ -92,7 +92,7 @@ typedef struct {
 	int nwalls;
 	bool active;
 	int nbackgrounds;
-	struct Background *background;
+	Background *background;
 } Room;
 
 typedef struct {
@@ -100,17 +100,17 @@ typedef struct {
 	float health;
 	Position pos; 
 	float bouncy;
-	struct Extension ext; 
+	Extension ext; 
 	Motion mot;
 	ALLEGRO_BITMAP *sprite, *spritesheet;
 	//ultimately gets drawn to the display
 	//spritesheet is used for animatics
 	int gfx_w, gfx_h, nanimatics;
 	bool *aniflags;
-	struct Animatic *ani;
+	Animatic *ani;
 	int hit_wall;
 	int nweapons;
-	struct Weapon weapon;
+	Weapon weapon;
 } Player;
 
 typedef struct {
