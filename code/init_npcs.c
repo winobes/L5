@@ -23,7 +23,11 @@ NPC *init_npcs(GameState *gs)
 	npc[0].mot.dx = 0;
 	npc[0].mot.dy = -1;
 	npc[0].mot.dd = .05;
-	npc[0].mot.ddxy = .05;
+	npc[0].mot.turn_speed = .5;
+	npc[0].mot.forward_speed = .05;
+	npc[0].mot.side_speed = 0;
+    npc[0].mot.warp_speed = 0;
+
 	npc[0].sprite = al_create_bitmap(npc[0].gfx_w, npc[0].gfx_h);
 	npc[0].spritesheet = al_load_bitmap("gfx/firefly_spritesheet.png");
 	npc[0].nanimatics = 3;
@@ -122,7 +126,10 @@ NPC *init_npcs(GameState *gs)
 	npc[1].mot.dx = 0;
 	npc[1].mot.dy = -1;
 	npc[1].mot.dd = .05;
-	npc[1].mot.ddxy = .05;
+	npc[1].mot.turn_speed = .5;
+	npc[1].mot.forward_speed = .05;
+	npc[1].mot.side_speed = 0;
+    npc[1].mot.warp_speed = 0;
 	npc[1].sprite = al_create_bitmap(npc[1].gfx_w, npc[1].gfx_h);
 	npc[1].spritesheet = al_load_bitmap("gfx/firefly_spritesheet.png");
 	npc[1].nanimatics = 3;

@@ -1,5 +1,3 @@
-
-
 #include <allegro5/allegro5.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_font.h>
@@ -14,6 +12,7 @@
 
 #include "collide.c"
 #include "update_background.c"
+#include "maneuvers.c"
 #include "ai1.c"
 #include "animatic1.c"
 #include "game_loop.c"

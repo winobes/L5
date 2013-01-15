@@ -52,6 +52,11 @@ typedef struct {
 	float dd;
 	// acceleration in x or y direction per frame, constant
 	float ddxy;
+    //
+	float forward_speed;
+	float turn_speed;
+	float warp_speed;
+	float side_speed;
 } Motion;
 
 typedef struct {
@@ -95,6 +100,12 @@ typedef struct {
 	Background *background;
 } Room;
 
+
+typedef struct {
+    bool on;
+    int state;
+} Maneuver;
+
 typedef struct {
 	bool exist, flying;
 	float health;
@@ -111,6 +122,10 @@ typedef struct {
 	int hit_wall;
 	int nweapons;
 	Weapon weapon;
+    int nmaneuvers;
+    Maneuver *man;
+    void (**man_func) (Position*, Motion*, Maneuver*, int);
+
 } Player;
 
 typedef struct {
@@ -125,19 +140,11 @@ typedef struct {
 	ALLEGRO_EVENT_QUEUE* event_queue;
 	ALLEGRO_TIMER* timer;
 	ALLEGRO_DISPLAY* display;
-	float player_forward_speed;
-	float player_turn_speed;
-	float player_warp_speed;
-	float player_side_speed;
-	float npc_turn_speed;
-	float npc_forward_speed;
-	float npc_side_speed;
 	bool s_held;
 } GameState;
 
 int NKEYS = 9;
-enum KEYS{RIGHT, DOWN, LEFT, UP, LCTRL, KEYA, KEYW, KEYS, KEYD};
-enum SHAPE{RECTANGLE, OCTAGON};
+enum KEYS{UP, DOWN, LEFT, RIGHT, LCTRL, KEYA, KEYW, KEYS, KEYD};
 
 const int width = 800;
 const int height = 600;

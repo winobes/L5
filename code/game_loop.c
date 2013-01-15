@@ -19,14 +19,6 @@ int game_loop() {
 
 	init_allegro(gs);
 
-	gs->player_forward_speed = 0.5;
-	gs->player_turn_speed = 0.25;
-	gs->player_warp_speed = 5.0;
-	gs->player_side_speed = 0.2;
-	gs->npc_turn_speed = 0.3;
-	gs->npc_forward_speed = 0.6;
-	gs->npc_side_speed = 0.25;
-	gs->s_held = false;
 	
 	gs->player = init_player(); // TODO fix the weapon init
 	gs->nrooms = 2;
@@ -50,7 +42,8 @@ int game_loop() {
 
 		// TODO check types and inputs
 		do_update(&event, keys, &exit_game, &redraw, gs);
-
+        //TODO bind animatics to maneuvers rather than keys
+        //TODO switch npcs to existing maneuvers
 		do_room_specific_update(gs);
 
 		do_graphics_update(gs, &redraw);
@@ -72,6 +65,8 @@ int game_loop() {
 	free(gs->player->ext.vert);
 	free(gs->player->ext.y);
 	free(gs->player->ext.x);
+    free(gs->player->man_func);
+    free(gs->player->man);
 	free(gs->player->ani);
 	free(gs->player->aniflags);
 	

@@ -13,6 +13,8 @@ Player *init_player()
 	player->hit_wall = -1;
 	player->nweapons = 1;
 
+
+
 	player->bouncy = 500;
 	player->pos.cx = 20;
 	player->pos.cy = 20;
@@ -55,7 +57,29 @@ Player *init_player()
 	player->mot.dx = 0;
 	player->mot.dy = 0;
 	player->mot.dd = .03;
-	player->mot.ddxy = .03;
+    player->mot.forward_speed = 0.03;
+	player->mot.turn_speed = 0.25;
+	player->mot.warp_speed = 5.0;
+	player->mot.side_speed = 0.2;
+
+
+    player->nmaneuvers = 8;
+    player->man = malloc(player->nmaneuvers * sizeof (Maneuver));
+
+    player->man_func = malloc(player->nmaneuvers * sizeof (void (*)(Position*, Motion*)));
+
+    player->man_func[0] = &thrust_forward;
+    player->man_func[1] = &thrust_backward;
+    player->man_func[2] = &rotate_right_thrust_forward;
+    player->man_func[3] = &rotate_left_thrust_forward;
+    player->man_func[4] = &thrust_forward_warpspeed;
+    player->man_func[5] = &thrust_right;
+    player->man_func[6] = &thrust_left;
+    player->man_func[7] = &slow_to_stop;
+
+    for (i = 0; i < player->nmaneuvers; i++) {
+        player->man[i].on = false;
+    }
 
 	player->gfx_w = 100;
 	player->gfx_h = 100;

@@ -7,6 +7,8 @@
 // return effects of receiving input pass by reference to calling game loop function
 void get_input(ALLEGRO_EVENT *event, bool *keys, bool *exit_game)
 {
+
+
 	if(event->type == ALLEGRO_EVENT_KEY_DOWN) {
 		switch(event->keyboard.keycode) {
 			case ALLEGRO_KEY_RIGHT:
@@ -74,88 +76,57 @@ void get_input(ALLEGRO_EVENT *event, bool *keys, bool *exit_game)
 
 void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 {
+    int i;
 	float penetration_scalar;
 	float penetration_vector[2];
 
 	if(event->type == ALLEGRO_EVENT_TIMER) {
 
-		//updating player direction
-		if (keys[RIGHT]) {
-			gs->player->pos.cd += gs->player_turn_speed * gs->player->mot.dd*PI;
-			
-			if(!keys[UP]) {
-				gs->player->mot.dx += gs->player_forward_speed * gs->player->mot.ddxy * cos(gs->player->pos.cd - PI/2);
-				gs->player->mot.dy += gs->player_forward_speed * gs->player->mot.ddxy * sin(gs->player->pos.cd - PI/2);
-			}
+    //registering maneuvers to keys
+        // forward_thrust
+        if (keys[UP]) { 
+            gs->player->man[0].on = true;
+        }
+        // backward_thrust
+        if (keys[DOWN]) { 
+            gs->player->man[1].on = true;
+        }
+        // right_forward_thrust
+        if (keys[RIGHT]) { 
+            gs->player->man[2].on = true;
+        }
+        // left_forward_thrust
+        if (keys[LEFT]) { 
+            gs->player->man[3].on = true;
+        }
+		// warp_speed_forward thrust
+        if (keys[KEYW]) { 
+            gs->player->man[4].on = true;
+        }
+        // thrust right relative to ship direction
+        if (keys[KEYD]) {
+            gs->player->man[5].on = true;
+        }
+		// thrust left relative to ship direction
+        if (keys[KEYA]) {
+            gs->player->man[6].on = true;
+        }
+        if (keys[KEYS]) {
+            gs->player->man[7].on = true;
+        }
 
-			/*	if(!keys[LEFT]) {
-				gs->player->pos.cx += (-cos(gs->player->pos.cd) - -cos(gs->player->pos.cd - .5*gs->player->mot.dd*PI)) * gs->player->w;
-				gs->player->pos.cy += (-sin(gs->player->pos.cd) - -sin(gs->player->pos.cd - .5*gs->player->mot.dd*PI)) * gs->player->w;
-
-			}*/
-		}
-
-		if (keys[LEFT]) {
-			gs->player->pos.cd -= gs->player_turn_speed * gs->player->mot.dd*PI;
-			
-			if(!keys[UP]) {
-				gs->player->mot.dx += gs->player_forward_speed * gs->player->mot.ddxy * cos(gs->player->pos.cd - PI/2);
-				gs->player->mot.dy += gs->player_forward_speed * gs->player->mot.ddxy * sin(gs->player->pos.cd - PI/2);
-			}
-		
-			/*	if(!keys[RIGHT]) {
-				gs->player->pos.cx += (-cos(gs->player->pos.cd) - -cos(gs->player->pos.cd - .5*gs->player->mot.dd*PI)) * gs->player->w;
-				gs->player->pos.cy += (-sin(gs->player->pos.cd) - -sin(gs->player->pos.cd - .5*gs->player->mot.dd*PI)) * gs->player->w;
-			}*/
-		}
+        //performing the maneuver functions
+        for (i = 0; i < gs->player->nmaneuvers; i++) {
+            if (gs->player->man[i].on) {    
+                gs->player->man_func[i](&gs->player->pos, &gs->player->mot, gs->player->man, i);
+            }
+        }
 
 		// wrap orientation to the range [0,2*PI]
 		if (gs->player->pos.cd > 2*PI) {
 			gs->player->pos.cd -= 2*PI;
 		} else if (gs->player->pos.cd < 0) {
 			gs->player->pos.cd += 2*PI;
-		}
-
-		// add thrust sideways left relative to forward vector of player ship direction
-		if (keys[KEYA]) {
-			gs->player->mot.dx += gs->player_side_speed * gs->player->mot.ddxy * cos(gs->player->pos.cd - PI);
-			gs->player->mot.dy += gs->player_side_speed * gs->player->mot.ddxy * sin(gs->player->pos.cd - PI);		
-		}
-
-		// player thrust forward full speed
-		if (keys[KEYW]) {
-			gs->player->mot.dx += gs->player->mot.ddxy * 5 * cos(gs->player->pos.cd - PI/2);
-			gs->player->mot.dy += gs->player->mot.ddxy * 5 * sin(gs->player->pos.cd - PI/2);
-		}
-
-		// slow to stop
-		if (keys[KEYS]) {
-			gs->s_held = true;
-			stopping(&gs->player->pos, &gs->player->mot, keys);		
-		} else if (gs->s_held) {
-			// still the stopping thrusters
-			gs->s_held = false;
-			int i;
-			for (i = 0; i < NKEYS; i++) {
-				keys[i] = false;
-			}
-		}
-
-		// add thrust sideways right relative to forward vector of player ship direction
-		if (keys[KEYD]) {
-			gs->player->mot.dx += gs->player_side_speed * gs->player->mot.ddxy * cos(gs->player->pos.cd);
-			gs->player->mot.dy += gs->player_side_speed * gs->player->mot.ddxy * sin(gs->player->pos.cd);		
-		}
-
-		//updating player dy and dx based on acceleration & direction
-		if (keys[UP]) {
-			gs->player->mot.dx += gs->player->mot.ddxy * cos(gs->player->pos.cd - PI/2);
-			gs->player->mot.dy += gs->player->mot.ddxy * sin(gs->player->pos.cd - PI/2);
-		}
-		//moving backwords...
-		if (keys[DOWN]) {
-			gs->player->mot.dx -= gs->player->mot.ddxy * cos(gs->player->pos.cd - PI/2);
-			gs->player->mot.dy -= gs->player->mot.ddxy * sin(gs->player->pos.cd - PI/2);
 		}
 
 		//updating gs->player position based on dx and dy
@@ -195,13 +166,13 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 
 			//updating NPC dy and dx based on acceleration & direction
 			if (gs->npc[i].keys[UP]) {
-				gs->npc[i].mot.dx += gs->npc[i].mot.ddxy * cos(gs->npc[i].pos.cd - PI/2);
-				gs->npc[i].mot.dy += gs->npc[i].mot.ddxy * sin(gs->npc[i].pos.cd - PI/2);
+				gs->npc[i].mot.dx += gs->npc[i].mot.forward_speed * cos(gs->npc[i].pos.cd - PI/2);
+				gs->npc[i].mot.dy += gs->npc[i].mot.forward_speed * sin(gs->npc[i].pos.cd - PI/2);
 			}
 			//moving backwords...
 			if (gs->npc[i].keys[DOWN]) {
-				gs->npc[i].mot.dx -= gs->npc[i].mot.ddxy * cos(gs->npc[i].pos.cd - PI/2);
-				gs->npc[i].mot.dy -= gs->npc[i].mot.ddxy * sin(gs->npc[i].pos.cd - PI/2);
+				gs->npc[i].mot.dx -= gs->npc[i].mot.forward_speed * cos(gs->npc[i].pos.cd - PI/2);
+				gs->npc[i].mot.dy -= gs->npc[i].mot.forward_speed * sin(gs->npc[i].pos.cd - PI/2);
 			}
 
 			calculate_speed(gs->npc[i].mot.dx, gs->npc[i].mot.dy, &gs->npc[i].mot.spd);
