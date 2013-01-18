@@ -58,7 +58,7 @@ Player *init_player()
 	player->mot.dy = 0;
 	player->mot.dd = .03;
     player->mot.forward_speed = 0.03;
-	player->mot.turn_speed = 0.25;
+	player->mot.turn_speed = 0.5;
 	player->mot.warp_speed = 5.0;
 	player->mot.side_speed = 0.2;
 
@@ -68,18 +68,63 @@ Player *init_player()
 
     player->man_func = malloc(player->nmaneuvers * sizeof (void (*)(Position*, Motion*)));
 
+    //registering maneuver functions
     player->man_func[0] = &thrust_forward;
     player->man_func[1] = &thrust_backward;
-    player->man_func[2] = &rotate_right_thrust_forward;
-    player->man_func[3] = &rotate_left_thrust_forward;
+    player->man_func[2] = &rotate_right;
+    player->man_func[3] = &rotate_left;
     player->man_func[4] = &thrust_forward_warpspeed;
     player->man_func[5] = &thrust_right;
     player->man_func[6] = &thrust_left;
     player->man_func[7] = &slow_to_stop;
 
+    //registering keys to maneuvers
+    player->man[0].key = UP;
+    player->man[1].key = DOWN;
+    player->man[2].key = RIGHT;
+    player->man[3].key = LEFT;
+    player->man[4].key = KEYW;
+    player->man[5].key = KEYD;
+    player->man[6].key = KEYA;
+    player->man[7].key = KEYS;
+
+
     for (i = 0; i < player->nmaneuvers; i++) {
         player->man[i].on = false;
+        player->man[i].state = 0;
+        player->man[i].maxstate = 0;
     }
+
+    // how many animatics are registered to each maneuver
+    player->man[0].nanimatics = 3;
+    player->man[1].nanimatics = 2;
+    player->man[2].nanimatics = 1;
+    player->man[3].nanimatics = 1;
+    player->man[4].nanimatics = 3;
+    player->man[5].nanimatics = 0;
+    player->man[6].nanimatics = 0;
+    player->man[7].nanimatics = 0; // stop doesn't have any animatics registered because it operates by manipulating other maneuvers.
+
+    for (i = 0; i < player->nmaneuvers; i++) {
+        player->man[i].animatic = malloc(player->man[i].nanimatics * sizeof (int));
+    }
+
+    // specifying the animatcs
+    player->man[0].animatic[0] = 2;
+    player->man[0].animatic[1] = 3;
+    player->man[0].animatic[2] = 4;
+
+    player->man[1].animatic[0] = 5;
+    player->man[1].animatic[1] = 6;
+
+    player->man[2].animatic[0] = 3;
+
+    player->man[3].animatic[0] = 4;
+
+    player->man[4].animatic[0] = 2;
+    player->man[4].animatic[1] = 3;
+    player->man[5].animatic[2] = 4;
+
 
 	player->gfx_w = 100;
 	player->gfx_h = 100;
@@ -94,6 +139,7 @@ Player *init_player()
 		player->aniflags[i] = false;
 	}
 
+    //the main ship sprite
 	player->ani[0].source_x = 0;
 	player->ani[0].source_y = 0;
 	player->ani[0].w = 35;
@@ -105,8 +151,8 @@ Player *init_player()
 	player->ani[0].scale_x = 1;
 	player->ani[0].scale_y = 1;
 	player->ani[0].is_running = false;
-	player->ani[0].draw = true;
-	player->ani[0].type = 0;
+	player->ani[0].draw = false;
+	player->ani[0].type = 1;
 	player->ani[0].flag = 0;
 	player->ani[0].tint = al_map_rgba_f(1,1,1,1);
 
@@ -128,6 +174,7 @@ Player *init_player()
 	player->ani[1].flag = 1;
 	player->ani[1].tint = al_map_rgba_f(1,1,1,1);
 
+    //main forward thruster
 	player->ani[2].source_x = 0;
 	player->ani[2].source_y = 45;
 	player->ani[2].w = 13;
@@ -146,6 +193,7 @@ Player *init_player()
 	player->ani[2].flag = 2;
 	player->ani[2].tint = al_map_rgba_f(1,1,1,1);
 
+    //right forward thruster
 	player->ani[3].source_x = 0;
 	player->ani[3].source_y = 71;
 	player->ani[3].w = 8;
@@ -164,6 +212,7 @@ Player *init_player()
 	player->ani[3].flag = 3;
 	player->ani[3].tint = al_map_rgba_f(1,1,1,1);
 
+    //left forward thruster
 	player->ani[4].source_x = 0;
 	player->ani[4].source_y = 113;
 	player->ani[4].w = 8;
@@ -182,6 +231,7 @@ Player *init_player()
 	player->ani[4].flag = 4;
 	player->ani[4].tint = al_map_rgba_f(1,1,1,1);
 
+    //right back thruster
 	player->ani[5].source_x = 0;
 	player->ani[5].source_y = 155;
 	player->ani[5].w = 7;
@@ -200,6 +250,7 @@ Player *init_player()
 	player->ani[5].flag = 5;
 	player->ani[5].tint = al_map_rgba_f(1,1,1,1);
 
+    //left back thruster
 	player->ani[6].source_x = 0;
 	player->ani[6].source_y = 188;
 	player->ani[6].w = 7;

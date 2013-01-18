@@ -104,6 +104,10 @@ typedef struct {
 typedef struct {
     bool on;
     int state;
+    int maxstate;
+    int *animatic; //triggers assoicated animations
+    int nanimatics;
+    int key; //consider changing this to an array for key-combo moves
 } Maneuver;
 
 typedef struct {
