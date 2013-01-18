@@ -91,8 +91,7 @@ Player *init_player()
 
     for (i = 0; i < player->nmaneuvers; i++) {
         player->man[i].on = false;
-        player->man[i].state = 0;
-        player->man[i].maxstate = 0;
+        player->man[i].state = 1;
     }
 
     // how many animatics are registered to each maneuver

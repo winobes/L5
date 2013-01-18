@@ -85,13 +85,15 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
     //passing key input to maneuvers
 
         for ( i = 0; i < gs->player->nmaneuvers; i++) {
+
+            if ((gs->player->man[i].state == 0) && !keys[gs->player->man[i].key] ) {
+            //only turn the maneuver off if it has reached the end of a cycle *and* they key is no longer pressed
+               gs->player->man[i].on = false;
+               gs->player->man[i].state = 1;
+            }
             if (keys[gs->player->man[i].key]) {
             // if the key is pressed, turn the maneuver on
                 gs->player->man[i].on = true;
-            }
-            if ((gs->player->man[i].state == gs->player->man[i].maxstate) && !keys[gs->player->man[i].key]) {
-            //only turn the maneuver off if it has reached the end of a cycle *and* they key is no longer pressed
-                gs->player->man[i].on = false;
             }
         }
         //performing the maneuver functions

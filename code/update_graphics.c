@@ -174,7 +174,10 @@ void do_graphics_update(GameState *gs, bool *redraw)
 	al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 7*12, ALLEGRO_ALIGN_RIGHT,"npc[0].health = %f", gs->npc[0].health);
 al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 8*12, ALLEGRO_ALIGN_RIGHT,"npc[1].health = %f", gs->npc[1].health);
 
-    if (gs->player->man[0].on) {
+    al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 21*12, ALLEGRO_ALIGN_RIGHT,"%i", gs->player->man[1].state);
+    
+
+    if (gs->player->man[1].on) {
     al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 20*12, ALLEGRO_ALIGN_RIGHT,"on");
     }
 ////debugging the player ext
