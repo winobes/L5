@@ -82,39 +82,18 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 
 	if(event->type == ALLEGRO_EVENT_TIMER) {
 
-    //registering maneuvers to keys
-        // forward_thrust
-        if (keys[UP]) { 
-            gs->player->man[0].on = true;
-        }
-        // backward_thrust
-        if (keys[DOWN]) { 
-            gs->player->man[1].on = true;
-        }
-        // right_forward_thrust
-        if (keys[RIGHT]) { 
-            gs->player->man[2].on = true;
-        }
-        // left_forward_thrust
-        if (keys[LEFT]) { 
-            gs->player->man[3].on = true;
-        }
-		// warp_speed_forward thrust
-        if (keys[KEYW]) { 
-            gs->player->man[4].on = true;
-        }
-        // thrust right relative to ship direction
-        if (keys[KEYD]) {
-            gs->player->man[5].on = true;
-        }
-		// thrust left relative to ship direction
-        if (keys[KEYA]) {
-            gs->player->man[6].on = true;
-        }
-        if (keys[KEYS]) {
-            gs->player->man[7].on = true;
-        }
+    //passing key input to maneuvers
 
+        for ( i = 0; i < gs->player->nmaneuvers; i++) {
+            if (keys[gs->player->man[i].key]) {
+            // if the key is pressed, turn the maneuver on
+                gs->player->man[i].on = true;
+            }
+            if ((gs->player->man[i].state == gs->player->man[i].maxstate) && !keys[gs->player->man[i].key]) {
+            //only turn the maneuver off if it has reached the end of a cycle *and* they key is no longer pressed
+                gs->player->man[i].on = false;
+            }
+        }
         //performing the maneuver functions
         for (i = 0; i < gs->player->nmaneuvers; i++) {
             if (gs->player->man[i].on) {    
@@ -122,18 +101,18 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
             }
         }
 
-		// wrap orientation to the range [0,2*PI]
+		// wrap player orientation to the range [0,2*PI]
 		if (gs->player->pos.cd > 2*PI) {
 			gs->player->pos.cd -= 2*PI;
 		} else if (gs->player->pos.cd < 0) {
 			gs->player->pos.cd += 2*PI;
 		}
 
-		//updating gs->player position based on dx and dy
+		//updating player position based on dx and dy
 		gs->player->pos.cx += gs->player->mot.dx;
 		gs->player->pos.cy += gs->player->mot.dy;
 
-		//recalculating the gs->player vertices
+		//recalculating the player vertices
 		calculate_verts_ship(&gs->player->ext, gs->player->pos.cx, gs->player->pos.cy, gs->player->pos.cd);
 
 		//updating NPC AI & Input
@@ -143,7 +122,7 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 				case 0:
 					break;
 				case 1:
-					ai1(gs, i);
+					ai1(&gs->npc[i], gs->player->ext, gs->current_room);
 					break;
 			}
 
@@ -205,7 +184,7 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 			}
 		}
 
-		//check for gs->player collisions with NPCs
+		//check for player collisions with NPCs
 
 		for (i = 0; i < gs->nnpcs; i++) {
 			if (gs->npc[i].exists && gs->npc[i].room == gs->current_room) {
@@ -314,35 +293,30 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 
 		//updating player animation flags
 
-		gs->player->aniflags[1] = true;
 
-		if (keys[UP]) {
-			gs->player->aniflags[2] = true;
-			gs->player->aniflags[3] = true;
-			gs->player->aniflags[4] = true;
-		}
+        for (i = 0; i < gs->player->nmaneuvers; i++) {
+        if (gs->player->man[i].on) {
+        for (j = 0; j < gs->player->man[i].nanimatics; j++) {
+            gs->player->aniflags[gs->player->man[i].animatic[j]] = true;
+        }
+        }
+        }
 
-		if (keys[RIGHT]) {
-			gs->player->aniflags[3] = true;
-		}
-		
-		if (keys[LEFT]) {
-			gs->player->aniflags[4] = true;
-		}
+        if (gs->player->exist) {
+            gs->player->aniflags[0] = true;
+            if (gs->player->flying) {
+                gs->player->aniflags[1] = true;
+            }
+        }
 
-		if (keys[DOWN]) {
-			gs->player->aniflags[5] = true;
-			gs->player->aniflags[6] = true;
-		}
-
-		//updating player animation variables
+ 		//updating player animation variables
 		for (i = 0; i < gs->player->nanimatics; i++) {
 			switch (gs->player->ani[i].type) {
-				case 0:
-					break;
-				case 1:
-					animatic1(&gs->player->ani[i], gs->player->aniflags);
-					break;
+			case 0:
+				break;
+			case 1:
+				animatic1(&gs->player->ani[i], gs->player->aniflags);
+				break;
 			}
 		}
 

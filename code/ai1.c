@@ -15,24 +15,24 @@
 //     right - rightmost angle of cone  
 //     minsr - minimum sight range
 //     maxsr - maximum sight range
-void make_cone(GameState *gs,
+void make_cone(NPC *npc,
 				Extension *ext,
 				float left,
 				float right,
 				int minsr,
 				int maxsr)
 {
-	ext->vert[0][0] = minsr * sin(left) + gs->npc->pos.cx;
-	ext->vert[0][1] = minsr * cos(left + PI) + gs->npc->pos.cy;
+	ext->vert[0][0] = minsr * sin(left) + npc->pos.cx;
+	ext->vert[0][1] = minsr * cos(left + PI) + npc->pos.cy;
 
-	ext->vert[1][0] = maxsr * sin(left) + gs->npc->pos.cx;
-	ext->vert[1][1] = maxsr * cos(left + PI) + gs->npc->pos.cy;
+	ext->vert[1][0] = maxsr * sin(left) + npc->pos.cx;
+	ext->vert[1][1] = maxsr * cos(left + PI) + npc->pos.cy;
 
-	ext->vert[2][0] = maxsr * sin(right) + gs->npc->pos.cx;
-	ext->vert[2][1] = maxsr * cos(right + PI) + gs->npc->pos.cy;
+	ext->vert[2][0] = maxsr * sin(right) + npc->pos.cx;
+	ext->vert[2][1] = maxsr * cos(right + PI) + npc->pos.cy;
 
-	ext->vert[3][0] = minsr * sin(right) + gs->npc->pos.cx;
-	ext->vert[3][1] = minsr * cos(right + PI) + gs->npc->pos.cy;
+	ext->vert[3][0] = minsr * sin(right) + npc->pos.cx;
+	ext->vert[3][1] = minsr * cos(right + PI) + npc->pos.cy;
 }
 
 
@@ -48,7 +48,7 @@ void make_cone(GameState *gs,
 //     dimension of the space
 //     minimum sight range
 //     maximum sight range
-void setup_vision(GameState *gs,
+void setup_vision(NPC *npc,
 					Extension *vlc,
 					Extension *vc,
 					Extension *vrc,
@@ -75,27 +75,27 @@ void setup_vision(GameState *gs,
 	}
 
 	// leftmost angle of vision from the forward direction of npc unit
-    float lvis = gs->npc->pos.cd - PI/2;
+    float lvis = npc->pos.cd - PI/2;
     // angle divding left and centre vision
-    float lcvis = gs->npc->pos.cd - PI/8;
+    float lcvis = npc->pos.cd - PI/8;
     // angle divding centre and right vision
-	float rcvis = gs->npc->pos.cd + PI/8;
+	float rcvis = npc->pos.cd + PI/8;
     // rightmost angle
-    float rvis = gs->npc->pos.cd + PI/2;
+    float rvis = npc->pos.cd + PI/2;
 
-	make_cone(gs,
+	make_cone(npc,
 				vlc,
 				lvis,
 				lcvis,
 				minsr,
 				maxsr);
-	make_cone(gs,
+	make_cone(npc,
 				vc,
 				lcvis,
 				rcvis,
 				minsr,
 				maxsr);
-	make_cone(gs,
+	make_cone(npc,
 				vrc,
 				rcvis,
 				rvis,
@@ -120,10 +120,8 @@ void teardown_vision(Extension *visLeftCentre,
 }
 
 
-void ai1 (GameState *gs, int npcid) {
+void ai1 (NPC *npc, Extension target, int current_room) {
 
-	NPC *npc = &gs->npc[npcid];
-	Player *target = gs->player;
 
 	Extension visLeftCentre;
 	Extension visRightCentre;
@@ -136,7 +134,7 @@ void ai1 (GameState *gs, int npcid) {
 
 	int i;
 
-	setup_vision(gs,
+	setup_vision(npc,
 				&visLeftCentre,
 				&visCentre,
 				&visRightCentre,
@@ -148,16 +146,16 @@ void ai1 (GameState *gs, int npcid) {
 		npc->keys[i] = false;
 	}
 
-	if (npc[0].room == gs->current_room) {
+	if (npc->room == current_room) {
 		// going after the player if it is ahead
-		if (collide(visLeftCentre, target->ext, penetration_vector, &penetration_scalar)) {
+		if (collide(visLeftCentre, target, penetration_vector, &penetration_scalar)) {
 			npc->keys[LEFT] = true;
 			sighted = true;
-		} else if (collide(visCentre, target->ext, penetration_vector, &penetration_scalar)) {
+		} else if (collide(visCentre, target, penetration_vector, &penetration_scalar)) {
 			// turning to get the player ahead if it is in sight
 			npc->keys[UP] = true;
 			sighted = true;
-		} else if (collide(visRightCentre, target->ext, penetration_vector, &penetration_scalar)) {
+		} else if (collide(visRightCentre, target, penetration_vector, &penetration_scalar)) {
 			npc->keys[RIGHT] = true;
 			sighted = true;
 		}
