@@ -76,7 +76,9 @@ void get_input(ALLEGRO_EVENT *event, bool *keys, bool *exit_game)
 
 void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 {
-    int i;
+
+	int i, j, k;
+
 	float penetration_scalar;
 	float penetration_vector[2];
 
@@ -117,44 +119,48 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 		//recalculating the player vertices
 		calculate_verts_ship(&gs->player->ext, gs->player->pos.cx, gs->player->pos.cy, gs->player->pos.cd);
 
+
+
+
+
 		//updating NPC AI & Input
-		int i, j;
+
 		for (i = 0; i < gs->nnpcs; i++) {
+
 			switch (gs->npc[i].ai) {
-				case 0:
-					break;
-				case 1:
-					ai1(&gs->npc[i], gs->player->ext, gs->current_room);
-					break;
+			case 0:
+				break;
+			case 1:
+				ai1(&gs->npc[i], gs->player->ext, gs->current_room);
+				break;
 			}
 
-			//updating NPC direction
-			if (gs->npc[i].keys[RIGHT]) {
-				gs->npc[i].pos.cd += .5*gs->npc[i].mot.dd*PI;
-			}
+          for ( j = 0; j < gs->npc[i].nmaneuvers; j++) {
 
-			if (gs->npc[i].keys[LEFT]) {
-				gs->npc[i].pos.cd -= .5*gs->npc[i].mot.dd*PI;
-			}
+                if (gs->npc[i].man[j].state == 0) {
+                //only turn the maneuver off if it has reached the end of a cycle *and* they key is no longer pressed
+                   gs->npc[i].man[j].on = false;
+                   gs->npc[i].man[j].state = 1;
+                }
 
-			if (gs->npc[i].pos.cd > 2*PI) {
-				gs->npc[i].pos.cd -= 2*PI;
-			}
+            }
 
-			if (gs->npc[i].pos.cd < 0) {
-				gs->npc[i].pos.cd += 2*PI;
-			}
+            //performing the maneuver functions
+            for (j = 0; j < gs->npc[i].nmaneuvers; j++) {
+                if (gs->npc[i].man[j].on) {    
+                    gs->npc[i].man_func[j](&gs->npc[i].pos, &gs->npc[i].mot, gs->npc[i].man, j);
+                }
+            }
 
+		    // wrap npc orientation to the range [0,2*PI]
+		    if (gs->npc[i].pos.cd > 2*PI) {
+			    gs->npc[i].pos.cd -= 2*PI;
+		    } else if (gs->npc[i].pos.cd < 0) {
+			    gs->npc[i].pos.cd += 2*PI;
+		    }
+			
 			//updating NPC dy and dx based on acceleration & direction
-			if (gs->npc[i].keys[UP]) {
-				gs->npc[i].mot.dx += gs->npc[i].mot.forward_speed * cos(gs->npc[i].pos.cd - PI/2);
-				gs->npc[i].mot.dy += gs->npc[i].mot.forward_speed * sin(gs->npc[i].pos.cd - PI/2);
-			}
-			//moving backwords...
-			if (gs->npc[i].keys[DOWN]) {
-				gs->npc[i].mot.dx -= gs->npc[i].mot.forward_speed * cos(gs->npc[i].pos.cd - PI/2);
-				gs->npc[i].mot.dy -= gs->npc[i].mot.forward_speed * sin(gs->npc[i].pos.cd - PI/2);
-			}
+
 
 			calculate_speed(gs->npc[i].mot.dx, gs->npc[i].mot.dy, &gs->npc[i].mot.spd);
 
@@ -340,15 +346,33 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 					}
 				}
 			}
-		}			
-		//updating NPC animation variables
+		}
+
+
+
+
+		
+
 		for (i = 0; i < gs->nnpcs; i++) {
+
+            // updating NPC animation flags
+            for (j = 0; j < gs->npc[i].nmaneuvers; j++) {
+            if (gs->npc[i].man[j].on) {
+            for (k = 0; k < gs->npc[i].man[j].nanimatics; k++) {
+                gs->npc[i].aniflags[gs->npc[i].man[j].animatic[k]] = true;
+            }
+            }
+            }
+
+
+
+    		//updating NPC animation variables
 			for (j = 0; j < gs->npc[i].nanimatics; j++) {
 				switch (gs->npc[i].ani[j].type) {
 					case 0:
 						break;
 					case 1:
-						animatic1(&gs->npc[i].ani[j], gs->npc[i].keys);
+						animatic1(&gs->npc[i].ani[j], gs->npc[i].aniflags);
 						break;
 				}
 			}

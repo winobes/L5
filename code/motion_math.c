@@ -56,7 +56,7 @@ void reflect(float *x, float *y, float N[2]) {
 //
 // calculates the position of the vertices given their vector position
 // (dis,ang) relative to some point (cx,cy) on the subject and the subject's
-// rotational direction (d)*/
+// rotational direction (d)
 void calculate_verts_ship(Extension* ext, float cx, float cy, float d) {
 
 	int i;
@@ -192,49 +192,6 @@ float get_velangle(float dx, float dy)
 }
 
 
-// bring ship closer to stopping its motion
-// INPUT
-// pos    - position of ship
-// motion - motion/position struct of ship
-// keys   - key press control vector of ship
-void stopping(Position *pos, Motion* motion, bool *keys)
-{
-	int i;
-	for (i = 0; i < NKEYS; i++) {
-		if (i != KEYS) {
-			keys[i] = false;
-		}
-	}
-	float normaldx = motion->dx / sqrt(motion->dx*motion->dx + motion->dy*motion->dy);
-	float velangle = get_velangle(motion->dx, motion->dy);
-	// angle delta
-	float angled = velangle - pos->cd;
-	if (sqrt(motion->dx*motion->dx + motion->dy*motion->dy) > .05) {
-		
-		if((-PI/8 < angled) && (angled < PI/8)) {
-			// moving forward, oppose motion
-			keys[DOWN] = true;
-		} else if(asin(normaldx) - pos->cd < PI) {
-			keys[LEFT] = true;
-		} else if(asin(normaldx) - pos->cd > PI) {
-			keys[RIGHT] = true;
-		}
-		/*
-		if(7/8*PI < angled && angled < 9/8*PI) {
-			keys[UP] = true;
-		} else if(9/8*PI < angled && angled < 2*PI) {
-			keys[RIGHT] = true;
-		} else if(0 < angled && angled < 7/8*PI) {
-			keys[LEFT] = true;
-		}
-		
-		} else if(7/16*PI < angled && angled < 9/16*PI) {
-			keys[KEYD] = true;
-		} else if(23/16*PI < angled && angled < 25/16*PI) {
-			keys[KEYA] = true;
-		*/
-	}
-}
 
 
 

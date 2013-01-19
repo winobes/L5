@@ -60,6 +60,15 @@ typedef struct {
 } Motion;
 
 typedef struct {
+    bool on;
+    int state; //keeps track of where we were in the function
+    int *animatic; //array of animation indexes associated with this manuver
+    int nanimatics; //number of animations this maneuver triggers
+    int key; //consider changing this to an array for key-combo moves
+} Maneuver;
+
+
+typedef struct {
 	bool exists, solid;
 	float health;
 	Position pos;
@@ -69,8 +78,12 @@ typedef struct {
 	Motion mot;
 	int nanimatics;
 	ALLEGRO_BITMAP *sprite, *spritesheet;
-	Animatic *ani;
-	bool *keys;
+    bool *aniflags; //array of flags telling animatics when to fire
+	Animatic *ani; 
+    int nmaneuvers;
+    Maneuver *man;
+    void (**man_func) (Position*, Motion*, Maneuver*, int);
+
 } NPC;
 
 typedef struct {
@@ -100,15 +113,6 @@ typedef struct {
 	Background *background;
 } Room;
 
-
-typedef struct {
-    bool on;
-    int state;
-    int maxstate;
-    int *animatic; //triggers assoicated animations
-    int nanimatics;
-    int key; //consider changing this to an array for key-combo moves
-} Maneuver;
 
 typedef struct {
 	bool exist, flying;

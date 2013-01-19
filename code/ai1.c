@@ -132,7 +132,6 @@ void ai1 (NPC *npc, Extension target, int current_room) {
 	float penetration_scalar;
 	float penetration_vector[2];
 
-	int i;
 
 	setup_vision(npc,
 				&visLeftCentre,
@@ -142,27 +141,24 @@ void ai1 (NPC *npc, Extension target, int current_room) {
 				150,
 				200);
 
-	for (i = 0; i < 5; i++) {
-		npc->keys[i] = false;
-	}
 
 	if (npc->room == current_room) {
 		// going after the player if it is ahead
 		if (collide(visLeftCentre, target, penetration_vector, &penetration_scalar)) {
-			npc->keys[LEFT] = true;
+            rotate_left(&npc->pos, &npc->mot, npc->man, 2);
 			sighted = true;
 		} else if (collide(visCentre, target, penetration_vector, &penetration_scalar)) {
 			// turning to get the player ahead if it is in sight
-			npc->keys[UP] = true;
+            thrust_forward(&npc->pos, &npc->mot, npc->man, 0);
 			sighted = true;
 		} else if (collide(visRightCentre, target, penetration_vector, &penetration_scalar)) {
-			npc->keys[RIGHT] = true;
+            rotate_right(&npc->pos, &npc->mot, npc->man, 1);
 			sighted = true;
 		}
 	}
 
 	if (sighted == false)  {
-		stopping(&npc->pos, &npc->mot, npc->keys);
+		slow_to_stop(&npc->pos, &npc->mot, npc->man, 4);
 	}
 	teardown_vision(&visLeftCentre, &visCentre, &visRightCentre);
 }

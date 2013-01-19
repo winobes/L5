@@ -122,7 +122,7 @@ Player *init_player()
 
     player->man[4].animatic[0] = 2;
     player->man[4].animatic[1] = 3;
-    player->man[5].animatic[2] = 4;
+    player->man[4].animatic[2] = 4;
 
 
 	player->gfx_w = 100;

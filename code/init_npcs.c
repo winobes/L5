@@ -32,12 +32,6 @@ NPC *init_npcs(GameState *gs)
 	npc[0].spritesheet = al_load_bitmap("gfx/firefly_spritesheet.png");
 	npc[0].nanimatics = 3;
 
-	npc[0].keys = malloc(5 * sizeof(bool));
-
-	for(i = 0; i < 5; i++) {
-		npc[0].keys[i] = false;
-	}
-
 	npc[0].ext.nverts = 4;
 
 	npc[0].ext.vert = malloc(npc[0].ext.nverts * sizeof(float*));
@@ -57,8 +51,52 @@ NPC *init_npcs(GameState *gs)
 	npc[0].ext.x[3] = -7.5; 
     npc[0].ext.y[3] = 7.5;
 
+
+    npc[0].nmaneuvers = 5;
+    npc[0].man = malloc(npc[0].nmaneuvers * sizeof (Maneuver)); 
+
+    
+   
+
+npc[0].man_func = malloc(npc[0].nmaneuvers * sizeof (void (*)(Position*, Motion*))); 
+
+    //registering maneuver functions
+    npc[0].man_func[0] = &thrust_forward;
+    npc[0].man_func[1] = &thrust_backward;
+    npc[0].man_func[2] = &rotate_right;
+    npc[0].man_func[3] = &rotate_left;
+    npc[0].man_func[4] = &slow_to_stop;
+
+
+    for (i = 0; i < npc[0].nmaneuvers; i++) {
+        npc[0].man[i].on = false;
+        npc[0].man[i].state = 1;
+    }
+
+    npc[0].man[0].nanimatics = 1;
+    npc[0].man[1].nanimatics = 0;
+    npc[0].man[2].nanimatics = 0;
+    npc[0].man[3].nanimatics = 1;
+    npc[0].man[4].nanimatics = 0;
+
+    for (i = 0; i < npc[0].nmaneuvers; i++) {
+        npc[0].man[i].animatic = malloc(npc[0].man[i].nanimatics * sizeof (int));
+    }
+
+    // specifying the animatcs
+    npc[0].man[0].animatic[0] = 1;
+    npc[0].man[3].animatic[0] = 2;
+
+
+
 	npc[0].nanimatics = 3;
 	npc[0].ani = malloc(npc[0].nanimatics * sizeof(Animatic));
+
+	npc[0].aniflags = malloc(npc[0].nanimatics * sizeof(bool)); 
+	for (i = 0; i < npc[0].nanimatics; i++) {
+		npc[0].aniflags[i] = false;
+	}
+
 
 	npc[0].ani[0].source_x = 0;
 	npc[0].ani[0].source_y = 0;
@@ -134,12 +172,6 @@ NPC *init_npcs(GameState *gs)
 	npc[1].spritesheet = al_load_bitmap("gfx/firefly_spritesheet.png");
 	npc[1].nanimatics = 3;
 
-	npc[1].keys = malloc(5 * sizeof(bool));
-
-	for(i = 0; i < 5; i++) {
-		npc[1].keys[i] = false;
-	}
-
 	npc[1].ext.nverts = 4;
 
 	npc[1].ext.vert = malloc(npc[1].ext.nverts * sizeof(float*));
@@ -159,8 +191,47 @@ NPC *init_npcs(GameState *gs)
 	npc[1].ext.x[3] = -7.5; 
     npc[1].ext.y[3] = 7.5;
 
+
+    npc[1].nmaneuvers = 5;
+    npc[1].man = malloc(npc[1].nmaneuvers * sizeof (Maneuver)); 
+
+
+    npc[1].man_func = malloc(npc[1].nmaneuvers * sizeof (void (*)(Position*, Motion*)));
+
+    //registering maneuver functions
+    npc[1].man_func[0] = &thrust_forward;
+    npc[1].man_func[1] = &thrust_backward;
+    npc[1].man_func[2] = &rotate_right;
+    npc[1].man_func[3] = &rotate_left;
+    npc[1].man_func[4] = &slow_to_stop;
+
+    for (i = 0; i < npc[1].nmaneuvers; i++) {
+        npc[1].man[i].on = false;
+        npc[1].man[i].state = 1;
+    }
+
+    npc[1].man[0].nanimatics = 1;
+    npc[1].man[1].nanimatics = 0;
+    npc[1].man[2].nanimatics = 0;
+    npc[1].man[3].nanimatics = 1;
+    npc[1].man[4].nanimatics = 0;
+
+    for (i = 0; i < npc[1].nmaneuvers; i++) {
+        npc[1].man[i].animatic = malloc(npc[1].man[i].nanimatics * sizeof (int));
+    }
+
+    // specifying the animatcs
+    npc[1].man[0].animatic[0] = 1;
+    npc[1].man[3].animatic[0] = 2;
+
+
 	npc[1].nanimatics = 3;
 	npc[1].ani = malloc(npc[1].nanimatics * sizeof(Animatic));
+
+	npc[1].aniflags = malloc(npc[1].nanimatics * sizeof(bool)); 
+	for (i = 1; i < npc[1].nanimatics; i++) {
+		npc[1].aniflags[i] = false;
+	}
 
 	npc[1].ani[0].source_x = 0;
 	npc[1].ani[0].source_y = 0;
