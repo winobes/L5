@@ -73,6 +73,7 @@ Player *init_player()
     player->man_func[1] = &thrust_backward;
     player->man_func[2] = &rotate_right;
     player->man_func[3] = &rotate_left;
+    // [2] and [3] should really be the rotate_*_thrust_forward functions.... for troubleshooting these are easier.
     player->man_func[4] = &thrust_forward_warpspeed;
     player->man_func[5] = &thrust_right;
     player->man_func[6] = &thrust_left;

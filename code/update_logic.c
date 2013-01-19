@@ -84,12 +84,13 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 
 	if(event->type == ALLEGRO_EVENT_TIMER) {
 
-    //passing key input to maneuvers
+        // updating player input & motion
 
         for ( i = 0; i < gs->player->nmaneuvers; i++) {
 
-            if ((gs->player->man[i].state == 0) && !keys[gs->player->man[i].key] ) {
-            //only turn the maneuver off if it has reached the end of a cycle *and* they key is no longer pressed
+            //passing key input to maneuvers
+            if (gs->player->man[i].state == 0) {
+            //turn the maneuver off if it has reached the end of a cycle. Reset the maneuver state when it is turned off.
                gs->player->man[i].on = false;
                gs->player->man[i].state = 1;
             }
@@ -123,10 +124,20 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 
 
 
-		//updating NPC AI & Input
+		//updating NPC AI & motion
 
 		for (i = 0; i < gs->nnpcs; i++) {
 
+          for ( j = 0; j < gs->npc[i].nmaneuvers; j++) {
+
+            if (gs->npc[i].man[j].state == 0) {
+            //turn the maneuver off if it has reached the end of a cycle. Reset the maneuver state.
+               gs->npc[i].man[j].on = false;
+               gs->npc[i].man[j].state = 1;
+                }
+            }
+
+            // ai functions have the power to turn maneuvers on (like keys for the player)
 			switch (gs->npc[i].ai) {
 			case 0:
 				break;
@@ -135,17 +146,8 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 				break;
 			}
 
-          for ( j = 0; j < gs->npc[i].nmaneuvers; j++) {
 
-                if (gs->npc[i].man[j].state == 0) {
-                //only turn the maneuver off if it has reached the end of a cycle *and* they key is no longer pressed
-                   gs->npc[i].man[j].on = false;
-                   gs->npc[i].man[j].state = 1;
-                }
-
-            }
-
-            //performing the maneuver functions
+            //performing the active maneuver functions
             for (j = 0; j < gs->npc[i].nmaneuvers; j++) {
                 if (gs->npc[i].man[j].on) {    
                     gs->npc[i].man_func[j](&gs->npc[i].pos, &gs->npc[i].mot, gs->npc[i].man, j);
@@ -158,11 +160,6 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 		    } else if (gs->npc[i].pos.cd < 0) {
 			    gs->npc[i].pos.cd += 2*PI;
 		    }
-			
-			//updating NPC dy and dx based on acceleration & direction
-
-
-			calculate_speed(gs->npc[i].mot.dx, gs->npc[i].mot.dy, &gs->npc[i].mot.spd);
 
 			//updating NPC position based on dx and dy
 			gs->npc[i].pos.cx += gs->npc[i].mot.dx;
@@ -172,8 +169,8 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 			calculate_verts_ship(&gs->npc[i].ext, gs->npc[i].pos.cx, gs->npc[i].pos.cy, gs->npc[i].pos.cd);
 		}
 
-		//check for player collisions with walls
 
+		//check for player collisions with walls
 		gs->player->hit_wall = -1;
 		for (i = 0; i < gs->room[gs->current_room]->nwalls; i++) {
 			if (gs->room[gs->current_room]->wall[i]->exists) {
@@ -193,7 +190,6 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 		}
 
 		//check for player collisions with NPCs
-
 		for (i = 0; i < gs->nnpcs; i++) {
 			if (gs->npc[i].exists && gs->npc[i].room == gs->current_room) {
 				if (collide(gs->player->ext, gs->npc[i].ext, penetration_vector, &penetration_scalar)) {
@@ -223,7 +219,6 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 		}
 
 		//check for NPC collisions with walls
-
 		for (i = 0; i < gs->nnpcs; i++) {
 			for (j = 0; j < gs->room[gs->npc[i].room]->nwalls; j++) {
 				if (gs->room[gs->npc[i].room]->wall[j]->exists) {
@@ -240,7 +235,6 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 		}
 
 		//updating gs->player bullett position
-
 		if(gs->player->weapon.reload_timer < gs->player->weapon.reload_time) {
 			gs->player->weapon.reload_timer++;
 		}
@@ -300,8 +294,6 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 		}
 
 		//updating player animation flags
-
-
         for (i = 0; i < gs->player->nmaneuvers; i++) {
         if (gs->player->man[i].on) {
         for (j = 0; j < gs->player->man[i].nanimatics; j++) {

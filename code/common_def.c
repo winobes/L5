@@ -61,7 +61,7 @@ typedef struct {
 
 typedef struct {
     bool on;
-    int state; //keeps track of where we were in the function
+    int state; //keeps track of where we were in the maneuver function. 1 is the beginning of a loop, 0 is the end.
     int *animatic; //array of animation indexes associated with this manuver
     int nanimatics; //number of animations this maneuver triggers
     int key; //consider changing this to an array for key-combo moves
