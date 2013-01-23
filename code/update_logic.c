@@ -79,6 +79,8 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 
 	int i, j, k;
 
+    bool check_again = true;
+
 	float penetration_scalar;
 	float penetration_vector[2];
 
@@ -99,12 +101,30 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
                 gs->player->man[i].on = true;
             }
         }
-        //performing the maneuver functions
+
+
         for (i = 0; i < gs->player->nmaneuvers; i++) {
-            if (gs->player->man[i].on) {    
-                gs->player->man_func[i](&gs->player->pos, &gs->player->mot, gs->player->man, i);
-            }
+            gs->player->man[i].has_run = false;
         }
+
+
+//performing the maneuver functions 
+        do { 
+            for (i = 0; i < gs->player->nmaneuvers; i++) {
+            if (gs->player->man[i].on && !gs->player->man[i].has_run) {
+                gs->player->man_func[i](&gs->player->pos, &gs->player->mot, gs->player->man, i);
+                gs->player->man[i].has_run = true;
+            }
+            }
+            check_again = false;
+            for (i = 0; i < gs->player->nmaneuvers; i++) {
+                if (gs->player->man[i].on && !gs->player->man[i].has_run) {
+            //if there are maneuvers that got turned on in the previous for loop (by other maneuvers), but haven't been run, they will trigger another loop
+                    check_again = true;
+                }
+            }
+        } while (check_again);
+        
 
 		// wrap player orientation to the range [0,2*PI]
 		if (gs->player->pos.cd > 2*PI) {
@@ -323,7 +343,7 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 		for (i = 0; i < gs->player->nanimatics; i++) {
 			gs->player->aniflags[i] = false;
 		}
-
+/* let's get player straight first...
 		//updating player weapon animation variables
 		for (i = 0; i < gs->player->weapon.nactive; i++) {
 			if (gs->player->weapon.exists[i]) {
@@ -341,11 +361,8 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 		}
 
 
-
-
-		
-
 		for (i = 0; i < gs->nnpcs; i++) {
+
 
             // updating NPC animation flags
             for (j = 0; j < gs->npc[i].nmaneuvers; j++) {
@@ -355,8 +372,7 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
             }
             }
             }
-
-
+if(gs->npc[1].aniflags[1] == true) { printf("HEY\n");}
 
     		//updating NPC animation variables
 			for (j = 0; j < gs->npc[i].nanimatics; j++) {
@@ -368,7 +384,9 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 						break;
 				}
 			}
-		}
+		}*/
+
+
 		for (i = 0; i < gs->room[gs->current_room]->nbackgrounds; i++) {
 			if (gs->room[gs->current_room]->background[i].is_tiled == true) {
 				update_background(&gs->room[gs->current_room]->background[i],
@@ -379,6 +397,7 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 			}
 		}
 	}
+	
 }
 
 
@@ -392,6 +411,8 @@ void do_update(ALLEGRO_EVENT *event, bool *keys, bool *exit_game, bool *redraw, 
 		update_logic(event, keys, gs);
 		*redraw = true;
 	}
+
+
 
 }
 
