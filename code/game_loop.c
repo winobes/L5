@@ -42,8 +42,7 @@ int game_loop() {
 
 		// TODO check types and inputs
 		do_update(&event, keys, &exit_game, &redraw, gs);
-        //TODO bind animatics to maneuvers rather than keys
-        //TODO switch npcs to existing maneuvers
+
 		do_room_specific_update(gs);
 
 		do_graphics_update(gs, &redraw);
@@ -68,6 +67,7 @@ int game_loop() {
     free(gs->player->man_func);
     free(gs->player->man);
 	free(gs->player->ani);
+    free(gs->player->ani_func);
 
 	free(gs->player->weapon.d);
 	free(gs->player->weapon.x);
@@ -130,6 +130,7 @@ int game_loop() {
 		}
 		free(gs->npc[i].ext.vert);
 		free(gs->npc[i].ani);
+        free(gs->npc[i].ani_func);
         free(gs->npc[i].man_func);
         free(gs->npc[i].man);
 

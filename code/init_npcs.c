@@ -92,7 +92,7 @@ npc[0].man_func = malloc(npc[0].nmaneuvers * sizeof (void (*)(Position*, Motion*
 	npc[0].nanimatics = 3;
 	npc[0].ani = malloc(npc[0].nanimatics * sizeof(Animatic));
 
-    npc[0].ani_func = malloc(npc[1].nanimatics * sizeof (void (*)(Animatic*, int))); //TODO free  
+    npc[0].ani_func = malloc(npc[1].nanimatics * sizeof (void (*)(Animatic*, int)));   
 
     npc[0].ani_func[0] = &default_on_static;
     npc[0].ani_func[1] = &complete_cycle;
@@ -228,7 +228,7 @@ npc[0].man_func = malloc(npc[0].nmaneuvers * sizeof (void (*)(Position*, Motion*
 	npc[1].nanimatics = 3;
 	npc[1].ani = malloc(npc[1].nanimatics * sizeof(Animatic));
 
-    npc[1].ani_func = malloc(npc[1].nanimatics * sizeof (void (*)(Animatic*, int))); //TODO free  
+    npc[1].ani_func = malloc(npc[1].nanimatics * sizeof (void (*)(Animatic*, int)));  
 
     npc[1].ani_func[0] = &default_on_static;
     npc[1].ani_func[1] = &complete_cycle;

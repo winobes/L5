@@ -134,7 +134,7 @@ Player *init_player()
 	player->nanimatics = 7;
 	player->ani = malloc(player->nanimatics * sizeof(Animatic));
 
-    player->ani_func = malloc(player->nanimatics * sizeof (void (*)(Animatic*, int))); //TODO free
+    player->ani_func = malloc(player->nanimatics * sizeof (void (*)(Animatic*, int)));
 
     player->ani_func[0] = &default_on_static;
     player->ani_func[1] = &default_on_loop;

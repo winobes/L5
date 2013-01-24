@@ -8,35 +8,10 @@
 #define COMMON_DEF_H
 
 typedef struct {
-	ALLEGRO_BITMAP *sprite;
-	float source_x, source_y, destination_x, destination_y;
-	int w, h, scale_x, scale_y;
-	ALLEGRO_COLOR tint;
-	float pivot_x, pivot_y;
-	//float angle;
-	bool flag, is_running, draw;
-    bool has_run;
-	int timer, nframes, frame_rate; //60ths of a second between frames
-	//float pivot_speed; //rotations per second
-} Animatic;
-
-typedef struct {
 	float **vert;
 	float *x, *y; //x and y describe the location of each vert with respect to some point (usually the subject's centerpoint)
 	int nverts;
 } Extension;
-
-typedef struct {
-	int current, nactive, key, nframes, frame_rate;
-	ALLEGRO_BITMAP *spritesheet;
-	int w, h, origin_x, origin_y, movement_type, reload_time, reload_timer; //origin of the bullet in distance from the center
-	float damage;
-	Extension ext;
-	ALLEGRO_BITMAP **sprite;
-	float *dx, *dy, *d, *x, *y, *source_x;
-	int *timer;
-	bool *exists;
-} Weapon;	
 
 typedef struct {
 	// current x, current y, direction
@@ -60,6 +35,19 @@ typedef struct {
 } Motion;
 
 typedef struct {
+	int current, nactive, key, nframes, frame_rate;
+	ALLEGRO_BITMAP *spritesheet;
+	int w, h, origin_x, origin_y, movement_type, reload_time, reload_timer; //origin of the bullet in distance from the center
+	float damage;
+	Extension ext;
+	ALLEGRO_BITMAP **sprite;
+	float *dx, *dy, *d, *x, *y, *source_x;
+	int *timer;
+	bool *exists;
+} Weapon;	
+
+
+typedef struct {
     bool on;
     bool has_run; //ensures that Maneuvers turned on by other Maneuvers start in the same loop that they are turned on.
     int state; //keeps track of where we were in the maneuver function. 1 is the beginning of a loop, 0 is the end.
@@ -68,6 +56,18 @@ typedef struct {
     int key; //consider changing this to an array for key-combo moves
 } Maneuver;
 
+typedef struct {
+	ALLEGRO_BITMAP *sprite;
+	float source_x, source_y, destination_x, destination_y;
+	int w, h, scale_x, scale_y;
+	ALLEGRO_COLOR tint;
+	float pivot_x, pivot_y;
+	//float angle;
+	bool flag, is_running, draw;
+    bool has_run;
+	int timer, nframes, frame_rate; //60ths of a second between frames
+	//float pivot_speed; //rotations per second
+} Animatic;
 
 typedef struct {
 	bool exists, solid;
@@ -84,8 +84,28 @@ typedef struct {
     int nmaneuvers;
     Maneuver *man;
     void (**man_func) (Position*, Motion*, Maneuver*, int);
-
 } NPC;
+
+typedef struct {
+	bool exist, flying;
+	float health;
+	Position pos; 
+	float bouncy;
+	Extension ext; 
+	Motion mot;
+	ALLEGRO_BITMAP *sprite, *spritesheet;
+	//ultimately gets drawn to the display
+	//spritesheet is used for animatics
+	int gfx_w, gfx_h, nanimatics;
+    void (**ani_func) (Animatic*, int);
+	Animatic *ani;
+	int hit_wall;
+	int nweapons;
+	Weapon weapon;
+    int nmaneuvers;
+    Maneuver *man;
+    void (**man_func) (Position*, Motion*, Maneuver*, int);
+} Player;
 
 typedef struct {
 	float health;
@@ -113,28 +133,6 @@ typedef struct {
 	int nbackgrounds;
 	Background *background;
 } Room;
-
-
-typedef struct {
-	bool exist, flying;
-	float health;
-	Position pos; 
-	float bouncy;
-	Extension ext; 
-	Motion mot;
-	ALLEGRO_BITMAP *sprite, *spritesheet;
-	//ultimately gets drawn to the display
-	//spritesheet is used for animatics
-	int gfx_w, gfx_h, nanimatics;
-    void (**ani_func) (Animatic*, int);
-	Animatic *ani;
-	int hit_wall;
-	int nweapons;
-	Weapon weapon;
-    int nmaneuvers;
-    Maneuver *man;
-    void (**man_func) (Position*, Motion*, Maneuver*, int);
-} Player;
 
 typedef struct {
 	//int nplayers; // = 1
