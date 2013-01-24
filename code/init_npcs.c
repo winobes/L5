@@ -58,7 +58,7 @@ NPC *init_npcs(GameState *gs)
     
    
 
-npc[0].man_func = malloc(npc[0].nmaneuvers * sizeof (void (*)(Position*, Motion*))); 
+npc[0].man_func = malloc(npc[0].nmaneuvers * sizeof (void (*)(Position*, Motion*, Maneuver*, int))); 
 
     //registering maneuver functions
     npc[0].man_func[0] = &thrust_forward;
@@ -74,9 +74,9 @@ npc[0].man_func = malloc(npc[0].nmaneuvers * sizeof (void (*)(Position*, Motion*
     }
 
     npc[0].man[0].nanimatics = 1;
-    npc[0].man[1].nanimatics = 0;
+    npc[0].man[1].nanimatics = 1;
     npc[0].man[2].nanimatics = 0;
-    npc[0].man[3].nanimatics = 1;
+    npc[0].man[3].nanimatics = 0;
     npc[0].man[4].nanimatics = 0;
 
     for (i = 0; i < npc[0].nmaneuvers; i++) {
@@ -85,19 +85,20 @@ npc[0].man_func = malloc(npc[0].nmaneuvers * sizeof (void (*)(Position*, Motion*
 
     // specifying the animatcs
     npc[0].man[0].animatic[0] = 1;
-    npc[0].man[3].animatic[0] = 2;
+    npc[0].man[1].animatic[0] = 2;
 
 
 
 	npc[0].nanimatics = 3;
 	npc[0].ani = malloc(npc[0].nanimatics * sizeof(Animatic));
 
-	npc[0].aniflags = malloc(npc[0].nanimatics * sizeof(bool)); 
-	for (i = 0; i < npc[0].nanimatics; i++) {
-		npc[0].aniflags[i] = false;
-	}
+    npc[0].ani_func = malloc(npc[1].nanimatics * sizeof (void (*)(Animatic*, int))); //TODO free  
 
+    npc[0].ani_func[0] = &default_on_static;
+    npc[0].ani_func[1] = &complete_cycle;
+    npc[0].ani_func[2] = &complete_cycle;
 
+	npc[0].ani[0].timer = 0;
 	npc[0].ani[0].source_x = 0;
 	npc[0].ani[0].source_y = 0;
 	npc[0].ani[0].w = 15;
@@ -108,12 +109,12 @@ npc[0].man_func = malloc(npc[0].nmaneuvers * sizeof (void (*)(Position*, Motion*
 	npc[0].ani[0].destination_y = 8;
 	npc[0].ani[0].scale_x = 1;
 	npc[0].ani[0].scale_y = 1;
-	npc[0].ani[0].is_running = false;
-	npc[0].ani[0].draw = true;
-	npc[0].ani[0].type = 0;
-	npc[0].ani[0].flag = -1;
+	npc[0].ani[0].is_running = true;
+	npc[0].ani[0].draw = false;
+	npc[0].ani[0].flag = false;
 	npc[0].ani[0].tint = al_map_rgba_f(1,1,1,1);
 
+	npc[0].ani[1].timer = 0;
 	npc[0].ani[1].source_x = 0;
 	npc[0].ani[1].source_y = 15;
 	npc[0].ani[1].w = 15;
@@ -128,10 +129,10 @@ npc[0].man_func = malloc(npc[0].nmaneuvers * sizeof (void (*)(Position*, Motion*
 	npc[0].ani[1].draw = false;
 	npc[0].ani[1].nframes = 4;
 	npc[0].ani[1].frame_rate = 15;
-	npc[0].ani[1].flag = UP;
-	npc[0].ani[1].type = 1;
+	npc[0].ani[1].flag = false;
 	npc[0].ani[1].tint = al_map_rgba_f(1,1,1,1);
 
+	npc[0].ani[2].timer = 0;
 	npc[0].ani[2].source_x = 0;
 	npc[0].ani[2].source_y = 30;
 	npc[0].ani[2].w = 15;
@@ -146,8 +147,7 @@ npc[0].man_func = malloc(npc[0].nmaneuvers * sizeof (void (*)(Position*, Motion*
 	npc[0].ani[2].draw = false;
 	npc[0].ani[2].nframes = 4;
 	npc[0].ani[2].frame_rate = 15;
-	npc[0].ani[2].flag = DOWN;
-	npc[0].ani[2].type = 1;
+	npc[0].ani[2].flag = false;
 	npc[0].ani[2].tint = al_map_rgba_f(1,1,1,1);
 
 	npc[1].solid = true;
@@ -196,7 +196,7 @@ npc[0].man_func = malloc(npc[0].nmaneuvers * sizeof (void (*)(Position*, Motion*
     npc[1].man = malloc(npc[1].nmaneuvers * sizeof (Maneuver)); 
 
 
-    npc[1].man_func = malloc(npc[1].nmaneuvers * sizeof (void (*)(Position*, Motion*)));
+    npc[1].man_func = malloc(npc[1].nmaneuvers * sizeof (void (*)(Position*, Motion*, Maneuver*, int)));
 
     //registering maneuver functions
     npc[1].man_func[0] = &thrust_forward;
@@ -211,9 +211,9 @@ npc[0].man_func = malloc(npc[0].nmaneuvers * sizeof (void (*)(Position*, Motion*
     }
 
     npc[1].man[0].nanimatics = 1;
-    npc[1].man[1].nanimatics = 0;
+    npc[1].man[1].nanimatics = 1;
     npc[1].man[2].nanimatics = 0;
-    npc[1].man[3].nanimatics = 1;
+    npc[1].man[3].nanimatics = 0;
     npc[1].man[4].nanimatics = 0;
 
     for (i = 0; i < npc[1].nmaneuvers; i++) {
@@ -222,17 +222,19 @@ npc[0].man_func = malloc(npc[0].nmaneuvers * sizeof (void (*)(Position*, Motion*
 
     // specifying the animatcs
     npc[1].man[0].animatic[0] = 1;
-    npc[1].man[3].animatic[0] = 2;
+    npc[1].man[1].animatic[0] = 2;
 
 
 	npc[1].nanimatics = 3;
 	npc[1].ani = malloc(npc[1].nanimatics * sizeof(Animatic));
 
-	npc[1].aniflags = malloc(npc[1].nanimatics * sizeof(bool)); 
-	for (i = 1; i < npc[1].nanimatics; i++) {
-		npc[1].aniflags[i] = false;
-	}
+    npc[1].ani_func = malloc(npc[1].nanimatics * sizeof (void (*)(Animatic*, int))); //TODO free  
 
+    npc[1].ani_func[0] = &default_on_static;
+    npc[1].ani_func[1] = &complete_cycle;
+    npc[1].ani_func[2] = &complete_cycle;
+
+    npc[1].ani[0].timer = 0;
 	npc[1].ani[0].source_x = 0;
 	npc[1].ani[0].source_y = 0;
 	npc[1].ani[0].w = 15;
@@ -243,12 +245,12 @@ npc[0].man_func = malloc(npc[0].nmaneuvers * sizeof (void (*)(Position*, Motion*
 	npc[1].ani[0].destination_y = 8;
 	npc[1].ani[0].scale_x = 1;
 	npc[1].ani[0].scale_y = 1;
-	npc[1].ani[0].is_running = false;
-	npc[1].ani[0].draw = true;
-	npc[1].ani[0].type = 0;
-	npc[1].ani[0].flag = -1;
+	npc[1].ani[0].is_running = true;
+	npc[1].ani[0].draw = false;
+	npc[1].ani[0].flag = false;
 	npc[1].ani[0].tint = al_map_rgba_f(1,1,1,1);
 
+    npc[1].ani[1].timer = 0;
 	npc[1].ani[1].source_x = 0;
 	npc[1].ani[1].source_y = 15;
 	npc[1].ani[1].w = 15;
@@ -263,10 +265,10 @@ npc[0].man_func = malloc(npc[0].nmaneuvers * sizeof (void (*)(Position*, Motion*
 	npc[1].ani[1].draw = false;
 	npc[1].ani[1].nframes = 4;
 	npc[1].ani[1].frame_rate = 15;
-	npc[1].ani[1].flag = UP;
-	npc[1].ani[1].type = 1;
+	npc[1].ani[1].flag = false;
 	npc[1].ani[1].tint = al_map_rgba_f(1,1,1,1);
 
+    npc[1].ani[2].timer = 0;
 	npc[1].ani[2].source_x = 0;
 	npc[1].ani[2].source_y = 30;
 	npc[1].ani[2].w = 15;
@@ -281,8 +283,7 @@ npc[0].man_func = malloc(npc[0].nmaneuvers * sizeof (void (*)(Position*, Motion*
 	npc[1].ani[2].draw = false;
 	npc[1].ani[2].nframes = 4;
 	npc[1].ani[2].frame_rate = 15;
-	npc[1].ani[2].flag = DOWN;
-	npc[1].ani[2].type = 1;
+	npc[1].ani[2].flag = false;
 	npc[1].ani[2].tint = al_map_rgba_f(1,1,1,1);
 
 	return npc;

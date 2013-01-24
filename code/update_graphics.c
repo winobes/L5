@@ -174,7 +174,15 @@ void do_graphics_update(GameState *gs, bool *redraw)
 	al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 7*12, ALLEGRO_ALIGN_RIGHT,"npc[0].health = %f", gs->npc[0].health);
 al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 8*12, ALLEGRO_ALIGN_RIGHT,"npc[1].health = %f", gs->npc[1].health);
 
-    
+al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 10*12, ALLEGRO_ALIGN_RIGHT,"player->ani[1].timer = %i", gs->player->ani[1].timer);
+al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 11*12, ALLEGRO_ALIGN_RIGHT,"player->ani[1].source_x = %f", gs->player->ani[1].source_x);
+if (gs->player->ani[6].is_running) {
+al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 12*12, ALLEGRO_ALIGN_RIGHT,"is_running");
+}
+ if (gs->player->ani[6].flag) {
+al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 13*12, ALLEGRO_ALIGN_RIGHT,"flag");
+}   
+ 
 ////debugging the player ext
 	/*	for (j = 0; j < gs->player->ext.nverts; j++) {
 			al_draw_pixel(gs->player->ext.vert[j][0]-(gs->player->pos.cx - width/2), gs->player->ext.vert[j][1]-(gs->player->pos.cy - height/2), al_map_rgb(83,207,46));

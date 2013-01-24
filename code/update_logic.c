@@ -74,6 +74,7 @@ void get_input(ALLEGRO_EVENT *event, bool *keys, bool *exit_game)
 	}
 }
 
+
 void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 {
 
@@ -119,7 +120,7 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
             check_again = false;
             for (i = 0; i < gs->player->nmaneuvers; i++) {
                 if (gs->player->man[i].on && !gs->player->man[i].has_run) {
-            //if there are maneuvers that got turned on in the previous for loop (by other maneuvers), but haven't been run, they will trigger another loop
+            //if there are maneuvers that were turned on in the previous for loop (by other maneuvers), but haven't been run, they will trigger another loop
                     check_again = true;
                 }
             }
@@ -313,36 +314,43 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 			}
 		}
 
-		//updating player animation flags
+        //updating player animation flags redux
+        for (i = 0; i < gs->player->nanimatics; i++) {
+            gs->player->ani[i].flag = false;
+        }
         for (i = 0; i < gs->player->nmaneuvers; i++) {
         if (gs->player->man[i].on) {
         for (j = 0; j < gs->player->man[i].nanimatics; j++) {
-            gs->player->aniflags[gs->player->man[i].animatic[j]] = true;
+            gs->player->ani[gs->player->man[i].animatic[j]].flag = true;
         }
         }
         }
 
-        if (gs->player->exist) {
-            gs->player->aniflags[0] = true;
-            if (gs->player->flying) {
-                gs->player->aniflags[1] = true;
+// performing player animations
+
+        for (i = 0; i < gs->player->nanimatics; i++) {
+            gs->player->ani[i].has_run = false;
+        }
+        check_again = true;
+        do { 
+            for (i = 0; i < gs->player->nanimatics; i++) {
+            if ((gs->player->ani[i].flag || gs->player->ani[i].is_running) && !gs->player->ani[i].has_run) {
+
+                gs->player->ani_func[i](gs->player->ani, i);
+                gs->player->ani[i].has_run = true;
             }
-        }
+            }
+            check_again = false;
+            for (i = 0; i < gs->player->nanimatics; i++) {
+                if (gs->player->ani[i].flag && !gs->player->ani[i].has_run) {
+            //if there are animatics that were turned on in the previous for loop (by other animatics), but haven't been run, they will trigger another loop
+                    check_again = true;
+                }
+            }
+        } while (check_again);
+     
 
- 		//updating player animation variables
-		for (i = 0; i < gs->player->nanimatics; i++) {
-			switch (gs->player->ani[i].type) {
-			case 0:
-				break;
-			case 1:
-				animatic1(&gs->player->ani[i], gs->player->aniflags);
-				break;
-			}
-		}
 
-		for (i = 0; i < gs->player->nanimatics; i++) {
-			gs->player->aniflags[i] = false;
-		}
 /* let's get player straight first...
 		//updating player weapon animation variables
 		for (i = 0; i < gs->player->weapon.nactive; i++) {
@@ -359,34 +367,49 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 				}
 			}
 		}
-
+*/
 
 		for (i = 0; i < gs->nnpcs; i++) {
 
 
             // updating NPC animation flags
+            for (j = 0; j < gs->npc[i].nanimatics; j++) {
+                gs->npc[i].ani[j].flag = false;
+            }
             for (j = 0; j < gs->npc[i].nmaneuvers; j++) {
             if (gs->npc[i].man[j].on) {
             for (k = 0; k < gs->npc[i].man[j].nanimatics; k++) {
-                gs->npc[i].aniflags[gs->npc[i].man[j].animatic[k]] = true;
+                gs->npc[i].ani[gs->npc[i].man[j].animatic[k]].flag = true;
             }
             }
             }
-if(gs->npc[1].aniflags[1] == true) { printf("HEY\n");}
+// performing NPC animations
 
-    		//updating NPC animation variables
-			for (j = 0; j < gs->npc[i].nanimatics; j++) {
-				switch (gs->npc[i].ani[j].type) {
-					case 0:
-						break;
-					case 1:
-						animatic1(&gs->npc[i].ani[j], gs->npc[i].aniflags);
-						break;
-				}
-			}
-		}*/
+            for (j = 0; j < gs->npc[i].nanimatics; j++) {
+                gs->npc[i].ani[j].has_run = false;
+            }
+            check_again = true;
+            do { 
+                for (j = 0; j < gs->npc[i].nanimatics; j++) {
+                if ((gs->npc[i].ani[j].flag || gs->npc[i].ani[j].is_running) && !gs->npc[i].ani[j].has_run) {
+
+                    gs->npc[i].ani_func[j](gs->npc[i].ani, j);
+                    gs->npc[i].ani[j].has_run = true;
+                }
+                }
+                check_again = false;
+                for (j = 0; j < gs->npc[i].nanimatics; j++) {
+                    if (gs->npc[i].ani[j].flag && !gs->npc[i].ani[j].has_run) {
+                //if there are animatics that were turned on in the previous for loop (by other animatics), but haven't been run, they will trigger another loop
+                        check_again = true;
+                    }
+                }
+            } while (check_again);
+
+        }
 
 
+// updating parallax background varriables
 		for (i = 0; i < gs->room[gs->current_room]->nbackgrounds; i++) {
 			if (gs->room[gs->current_room]->background[i].is_tiled == true) {
 				update_background(&gs->room[gs->current_room]->background[i],

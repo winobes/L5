@@ -14,8 +14,8 @@ typedef struct {
 	ALLEGRO_COLOR tint;
 	float pivot_x, pivot_y;
 	//float angle;
-	int flag, type;
-	bool is_running, draw;
+	bool flag, is_running, draw;
+    bool has_run;
 	int timer, nframes, frame_rate; //60ths of a second between frames
 	//float pivot_speed; //rotations per second
 } Animatic;
@@ -61,6 +61,7 @@ typedef struct {
 
 typedef struct {
     bool on;
+    bool has_run; //ensures that Maneuvers turned on by other Maneuvers start in the same loop that they are turned on.
     int state; //keeps track of where we were in the maneuver function. 1 is the beginning of a loop, 0 is the end.
     int *animatic; //array of animation indexes associated with this manuver
     int nanimatics; //number of animations this maneuver triggers
@@ -77,8 +78,8 @@ typedef struct {
 	Extension ext;
 	Motion mot;
 	int nanimatics;
+    void (**ani_func) (Animatic*, int);
 	ALLEGRO_BITMAP *sprite, *spritesheet;
-    bool *aniflags; //array of flags telling animatics when to fire
 	Animatic *ani; 
     int nmaneuvers;
     Maneuver *man;
@@ -125,7 +126,7 @@ typedef struct {
 	//ultimately gets drawn to the display
 	//spritesheet is used for animatics
 	int gfx_w, gfx_h, nanimatics;
-	bool *aniflags;
+    void (**ani_func) (Animatic*, int);
 	Animatic *ani;
 	int hit_wall;
 	int nweapons;
@@ -133,7 +134,6 @@ typedef struct {
     int nmaneuvers;
     Maneuver *man;
     void (**man_func) (Position*, Motion*, Maneuver*, int);
-
 } Player;
 
 typedef struct {

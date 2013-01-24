@@ -2,8 +2,8 @@ void thrust_forward (Position *pos, Motion *mot, Maneuver *man, int current)
 {
 
     man[current].state++;
-    if (man[current].state > 1) {
-    //persists for one frame unless player is holding the key 
+    if (man[current].state > 0) {
+    //persists for zero frames unless player is holding the key 
         man[current].state = 0;
     }
 
@@ -18,8 +18,8 @@ void thrust_backward (Position *pos, Motion *mot, Maneuver *man, int current)
 {
 
     man[current].state++;
-    if (man[current].state > 1) {
-    //persists for one frame unless player is holding the key 
+    if (man[current].state > 0) {
+    //persists for zero frames unless player is holding the key 
         man[current].state = 0;
     }
 
@@ -35,8 +35,8 @@ void rotate_right (Position *pos, Motion *mot, Maneuver *man, int current)
 {
 
     man[current].state++;
-    if (man[current].state > 1) {
-    //persists for one frame unless player is holding the key 
+    if (man[current].state > 0) {
+    //persists for zero frames unless player is holding the key 
         man[current].state = 0;
     }
 
@@ -49,8 +49,8 @@ void rotate_left (Position *pos, Motion *mot, Maneuver *man, int current)
 {
 
     man[current].state++;
-    if (man[current].state > 1) {
-    //persists for one frame unless player is holding the key 
+    if (man[current].state > 0) {
+    //persists for zero frames unless player is holding the key 
         man[current].state = 0;
     }
 
@@ -64,8 +64,8 @@ void rotate_right_thrust_forward (Position *pos, Motion *mot, Maneuver *man, int
 {
 
     man[current].state++;
-    if (man[current].state > 1) {
-    //persists for one frame unless player is holding the key 
+    if (man[current].state > 0) {
+    //persists for zero frames unless player is holding the key 
         man[current].state = 0;
     }
 
@@ -85,8 +85,8 @@ void rotate_left_thrust_forward (Position *pos, Motion *mot, Maneuver *man, int 
 {
 
     man[current].state++;
-    if (man[current].state > 1) {
-    //persists for one frame unless player is holding the key 
+    if (man[current].state > 0) {
+    //persists for zero frames unless player is holding the key 
         man[current].state = 0;
     }
 
@@ -106,8 +106,8 @@ void thrust_forward_warpspeed (Position *pos, Motion *mot, Maneuver *man, int cu
 {
 
     man[current].state++;
-    if (man[current].state > 1) {
-    //persists for one frame unless player is holding the key 
+    if (man[current].state > 0) {
+    //persists for zero frames unless player is holding the key 
         man[current].state = 0;
     }
 
@@ -121,8 +121,8 @@ void thrust_right (Position *pos, Motion *mot, Maneuver *man, int current)
 {
 
     man[current].state++;
-    if (man[current].state > 1) {
-    //persists for one frame unless player is holding the key 
+    if (man[current].state > 0) {
+    //persists for zero frames unless player is holding the key 
         man[current].state = 0;
     }
 
@@ -138,8 +138,8 @@ void thrust_left (Position *pos, Motion *mot, Maneuver *man, int current)
 {
 
     man[current].state++;
-    if (man[current].state > 1) {
-    //persists for one frame unless player is holding the key 
+    if (man[current].state > 0) {
+    //persists for zero frames unless player is holding the key 
         man[current].state = 0;
     }
 
@@ -150,11 +150,12 @@ void thrust_left (Position *pos, Motion *mot, Maneuver *man, int current)
 
 void slow_to_stop (Position *pos, Motion *mot, Maneuver *man, int current)
 {
+
 //expects man[1] to be forward motion, man[2] to rotate right, man[3] rotate left. Note that e.g. rotate_left_thrust_forward will work for man[3], but get slow_to_stop stuck in a non-halting state under certain conditions (not reccomended for npc AIs).
 
     man[current].state++;
-    if (man[current].state > 1) {
-    //persists for one frame unless player is holding the key 
+    if (man[current].state > 0) {
+    //persists for zero frames unless player is holding the key 
         man[current].state = 0;
     }
 

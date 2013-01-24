@@ -13,8 +13,8 @@
 #include "collide.c"
 #include "update_background.c"
 #include "maneuvers.c"
+#include "animatics.c"
 #include "ai1.c"
-#include "animatic1.c"
 #include "game_loop.c"
 
 

@@ -66,7 +66,7 @@ Player *init_player()
     player->nmaneuvers = 8;
     player->man = malloc(player->nmaneuvers * sizeof (Maneuver));
 
-    player->man_func = malloc(player->nmaneuvers * sizeof (void (*)(Position*, Motion*)));
+    player->man_func = malloc(player->nmaneuvers * sizeof (void (*)(Position*, Motion*, Maneuver, int)));
 
     //registering maneuver functions
     player->man_func[0] = &thrust_forward;
@@ -134,9 +134,26 @@ Player *init_player()
 	player->nanimatics = 7;
 	player->ani = malloc(player->nanimatics * sizeof(Animatic));
 
-	player->aniflags = malloc(player->nanimatics * sizeof(bool));
+    player->ani_func = malloc(player->nanimatics * sizeof (void (*)(Animatic*, int))); //TODO free
+
+    player->ani_func[0] = &default_on_static;
+    player->ani_func[1] = &default_on_loop;
+    player->ani_func[2] = &complete_cycle;
+    player->ani_func[3] = &complete_cycle;
+    player->ani_func[4] = &complete_cycle;
+    player->ani_func[5] = &complete_cycle;
+    player->ani_func[6] = &complete_cycle;
+
+
 	for (i = 0; i < player->nanimatics; i++) {
-		player->aniflags[i] = false;
+        player->ani[i].timer = 0;
+        player->ani[i].is_running = false;
+        player->ani[i].draw = false;
+        player->ani[i].flag = false;
+        player->ani[i].tint = al_map_rgba_f(1,1,1,1);
+        player->ani[i].scale_x = 1;
+        player->ani[i].scale_y = 1;
+        player->ani[i].frame_rate = 15;
 	}
 
     //the main ship sprite
@@ -148,14 +165,9 @@ Player *init_player()
 	player->ani[0].pivot_y = 0;
 	player->ani[0].destination_x = 33;
 	player->ani[0].destination_y = 33;
-	player->ani[0].scale_x = 1;
-	player->ani[0].scale_y = 1;
-	player->ani[0].is_running = false;
-	player->ani[0].draw = false;
-	player->ani[0].type = 1;
-	player->ani[0].flag = 0;
-	player->ani[0].tint = al_map_rgba_f(1,1,1,1);
+    player->ani[0].is_running = true;
 
+    //engine glow
 	player->ani[1].source_x = 0;
 	player->ani[1].source_y = 35;
 	player->ani[1].w = 13;
@@ -164,15 +176,8 @@ Player *init_player()
 	player->ani[1].pivot_y = 0;
 	player->ani[1].destination_x = 32 + 10;
 	player->ani[1].destination_y = 32 + 25;
-	player->ani[1].scale_x = 1;
-	player->ani[1].scale_y = 1;
-	player->ani[1].is_running = false;
-	player->ani[1].draw = false;
-	player->ani[1].nframes = 4;
-	player->ani[1].frame_rate = 15;
-	player->ani[1].type = 1;
-	player->ani[1].flag = 1;
-	player->ani[1].tint = al_map_rgba_f(1,1,1,1);
+    player->ani[1].nframes = 4;
+    player->ani[1].is_running = true;
 
     //main forward thruster
 	player->ani[2].source_x = 0;
@@ -183,15 +188,7 @@ Player *init_player()
 	player->ani[2].pivot_y = 0;
 	player->ani[2].destination_x = 32 + 10;
 	player->ani[2].destination_y = 32 + 25;
-	player->ani[2].scale_x = 1;
-	player->ani[2].scale_y = 1;
-	player->ani[2].is_running = false;
-	player->ani[2].draw = false;
-	player->ani[2].nframes = 1;
-	player->ani[2].frame_rate = 15;
-	player->ani[2].type = 1;
-	player->ani[2].flag = 2;
-	player->ani[2].tint = al_map_rgba_f(1,1,1,1);
+    player->ani[2].nframes = 1;
 
     //right forward thruster
 	player->ani[3].source_x = 0;
@@ -202,15 +199,7 @@ Player *init_player()
 	player->ani[3].pivot_y = 0;
 	player->ani[3].destination_x = 32 + 0;
 	player->ani[3].destination_y = 32 + 9;
-	player->ani[3].scale_x = 1;
-	player->ani[3].scale_y = 1;
-	player->ani[3].is_running = false;
-	player->ani[3].draw = false;
-	player->ani[3].nframes = 1;
-	player->ani[3].frame_rate = 15;
-	player->ani[3].type = 1;
-	player->ani[3].flag = 3;
-	player->ani[3].tint = al_map_rgba_f(1,1,1,1);
+    player->ani[3].nframes = 1;
 
     //left forward thruster
 	player->ani[4].source_x = 0;
@@ -221,15 +210,7 @@ Player *init_player()
 	player->ani[4].pivot_y = 0;
 	player->ani[4].destination_x = 32 + 25;
 	player->ani[4].destination_y = 32 + 9;
-	player->ani[4].scale_x = 1;
-	player->ani[4].scale_y = 1;
-	player->ani[4].is_running = false;
-	player->ani[4].draw = false;
-	player->ani[4].nframes = 1;
-	player->ani[4].frame_rate = 15;
-	player->ani[4].type = 1;
-	player->ani[4].flag = 4;
-	player->ani[4].tint = al_map_rgba_f(1,1,1,1);
+    player->ani[4].nframes = 1;
 
     //right back thruster
 	player->ani[5].source_x = 0;
@@ -240,15 +221,7 @@ Player *init_player()
 	player->ani[5].pivot_y = 0;
 	player->ani[5].destination_x = 32 + 2;
 	player->ani[5].destination_y = 32 - 10;
-	player->ani[5].scale_x = 1;
-	player->ani[5].scale_y = 1;
-	player->ani[5].is_running = false;
-	player->ani[5].draw = false;
-	player->ani[5].nframes = 4;
-	player->ani[5].frame_rate = 15;
-	player->ani[5].type = 1;
-	player->ani[5].flag = 5;
-	player->ani[5].tint = al_map_rgba_f(1,1,1,1);
+    player->ani[5].nframes = 4;
 
     //left back thruster
 	player->ani[6].source_x = 0;
@@ -259,15 +232,7 @@ Player *init_player()
 	player->ani[6].pivot_y = 0;
 	player->ani[6].destination_x = 32 + 26;
 	player->ani[6].destination_y = 32 - 10;
-	player->ani[6].scale_x = 1;
-	player->ani[6].scale_y = 1;
-	player->ani[6].is_running = false;
-	player->ani[6].draw = false;
-	player->ani[6].nframes = 4;
-	player->ani[6].frame_rate = 15;
-	player->ani[6].type = 1;
-	player->ani[6].flag = 6;
-	player->ani[6].tint = al_map_rgba_f(1,1,1,1);
+    player->ani[6].nframes = 4;
 
 	player->weapon.nactive = 25;
 	player->weapon.key = LCTRL;

@@ -157,7 +157,7 @@ void ai1 (NPC *npc, Extension target, int current_room) {
 		}
 	}
 
-	if (sighted == false)  {
+	if ((!sighted) && (sqrt(npc->mot.dx*npc->mot.dx + npc->mot.dy*npc->mot.dy) > .05)) {
 		slow_to_stop(&npc->pos, &npc->mot, npc->man, 4);
 	}
 	teardown_vision(&visLeftCentre, &visCentre, &visRightCentre);

@@ -68,8 +68,7 @@ int game_loop() {
     free(gs->player->man_func);
     free(gs->player->man);
 	free(gs->player->ani);
-	free(gs->player->aniflags);
-	
+
 	free(gs->player->weapon.d);
 	free(gs->player->weapon.x);
 	free(gs->player->weapon.y);
@@ -131,7 +130,6 @@ int game_loop() {
 		}
 		free(gs->npc[i].ext.vert);
 		free(gs->npc[i].ani);
-        free(gs->npc[i].aniflags);
         free(gs->npc[i].man_func);
         free(gs->npc[i].man);
 
