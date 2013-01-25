@@ -130,7 +130,7 @@ Player *init_player()
 	player->gfx_h = 100;
 
 	player->sprite = al_create_bitmap(player->gfx_w, player->gfx_h);
-	player->spritesheet = al_load_bitmap("gfx/FireflySpritesheet.png");
+	player->spritesheet = al_load_bitmap("gfx/Firefly1.png");
 	player->nanimatics = 7;
 	player->ani = malloc(player->nanimatics * sizeof(Animatic));
 
@@ -138,9 +138,9 @@ Player *init_player()
 
     player->ani_func[0] = &default_on_static;
     player->ani_func[1] = &default_on_loop;
-    player->ani_func[2] = &complete_cycle;
-    player->ani_func[3] = &complete_cycle;
-    player->ani_func[4] = &complete_cycle;
+    player->ani_func[2] = &glow_loop;
+    player->ani_func[3] = &glow_loop;
+    player->ani_func[4] = &glow_loop;
     player->ani_func[5] = &complete_cycle;
     player->ani_func[6] = &complete_cycle;
 
@@ -154,6 +154,8 @@ Player *init_player()
         player->ani[i].scale_x = 1;
         player->ani[i].scale_y = 1;
         player->ani[i].frame_rate = 15;
+        player->ani[i].frame = 0;
+        player->ani[i].state = 0;
 	}
 
     //the main ship sprite
@@ -174,8 +176,8 @@ Player *init_player()
 	player->ani[1].h = 10;
 	player->ani[1].pivot_x = 0;
 	player->ani[1].pivot_y = 0;
-	player->ani[1].destination_x = 32 + 10;
-	player->ani[1].destination_y = 32 + 25;
+	player->ani[1].destination_x = 32 + 12;
+	player->ani[1].destination_y = 32 + 26;
     player->ani[1].nframes = 4;
     player->ani[1].is_running = true;
 
@@ -186,51 +188,51 @@ Player *init_player()
 	player->ani[2].h = 26;
 	player->ani[2].pivot_x = 0;
 	player->ani[2].pivot_y = 0;
-	player->ani[2].destination_x = 32 + 10;
-	player->ani[2].destination_y = 32 + 25;
-    player->ani[2].nframes = 1;
+	player->ani[2].destination_x = 32 + 12;
+	player->ani[2].destination_y = 32 + 26;
+    player->ani[2].nframes = 4;
 
-    //right forward thruster
+    //left forward thruster (rotates ship right)
 	player->ani[3].source_x = 0;
 	player->ani[3].source_y = 71;
 	player->ani[3].w = 8;
 	player->ani[3].h = 42;
 	player->ani[3].pivot_x = 0;
 	player->ani[3].pivot_y = 0;
-	player->ani[3].destination_x = 32 + 0;
-	player->ani[3].destination_y = 32 + 9;
-    player->ani[3].nframes = 1;
+	player->ani[3].destination_x = 32 + 2;
+	player->ani[3].destination_y = 32 + 10;
+    player->ani[3].nframes = 4;
 
-    //left forward thruster
+    //right forward thruster (rotates ship left)
 	player->ani[4].source_x = 0;
 	player->ani[4].source_y = 113;
 	player->ani[4].w = 8;
 	player->ani[4].h = 42;
 	player->ani[4].pivot_x = 0;
 	player->ani[4].pivot_y = 0;
-	player->ani[4].destination_x = 32 + 25;
-	player->ani[4].destination_y = 32 + 9;
-    player->ani[4].nframes = 1;
+	player->ani[4].destination_x = 32 + 27;
+	player->ani[4].destination_y = 32 + 10;
+    player->ani[4].nframes = 4;
 
-    //right back thruster
+    //left back thruster
 	player->ani[5].source_x = 0;
 	player->ani[5].source_y = 155;
 	player->ani[5].w = 7;
 	player->ani[5].h = 33;
 	player->ani[5].pivot_x = 0;
 	player->ani[5].pivot_y = 0;
-	player->ani[5].destination_x = 32 + 2;
+	player->ani[5].destination_x = 32 + 3;
 	player->ani[5].destination_y = 32 - 10;
     player->ani[5].nframes = 4;
 
-    //left back thruster
+    //right back thruster
 	player->ani[6].source_x = 0;
 	player->ani[6].source_y = 188;
 	player->ani[6].w = 7;
 	player->ani[6].h = 33;
 	player->ani[6].pivot_x = 0;
 	player->ani[6].pivot_y = 0;
-	player->ani[6].destination_x = 32 + 26;
+	player->ani[6].destination_x = 32 + 27;
 	player->ani[6].destination_y = 32 - 10;
     player->ani[6].nframes = 4;
 

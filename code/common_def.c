@@ -58,8 +58,8 @@ typedef struct {
 
 typedef struct {
 	ALLEGRO_BITMAP *sprite;
-	float source_x, source_y, destination_x, destination_y;
-	int w, h, scale_x, scale_y;
+	int source_x, source_y, destination_x, destination_y;
+	int frame, w, h, scale_x, scale_y, state;
 	ALLEGRO_COLOR tint;
 	float pivot_x, pivot_y;
 	//float angle;

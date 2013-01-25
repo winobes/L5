@@ -61,7 +61,7 @@ void do_graphics_update(GameState *gs, bool *redraw)
 					if (gs->npc[i].ani[j].draw) {
 						al_draw_tinted_scaled_rotated_bitmap_region(
 							gs->npc[i].spritesheet,
-							gs->npc[i].ani[j].source_x,
+							gs->npc[i].ani[j].frame * gs->npc[i].ani[j].w + gs->npc[i].ani[j].source_x,
 							gs->npc[i].ani[j].source_y,
 							gs->npc[i].ani[j].w,
 							gs->npc[i].ani[j].h,
@@ -141,7 +141,7 @@ void do_graphics_update(GameState *gs, bool *redraw)
 			if (gs->player->ani[i].draw) {
 				al_draw_tinted_scaled_rotated_bitmap_region(
 						gs->player->spritesheet,
-						gs->player->ani[i].source_x,
+						gs->player->ani[i].frame * gs->player->ani[i].w + gs->player->ani[i].source_x,
 						gs->player->ani[i].source_y,
 						gs->player->ani[i].w,
 						gs->player->ani[i].h,
@@ -174,14 +174,8 @@ void do_graphics_update(GameState *gs, bool *redraw)
 	al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 7*12, ALLEGRO_ALIGN_RIGHT,"npc[0].health = %f", gs->npc[0].health);
 al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 8*12, ALLEGRO_ALIGN_RIGHT,"npc[1].health = %f", gs->npc[1].health);
 
-al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 10*12, ALLEGRO_ALIGN_RIGHT,"player->ani[1].timer = %i", gs->player->ani[1].timer);
-al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 11*12, ALLEGRO_ALIGN_RIGHT,"player->ani[1].source_x = %f", gs->player->ani[1].source_x);
-if (gs->player->ani[6].is_running) {
-al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 12*12, ALLEGRO_ALIGN_RIGHT,"is_running");
-}
- if (gs->player->ani[6].flag) {
-al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 13*12, ALLEGRO_ALIGN_RIGHT,"flag");
-}   
+al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 18*12, ALLEGRO_ALIGN_RIGHT,"frame = %i", gs->player->ani[2].frame);
+
  
 ////debugging the player ext
 	/*	for (j = 0; j < gs->player->ext.nverts; j++) {

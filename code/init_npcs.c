@@ -29,7 +29,7 @@ NPC *init_npcs(GameState *gs)
     npc[0].mot.warp_speed = 0;
 
 	npc[0].sprite = al_create_bitmap(npc[0].gfx_w, npc[0].gfx_h);
-	npc[0].spritesheet = al_load_bitmap("gfx/firefly_spritesheet.png");
+	npc[0].spritesheet = al_load_bitmap("gfx/Skimmer1.png");
 	npc[0].nanimatics = 3;
 
 	npc[0].ext.nverts = 4;
@@ -97,6 +97,11 @@ npc[0].man_func = malloc(npc[0].nmaneuvers * sizeof (void (*)(Position*, Motion*
     npc[0].ani_func[0] = &default_on_static;
     npc[0].ani_func[1] = &complete_cycle;
     npc[0].ani_func[2] = &complete_cycle;
+
+    for (i = 0; i < npc[0].nanimatics; i++) {
+        npc[0].ani[i].frame = 0;
+        npc[0].ani[i].state = 0;
+    }
 
 	npc[0].ani[0].timer = 0;
 	npc[0].ani[0].source_x = 0;
@@ -169,7 +174,7 @@ npc[0].man_func = malloc(npc[0].nmaneuvers * sizeof (void (*)(Position*, Motion*
 	npc[1].mot.side_speed = 0;
     npc[1].mot.warp_speed = 0;
 	npc[1].sprite = al_create_bitmap(npc[1].gfx_w, npc[1].gfx_h);
-	npc[1].spritesheet = al_load_bitmap("gfx/firefly_spritesheet.png");
+	npc[1].spritesheet = al_load_bitmap("gfx/Skimmer1.png");
 	npc[1].nanimatics = 3;
 
 	npc[1].ext.nverts = 4;
@@ -233,6 +238,11 @@ npc[0].man_func = malloc(npc[0].nmaneuvers * sizeof (void (*)(Position*, Motion*
     npc[1].ani_func[0] = &default_on_static;
     npc[1].ani_func[1] = &complete_cycle;
     npc[1].ani_func[2] = &complete_cycle;
+
+    for (i = 0; i < npc[1].nanimatics; i++) {
+        npc[1].ani[i].frame = 0;
+        npc[1].ani[i].state = 0;
+    }
 
     npc[1].ani[0].timer = 0;
 	npc[1].ani[0].source_x = 0;
