@@ -1,5 +1,7 @@
 void complete_cycle(Animatic *ani, int c) 
 {
+// completes the loop if the flag goes false in the middle
+// 0,1,2,3,0,1,2,3,0,...
 
     ani[c].timer++;
     
@@ -28,6 +30,7 @@ void complete_cycle(Animatic *ani, int c)
 
 void default_on_static (Animatic *ani, int c)
 {
+//ani[c].is_running must be initalized to true
 
     ani[c].is_running = true;
 
@@ -44,7 +47,11 @@ void default_on_static (Animatic *ani, int c)
 
 void default_on_loop (Animatic *ani, int c)
 {
+//a normal loop - stays on unless the flag is held false
 
+//0,1,2,3,0,1,2,...
+
+//ani[c].is_running must be initialized to true 
 
     if (ani[c].flag) {
 

@@ -57,7 +57,7 @@ void reflect(float *x, float *y, float N[2]) {
 // calculates the position of the vertices given their vector position
 // (dis,ang) relative to some point (cx,cy) on the subject and the subject's
 // rotational direction (d)
-void calculate_verts_ship(Extension* ext, float cx, float cy, float d) {
+void calculate_verts(Extension* ext, float cx, float cy, float d) {
 
 	int i;
     float dis;

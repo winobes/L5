@@ -5,13 +5,13 @@
 Player *init_player()
 {
 	Player *player = malloc(sizeof(Player));
-	int i;
+	int i, j;
 
 	player->exist = true;
 	player->flying = true;
 	player->health = 100;
 	player->hit_wall = -1;
-	player->nweapons = 1;
+
 
 
 
@@ -24,7 +24,7 @@ Player *init_player()
 
 	player->ext.vert = malloc(player->ext.nverts * sizeof(float*));
 	for (i = 0; i < player->ext.nverts; i++) {
-		player->ext.vert[i] = malloc(2 * sizeof(player->ext.vert[i]));
+		player->ext.vert[i] = malloc(2 * sizeof(float));
 	}
 
 	player->ext.x = malloc(player->ext.nverts * sizeof(float));
@@ -236,51 +236,94 @@ Player *init_player()
 	player->ani[6].destination_y = 32 - 10;
     player->ani[6].nframes = 4;
 
-	player->weapon.nactive = 25;
-	player->weapon.key = LCTRL;
-	player->weapon.spritesheet = al_load_bitmap("gfx/bullet1.png");
-	player->weapon.w = 5;
-	player->weapon.h = 5;
-	player->weapon.origin_x = 0;
-	player->weapon.origin_y = -17;
-	player->weapon.movement_type = 1;
-	player->weapon.damage = 10;
-	player->weapon.current = 0;
-	player->weapon.reload_timer = 0;
-	player->weapon.reload_time = 10;
-	player->weapon.nframes = 6;
-	player->weapon.frame_rate = 5;
 
-	player->weapon.sprite = malloc (player->weapon.nactive * sizeof(player->weapon.sprite));
+	player->nweapons = 1;
 
-	player->weapon.d = malloc(player->weapon.nactive * sizeof(player->weapon.d));
+    player->weapon = malloc(player->nweapons * sizeof (Weapon)); //TODO FREE
 
-	player->weapon.x = malloc(player->weapon.nactive * sizeof(player->weapon.x));
+    player->weapon[0].bullet_temp.nmaneuvers = 0;
+    player->weapon[0].bullet_temp.nanimatics = 1;
+    player->weapon[0].bullet_temp.ext.nverts = 4;
 
-	player->weapon.y = malloc(player->weapon.nactive * sizeof(player->weapon.y));
+    for (i = 0; i < player->nweapons; i++) {
 
-	player->weapon.dx = malloc(player->weapon.nactive * sizeof(player->weapon.dx));
+        player->weapon[i].timer = 0;
+        player->weapon[i].fire = false;
+        player->weapon[i].bullet_temp.ani = malloc(player->weapon[i].bullet_temp.nanimatics * sizeof (Animatic)); //TODO FREE
+        player->weapon[i].bullet_temp.ani_func = malloc(player->weapon[i].bullet_temp.nanimatics * sizeof (void (*)(Animatic*, int)));
+        player->weapon[i].bullet_temp.man = malloc(player->weapon[i].bullet_temp.nmaneuvers * sizeof (Maneuver)); //TODO FREE
+        player->weapon[i].bullet_temp.man_func = malloc(player->weapon[i].bullet_temp.nanimatics * sizeof (void (*)(Position*, Motion*, Maneuver, int))); //TODO free
+	    player->weapon[i].bullet_temp.ext.vert = malloc(player->weapon[i].bullet_temp.ext.nverts * sizeof(float*));
+        	player->weapon[i].bullet_temp.ext.x = malloc(player->weapon[i].bullet_temp.ext.nverts * sizeof(float));  //TODO FREE
+	        player->weapon[i].bullet_temp.ext.y = malloc(player->weapon[i].bullet_temp.ext.nverts * sizeof(float)); //TODO FREE
 
-	player->weapon.dy = malloc(player->weapon.nactive * sizeof(player->weapon.dy));
+	    for (j = 0; j < player->weapon[i].bullet_temp.ext.nverts; j++) {
+		    player->weapon[i].bullet_temp.ext.vert[j] = malloc(2 * sizeof(float)); //TODO FREE
+	    }
 
-	player->weapon.source_x = malloc(player->weapon.nactive * sizeof(player->weapon.source_x));
+        for (j = 0; j < player->weapon[i].bullet_temp.nmaneuvers; j++) {
+            player->weapon[i].bullet_temp.man[j].on = false;
+            player->weapon[i].bullet_temp.man[j].has_run = false;
+            player->weapon[i].bullet_temp.man[j].state = 0;
+        }
 
-	player->weapon.timer = malloc(player->weapon.nactive * sizeof(player->weapon.timer));
+        for (j = 0; j < player->weapon[i].bullet_temp.nanimatics; j++) {
+            player->weapon[i].bullet_temp.ani[j].source_x = 0;
+            player->weapon[i].bullet_temp.ani[j].source_y = 0;
+            player->weapon[i].bullet_temp.ani[j].frame = 0;
+            player->weapon[i].bullet_temp.ani[j].scale_x = 1;
+            player->weapon[i].bullet_temp.ani[j].scale_y = 1;
+            player->weapon[i].bullet_temp.ani[j].state = 0;
+            player->weapon[i].bullet_temp.ani[j].tint = al_map_rgba_f(1,1,1,1);
+            player->weapon[i].bullet_temp.ani[j].pivot_x = 0;
+            player->weapon[i].bullet_temp.ani[j].pivot_y = 0;
+            player->weapon[i].bullet_temp.ani[j].flag = false;
+            player->weapon[i].bullet_temp.ani[j].is_running = false;
+            player->weapon[i].bullet_temp.ani[j].draw = true;
+            player->weapon[i].bullet_temp.ani[j].has_run = true;
+            player->weapon[i].bullet_temp.ani[j].timer = 0;
+            player->weapon[i].bullet_temp.mot.dx = 0;
+            player->weapon[i].bullet_temp.mot.dy = 0;
+            player->weapon[i].bullet_temp.mot.spd = 0;
+            player->weapon[i].bullet_temp.mot.dd = 0;
+        }           
+    }
 
-	player->weapon.exists = malloc(player->weapon.nactive * sizeof(player->weapon.exists));
+    
+    player->weapon[0].key = LCTRL;
+    player->weapon[0].reload_time = 5;
+    player->weapon[0].initial_velocity = 3;
+    player->weapon[0].bullet_temp.spritesheet = al_load_bitmap("gfx/bullet1.png");
+    player->weapon[0].bullet_temp.pos.cx = 0;
+    player->weapon[0].bullet_temp.pos.cy = -17;
+    player->weapon[0].bullet_temp.pos.cd = 0;
+    player->weapon[0].bullet_temp.mot.forward_speed = 0;
+    player->weapon[0].bullet_temp.mot.turn_speed = 0;
+    player->weapon[0].bullet_temp.mot.warp_speed = 0;
+    player->weapon[0].bullet_temp.mot.side_speed = 0;
+    player->weapon[0].bullet_temp.gfx_w = 5;
+    player->weapon[0].bullet_temp.gfx_h = 5;
+    player->weapon[0].bullet_temp.damage = 5;
+    player->weapon[0].bullet_temp.ext.x[0] = -2.5;
+    player->weapon[0].bullet_temp.ext.y[0] = -2.5;
+    player->weapon[0].bullet_temp.ext.x[1] = 2.5;
+    player->weapon[0].bullet_temp.ext.y[1] = -2.5;
+    player->weapon[0].bullet_temp.ext.x[2] = 2.5;
+    player->weapon[0].bullet_temp.ext.y[2] = 2.5;
+    player->weapon[0].bullet_temp.ext.x[3] = -2.5;
+    player->weapon[0].bullet_temp.ext.x[3] = 2.5;
 
-	for (i = 0; i < player->weapon.nactive; i++) {
-		player->weapon.d[i] = 0;
-		player->weapon.source_x[i] = 0;
-		player->weapon.timer[i] = 0;
-		player->weapon.exists[i] = false;
-	}
+    player->weapon[0].bullet_temp.ani[0].is_running = true;
 
-	player->weapon.ext.nverts = 1;
-	player->weapon.ext.vert = malloc(player->weapon.ext.nverts * sizeof(float*));
-	for (i = 0; i < player->weapon.ext.nverts; i++) {
-		player->weapon.ext.vert[i] = malloc(2 * sizeof(player->weapon.ext.vert[i]));
-	}
+
+    //maneuver key & animaitcs would go here.
+    //man_func would go here.
+
+    player->weapon[0].bullet_temp.ani[0].w = 5;
+    player->weapon[0].bullet_temp.ani[0].h = 5;
+    player->weapon[0].bullet_temp.ani[0].nframes = 6;
+    player->weapon[0].bullet_temp.ani[0].frame_rate = 3;
+    player->weapon[0].bullet_temp.ani_func[0] = &default_on_loop;
 
 	return player;
 }

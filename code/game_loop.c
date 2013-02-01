@@ -26,6 +26,13 @@ int game_loop() {
 	gs->nnpcs = 2;
 	gs->npc = init_npcs(gs);  
 	gs->current_room = 0;
+    gs->player_bullet = malloc(100 * sizeof(Bullet)); //TODO FREE
+    for(i = 0; i < 100; i++) {
+        gs->player_bullet[i].exist = false;
+    }
+    gs->current_pb = 0;
+    gs->npc_bullet = malloc(100 * sizeof(Bullet)); //TODO FREE
+    gs->current_nb = 0;
 	gs->font10 = al_load_font("fonts/Roboto-Black.ttf", 10,0);
 
 	bool *keys = malloc(NKEYS * sizeof(bool));
@@ -69,25 +76,10 @@ int game_loop() {
 	free(gs->player->ani);
     free(gs->player->ani_func);
 
-	free(gs->player->weapon.d);
-	free(gs->player->weapon.x);
-	free(gs->player->weapon.y);
-	free(gs->player->weapon.dx);
-	free(gs->player->weapon.dy);
-	free(gs->player->weapon.source_x);
-	free(gs->player->weapon.timer);
-	free(gs->player->weapon.exists);
-	for (j = 0; j < gs->player->weapon.ext.nverts; j++) {
-		free(gs->player->weapon.ext.vert[j]);
-	}
-	free(gs->player->weapon.ext.vert);
 	al_destroy_bitmap(gs->player->spritesheet);
 	gs->player->spritesheet = NULL;
 	al_destroy_bitmap(gs->player->sprite);
 	gs->player->sprite = NULL;
-	al_destroy_bitmap(gs->player->weapon.spritesheet);
-	gs->player->weapon.spritesheet = NULL;
-	free(gs->player->weapon.sprite);
 	free(gs->player);
 	
 	#ifdef DEBUG

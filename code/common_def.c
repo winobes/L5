@@ -26,8 +26,6 @@ typedef struct {
 	// change in orientation per game frame, CCW positive
 	float dd;
 	// acceleration in x or y direction per frame, constant
-	float ddxy;
-    //
 	float forward_speed;
 	float turn_speed;
 	float warp_speed;
@@ -35,29 +33,15 @@ typedef struct {
 } Motion;
 
 typedef struct {
-	int current, nactive, key, nframes, frame_rate;
-	ALLEGRO_BITMAP *spritesheet;
-	int w, h, origin_x, origin_y, movement_type, reload_time, reload_timer; //origin of the bullet in distance from the center
-	float damage;
-	Extension ext;
-	ALLEGRO_BITMAP **sprite;
-	float *dx, *dy, *d, *x, *y, *source_x;
-	int *timer;
-	bool *exists;
-} Weapon;	
-
-
-typedef struct {
     bool on;
     bool has_run; //ensures that Maneuvers turned on by other Maneuvers start in the same loop that they are turned on.
     int state; //keeps track of where we were in the maneuver function. 1 is the beginning of a loop, 0 is the end.
-    int *animatic; //array of animation indexes associated with this manuver
+    int *animatic; //array of indexes of animations linked with this maneuver
     int nanimatics; //number of animations this maneuver triggers
     int key; //consider changing this to an array for key-combo moves
 } Maneuver;
 
 typedef struct {
-	ALLEGRO_BITMAP *sprite;
 	int source_x, source_y, destination_x, destination_y;
 	int frame, w, h, scale_x, scale_y, state;
 	ALLEGRO_COLOR tint;
@@ -70,7 +54,32 @@ typedef struct {
 } Animatic;
 
 typedef struct {
-	bool exists, solid;
+    Position pos;
+    Motion mot;
+    Extension ext;
+    ALLEGRO_BITMAP *spritesheet, *sprite;
+    int gfx_w, gfx_h;
+    int room;
+    int nanimatics;
+    Animatic *ani;
+    void (**ani_func) (Animatic*, int);
+    int nmaneuvers;
+    Maneuver *man;
+    void (**man_func) (Position*, Motion*, Maneuver*, int);
+    bool exist;
+    int damage;
+} Bullet;
+
+typedef struct {
+    int reload_time, timer;
+    int key;
+    bool fire;
+    float initial_velocity;
+    Bullet bullet_temp; //copied to a member of the bullet array when the weapon fires
+} Weapon;
+
+typedef struct {
+	bool exist, solid;
 	float health;
 	Position pos;
 	float bouncy;  // bounce elasticity
@@ -101,7 +110,7 @@ typedef struct {
 	Animatic *ani;
 	int hit_wall;
 	int nweapons;
-	Weapon weapon;
+	Weapon *weapon;
     int nmaneuvers;
     Maneuver *man;
     void (**man_func) (Position*, Motion*, Maneuver*, int);
@@ -109,7 +118,7 @@ typedef struct {
 
 typedef struct {
 	float health;
-	bool exists, solid, hot;
+	bool exist, solid, hot;
 	// the wall's location is fully and independenly described by verts.
 	// w and h are good for initializing.
 	// d is used for drawing the sprite appropriately.
@@ -146,7 +155,10 @@ typedef struct {
 	ALLEGRO_EVENT_QUEUE* event_queue;
 	ALLEGRO_TIMER* timer;
 	ALLEGRO_DISPLAY* display;
-	bool s_held;
+    Bullet *player_bullet;
+    int current_pb;
+    Bullet *npc_bullet;
+    int current_nb;
 } GameState;
 
 int NKEYS = 9;

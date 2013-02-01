@@ -10,7 +10,7 @@ NPC *init_npcs(GameState *gs)
 	NPC *npc = malloc(gs->nnpcs * sizeof(NPC));
 
 	npc[0].solid = true;
-	npc[0].exists = true;
+	npc[0].exist = true;
 	npc[0].health = 10;
 	npc[0].pos.cx = 0;
 	npc[0].pos.cy = 0;
@@ -156,7 +156,7 @@ npc[0].man_func = malloc(npc[0].nmaneuvers * sizeof (void (*)(Position*, Motion*
 	npc[0].ani[2].tint = al_map_rgba_f(1,1,1,1);
 
 	npc[1].solid = true;
-	npc[1].exists = true;
+	npc[1].exist = true;
 	npc[1].health = 10;
 	npc[1].pos.cx = 10;
 	npc[1].pos.cy = 10;

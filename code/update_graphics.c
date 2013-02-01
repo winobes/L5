@@ -53,7 +53,7 @@ void do_graphics_update(GameState *gs, bool *redraw)
 			
 
 		for (i = 0; i < gs->nnpcs; i++) {
-			if (gs->npc[i].room == gs->current_room && gs->npc[i].exists) {
+			if (gs->npc[i].room == gs->current_room && gs->npc[i].exist) {
 				al_set_target_bitmap(gs->npc[i].sprite);
 				al_clear_to_color(al_map_rgba(0,0,0,0));
 				//drawing the NPC animatics to its spritesheet
@@ -92,12 +92,12 @@ void do_graphics_update(GameState *gs, bool *redraw)
 		for (i = 0; i < gs->room[gs->current_room]->nwalls; i++) {
 			//all of the walls in the current room
 			// TODO check line break does not affect logic
-			if (gs->room[gs->current_room]->wall[i]->exists &&
+			if (gs->room[gs->current_room]->wall[i]->exist &&
 				gs->room[gs->current_room]->wall[i]->ext.vert[0][0] - gs->player->pos.cx < width/2 +
 					gs->room[gs->current_room]->wall[i]->h + gs->room[gs->current_room]->wall[i]->w &&
 				gs->room[gs->current_room]->wall[i]->ext.vert[0][1] - gs->player->pos.cy < height/2 +
 					gs->room[gs->current_room]->wall[i]->w + gs->room[gs->current_room]->wall[i]->h) {
-				//only draw if it exists and is close enough to the gs->player that it might possibly be in view of the screen
+				//only draw if it exist and is close enough to the gs->player that it might possibly be in view of the screen
 				al_draw_scaled_rotated_bitmap(
 					gs->room[gs->current_room]->wall[i]->sprite,
 					0, //center x,y
@@ -113,25 +113,45 @@ void do_graphics_update(GameState *gs, bool *redraw)
 
 
 
-		for (i = 0; i < gs->player->weapon.nactive; i++) {
-			if (gs->player->weapon.exists[i]) {
-				al_draw_tinted_scaled_rotated_bitmap_region(
-						gs->player->weapon.spritesheet,
-						gs->player->weapon.source_x[i],
-						0,
-						gs->player->weapon.w,
-						gs->player->weapon.h,
-						al_map_rgba_f(1,1,1,1),
-						gs->player->weapon.w/2,
-						gs->player->weapon.h/2,
-						gs->player->weapon.x[i] - (gs->player->pos.cx - width/2),
-						gs->player->weapon.y[i] - (gs->player->pos.cy - height/2),
-						1,
-						1,
-						0,0);
+
+
+		for (i = 0; i < 100; i++) {
+
+			if (gs->player_bullet[i].room == gs->current_room && gs->player_bullet[i].exist) {
+				al_set_target_bitmap(gs->player_bullet[i].sprite);
+				al_clear_to_color(al_map_rgba(0,0,0,0));
+				//drawing the NPC animatics to its spritesheet
+				for (j = 0; j < gs->player_bullet[i].nanimatics; j++) {
+					if (gs->player_bullet[i].ani[j].draw) {
+						al_draw_tinted_scaled_rotated_bitmap_region(
+							gs->player_bullet[i].spritesheet,
+							gs->player_bullet[i].ani[j].frame * gs->player_bullet[i].ani[j].w + gs->player_bullet[i].ani[j].source_x,
+							gs->player_bullet[i].ani[j].source_y,
+							gs->player_bullet[i].ani[j].w,
+							gs->player_bullet[i].ani[j].h,
+							gs->player_bullet[i].ani[j].tint,
+							gs->player_bullet[i].ani[j].pivot_x,
+							gs->player_bullet[i].ani[j].pivot_y,
+							gs->player_bullet[i].ani[j].destination_x,
+							gs->player_bullet[i].ani[j].destination_y,
+							gs->player_bullet[i].ani[j].scale_x,
+							gs->player_bullet[i].ani[j].scale_y,
+							0,0);
+					}
+				}
+				al_set_target_backbuffer(gs->display);
+				//drawing the gs->player_bullet[i] to the display
+				al_draw_scaled_rotated_bitmap(
+					gs->player_bullet[i].sprite,
+					gs->player_bullet[i].gfx_w/2, gs->player_bullet[i].gfx_h/2, //center x,y
+					gs->player_bullet[i].pos.cx - (gs->player->pos.cx - width/2), 
+					gs->player_bullet[i].pos.cy - (gs->player->pos.cy - height/2), // destination of point center x,y
+					1, 1, //x scale, y scale
+					gs->player_bullet[i].pos.cd, // angle		
+					0 //flags
+				);
 			}
 		}
-
 
 		//drawing animatics to the gs->player's sprite
 		al_set_target_bitmap(gs->player->sprite);
@@ -174,7 +194,16 @@ void do_graphics_update(GameState *gs, bool *redraw)
 	al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 7*12, ALLEGRO_ALIGN_RIGHT,"npc[0].health = %f", gs->npc[0].health);
 al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 8*12, ALLEGRO_ALIGN_RIGHT,"npc[1].health = %f", gs->npc[1].health);
 
-al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 18*12, ALLEGRO_ALIGN_RIGHT,"frame = %i", gs->player->ani[2].frame);
+al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 18*12, ALLEGRO_ALIGN_RIGHT,"player->weapon[0].bullet_temp.damage = %i", gs->player->weapon[0].bullet_temp.damage);
+
+al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 19*12, ALLEGRO_ALIGN_RIGHT,"player_bullet[1].damage = %i", gs->player_bullet[1].damage);
+if(gs->player_bullet[1].exist) {
+al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 20*12, ALLEGRO_ALIGN_RIGHT, "player_bullet[1].ani[0].frame = %i",gs->player_bullet[1].ani[0].frame);
+}
+al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 21*12, ALLEGRO_ALIGN_RIGHT, "player->ani[1].frame = %i",gs->player->ani[1].frame);
+al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 22*12, ALLEGRO_ALIGN_RIGHT, "current_pb = %i",gs->current_pb);
+al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 23*12, ALLEGRO_ALIGN_RIGHT, "player->pos.cd = %f",gs->player->pos.cd);
+
 
  
 ////debugging the player ext

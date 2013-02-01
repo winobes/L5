@@ -34,7 +34,7 @@ Room **init_rooms(GameState *gs)
 		}
 
 		for (j = 0; j < room[i]->nwalls; j++) {
-			room[i]->wall[j]->exists = true;
+			room[i]->wall[j]->exist = true;
 			room[i]->wall[j]->ext.nverts = 4;
 			room[i]->wall[j]->ext.vert = malloc(room[i]->wall[j]->ext.nverts * sizeof(float*));
 			for (k = 0; k < room[i]->wall[j]->ext.nverts; k++) {
@@ -48,7 +48,7 @@ Room **init_rooms(GameState *gs)
 		room[0]->wall[i]->h = 800/5;
 		room[0]->wall[i]->w = 100/5;
 		room[0]->wall[i]->sprite = al_load_bitmap("gfx/little1.png");
-		room[0]->wall[i]->exists = true;
+		room[0]->wall[i]->exist = true;
 		room[0]->wall[i]->solid = true;
 	}
 
@@ -56,7 +56,7 @@ Room **init_rooms(GameState *gs)
 		room[0]->wall[i]->h = 200/5;
 		room[0]->wall[i]->w = 200/5;
 		room[0]->wall[i]->sprite = al_load_bitmap("gfx/little0.png"); 
-		room[0]->wall[i]->exists = true;
+		room[0]->wall[i]->exist = true;
 		room[0]->wall[i]->solid = true;
 	}
 
@@ -64,7 +64,7 @@ Room **init_rooms(GameState *gs)
 		room[0]->wall[i]->h = 20;
 		room[0]->wall[i]->w = 20;
 		room[0]->wall[i]->sprite = al_load_bitmap("gfx/little2.png");
-		room[0]->wall[i]->exists = true;
+		room[0]->wall[i]->exist = true;
 		room[0]->wall[i]->solid = true;
 	}
 
@@ -171,7 +171,7 @@ Room **init_rooms(GameState *gs)
 		room[1]->wall[i]->h = 800/5;
 		room[1]->wall[i]->w = 100/5;
 		room[1]->wall[i]->sprite = al_load_bitmap("gfx/little1.png");
-		room[1]->wall[i]->exists = true;
+		room[1]->wall[i]->exist = true;
 		room[1]->wall[i]->solid = true;
 	}
 
@@ -179,7 +179,7 @@ Room **init_rooms(GameState *gs)
 		room[1]->wall[i]->h = 20;
 		room[1]->wall[i]->w = 20;
 		room[1]->wall[i]->sprite = al_load_bitmap("gfx/little2.png");
-		room[1]->wall[i]->exists = true;
+		room[1]->wall[i]->exist = true;
 		room[1]->wall[i]->solid = true;
 	}
 
