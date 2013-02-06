@@ -79,9 +79,30 @@ void copy_bullet (Bullet source, Bullet* dest) {
 /*a "deep copy" of one bullet struct to another. Used to initialize fired bullets from the template in the Weapon struct*/
     int i, j;    
 
-    dest->pos = source.pos;
-    dest->mot = source.mot;
-    dest->ext = source.ext;
+    dest->pos.cx = source.pos.cx;
+    dest->pos.cy = source.pos.cy;
+    dest->pos.cd = source.pos.cd;
+ 
+    dest->mot.dx = source.mot.dx;
+    dest->mot.dy = source.mot.dy;
+    dest->mot.spd = source.mot.spd;
+    dest->mot.dd = source.mot.dd;
+    dest->mot.forward_speed = source.mot.forward_speed;
+    dest->mot.turn_speed = source.mot.turn_speed;
+    dest->mot.side_speed = source.mot.side_speed;
+
+    dest->ext.nverts = source.ext.nverts;
+    dest->ext.vert = malloc(dest->ext.nverts * sizeof (float*));//TODO FREE
+    dest->ext.x = malloc(dest->ext.nverts * sizeof (float));//TODO FREE
+    dest->ext.y = malloc(dest->ext.nverts * sizeof (float));//TODO FREE
+    for (i = 0; i < dest->ext.nverts; i++) {
+        dest->ext.vert[i] = malloc(2 * sizeof(float));//TODO FREE
+        dest->ext.x[i] = source.ext.x[i];
+        dest->ext.y[i] = source.ext.y[i];
+    }
+
+    calculate_verts(&dest->ext, dest->pos.cx, dest->pos.cy, dest->pos.cd);
+
 
     dest->gfx_w = source.gfx_w;
     dest->gfx_h = source.gfx_h;
@@ -312,7 +333,6 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 
             if (gs->player->weapon[i].fire && (gs->player->weapon[i].timer <= 0)) { //if the triger is pulled and the reload time is complete, the weapon fires
                 gs->player->weapon[i].timer = gs->player->weapon[i].reload_time;
-                gs->player->weapon[i].fire = false;
                 copy_bullet(gs->player->weapon[i].bullet_temp, &(gs->player_bullet[gs->current_pb]));
                 gs->player_bullet[gs->current_pb].room = gs->current_room; 
                 temp = gs->player_bullet[gs->current_pb].pos.cx;
@@ -323,23 +343,23 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 
                 gs->player_bullet[gs->current_pb].exist = true;
 
-                if (gs->current_pb < 100) { 
+                if (gs->current_pb < gs->n_player_bullets) { 
                     gs->current_pb++;
                 } 
-                if (gs->current_pb >= 100) {
+                if (gs->current_pb >= gs->n_player_bullets) {
                     gs->current_pb = 0;
                 }
                
             }
         }
         
-        for (i = 0; i < 100; i++) {
+        for (i = 0; i < gs->n_player_bullets; i++) {
         if (gs->player_bullet[i].exist) {
             run_active_maneuvers(gs->player_bullet[i].man, gs->player_bullet[i].man_func, gs->player_bullet[i].nmaneuvers, &(gs->player_bullet[i].pos), &(gs->player_bullet[i].mot));
 
             update_position(&gs->player_bullet[i].pos, gs->player_bullet[i].mot);
 
-			    //recalculating the NPC vertices
+			    //recalculating the bullet vertices
 		    calculate_verts(&gs->player_bullet[i].ext, gs->player_bullet[i].pos.cx, gs->player_bullet[i].pos.cy, gs->player_bullet[i].pos.cd);
 	    }
         }
@@ -409,8 +429,31 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 		}
 		}
 
+
+//bullet collisions with npcs
+        for ( i = 0; i < gs->n_player_bullets; i++) {
+        for (j = 0; j < gs->nnpcs; j++) {
+        if (gs->player_bullet[i].exist && gs->npc[j].exist && gs->player_bullet[i].room == gs->npc[j].room) {
+        if (collide(gs->player_bullet[i].ext, gs->npc[j].ext, penetration_vector, &penetration_scalar)) {
+            gs->player_bullet[i].exist = false;
+        }
+        }
+        }
+        }
+//bullet collisions with walls
+        for ( i = 0; i < gs->n_player_bullets; i++) {
+        for (j = 0; j < gs->room[gs->current_room]->nwalls; j++) {
+        if (gs->player_bullet[i].exist && gs->room[gs->current_room]->wall[i]->exist) {
+        if (collide(gs->player_bullet[i].ext, gs->room[gs->current_room]->wall[j]->ext, penetration_vector, &penetration_scalar)) {
+            gs->player_bullet[i].exist = false;
+        }
+        }
+        }
+        }
+
+/*
         //check for Player Bullet collisions with NPCs
-        for (i = 0; i < 100; i++) {
+        for (i = 0; i < gs->n_player_bullets; i++) {
         if (gs->player_bullet[i].exist) {
         for (j = 0; j < gs->nnpcs; j++) {
         if (gs->npc[j].exist) {
@@ -423,7 +466,7 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
         }
         }
         }
-        }   
+        }*/   
 
     //updating player animatics
         run_animatics(gs->player->ani, gs->player->ani_func, gs->player->nanimatics, gs->player->man, gs->player->nmaneuvers);
@@ -434,7 +477,7 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
         }
 
     //updating bullet animatics
-        for (i = 0; i < 100; i++) {
+        for (i = 0; i < gs->n_player_bullets; i++) {
         if (gs->player_bullet[i].exist == true) {
             run_animatics(gs->player_bullet[i].ani, gs->player_bullet[i].ani_func, gs->player_bullet[i].nanimatics, gs->player_bullet[i].man, gs->player_bullet[i].nmaneuvers);
         }

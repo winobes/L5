@@ -115,7 +115,7 @@ void do_graphics_update(GameState *gs, bool *redraw)
 
 
 
-		for (i = 0; i < 100; i++) {
+		for (i = 0; i < gs->n_player_bullets; i++) {
 
 			if (gs->player_bullet[i].room == gs->current_room && gs->player_bullet[i].exist) {
 				al_set_target_bitmap(gs->player_bullet[i].sprite);
@@ -194,16 +194,6 @@ void do_graphics_update(GameState *gs, bool *redraw)
 	al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 7*12, ALLEGRO_ALIGN_RIGHT,"npc[0].health = %f", gs->npc[0].health);
 al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 8*12, ALLEGRO_ALIGN_RIGHT,"npc[1].health = %f", gs->npc[1].health);
 
-al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 18*12, ALLEGRO_ALIGN_RIGHT,"player->weapon[0].bullet_temp.damage = %i", gs->player->weapon[0].bullet_temp.damage);
-
-al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 19*12, ALLEGRO_ALIGN_RIGHT,"player_bullet[1].damage = %i", gs->player_bullet[1].damage);
-if(gs->player_bullet[1].exist) {
-al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 20*12, ALLEGRO_ALIGN_RIGHT, "player_bullet[1].ani[0].frame = %i",gs->player_bullet[1].ani[0].frame);
-}
-al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 21*12, ALLEGRO_ALIGN_RIGHT, "player->ani[1].frame = %i",gs->player->ani[1].frame);
-al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 22*12, ALLEGRO_ALIGN_RIGHT, "current_pb = %i",gs->current_pb);
-al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 23*12, ALLEGRO_ALIGN_RIGHT, "player->pos.cd = %f",gs->player->pos.cd);
-
 
  
 ////debugging the player ext
@@ -211,6 +201,7 @@ al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 23*12, ALLEGRO_ALIGN_R
 			al_draw_pixel(gs->player->ext.vert[j][0]-(gs->player->pos.cx - width/2), gs->player->ext.vert[j][1]-(gs->player->pos.cy - height/2), al_map_rgb(83,207,46));
 		}
 	*/	
+
 
 		al_flip_display();
 	}

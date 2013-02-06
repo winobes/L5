@@ -157,8 +157,10 @@ typedef struct {
 	ALLEGRO_DISPLAY* display;
     Bullet *player_bullet;
     int current_pb;
+    int n_player_bullets;
     Bullet *npc_bullet;
     int current_nb;
+    int n_npc_bullets;
 } GameState;
 
 int NKEYS = 9;

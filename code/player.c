@@ -311,7 +311,7 @@ Player *init_player()
     player->weapon[0].bullet_temp.ext.x[2] = 2.5;
     player->weapon[0].bullet_temp.ext.y[2] = 2.5;
     player->weapon[0].bullet_temp.ext.x[3] = -2.5;
-    player->weapon[0].bullet_temp.ext.x[3] = 2.5;
+    player->weapon[0].bullet_temp.ext.y[3] = 2.5;
 
     player->weapon[0].bullet_temp.ani[0].is_running = true;
 
