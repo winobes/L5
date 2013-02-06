@@ -27,7 +27,7 @@ int game_loop() {
 	gs->npc = init_npcs(gs);  
 	gs->current_room = 0;
 
-    gs->n_player_bullets = 15;
+    gs->n_player_bullets = 100;
     gs->player_bullet = malloc(gs->n_player_bullets * sizeof(Bullet)); //TODO FREE
     for(i = 0; i < gs->n_player_bullets; i++) {
         gs->player_bullet[i].exist = false;

@@ -365,7 +365,7 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
         }
 
    
-	    //check for player collisions with walls
+	    //player collisions with walls
 	    gs->player->hit_wall = -1;
 	    for (i = 0; i < gs->room[gs->current_room]->nwalls; i++) {
 		    if (gs->room[gs->current_room]->wall[i]->exist) {
@@ -384,7 +384,7 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 		    }
 	    }
 
-		//check for player collisions with NPCs
+		//player collisions with NPCs
 		for (i = 0; i < gs->nnpcs; i++) {
 		if (gs->npc[i].exist && gs->npc[i].room == gs->current_room) {
 		if (collide(gs->player->ext, gs->npc[i].ext, penetration_vector, &penetration_scalar)) {
@@ -430,7 +430,7 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 		}
 
 
-//bullet collisions with npcs
+//player bullet collisions with npcs
         for ( i = 0; i < gs->n_player_bullets; i++) {
         for (j = 0; j < gs->nnpcs; j++) {
         if (gs->player_bullet[i].exist && gs->npc[j].exist && gs->player_bullet[i].room == gs->npc[j].room) {
@@ -440,7 +440,8 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
         }
         }
         }
-//bullet collisions with walls
+
+//player bullet collisions with walls
         for ( i = 0; i < gs->n_player_bullets; i++) {
         for (j = 0; j < gs->room[gs->current_room]->nwalls; j++) {
         if (gs->player_bullet[i].exist && gs->room[gs->current_room]->wall[i]->exist) {
@@ -450,23 +451,6 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
         }
         }
         }
-
-/*
-        //check for Player Bullet collisions with NPCs
-        for (i = 0; i < gs->n_player_bullets; i++) {
-        if (gs->player_bullet[i].exist) {
-        for (j = 0; j < gs->nnpcs; j++) {
-        if (gs->npc[j].exist) {
-        if (gs->player_bullet[i].room == gs->npc[j].room) {
-            if (collide(gs->player_bullet[i].ext, gs->npc[j].ext, penetration_vector, &penetration_scalar)) {
-                gs->npc[j].health -= gs->player_bullet[i].damage;
-                gs->player_bullet[i].exist = false;
-            }
-        }
-        }
-        }
-        }
-        }*/   
 
     //updating player animatics
         run_animatics(gs->player->ani, gs->player->ani_func, gs->player->nanimatics, gs->player->man, gs->player->nmaneuvers);
