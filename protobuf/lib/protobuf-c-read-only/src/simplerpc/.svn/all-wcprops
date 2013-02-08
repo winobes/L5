@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/!svn/ver/51/trunk/src/simplerpc
+END
+simplerpc.c
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/51/trunk/src/simplerpc/simplerpc.c
+END
+simplerpc.proto
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/46/trunk/src/simplerpc/simplerpc.proto
+END
+simplerpc.h
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/46/trunk/src/simplerpc/simplerpc.h
+END

@@ -1,0 +1,83 @@
+K 25
+svn:wc:ra_dav:version-url
+V 32
+/svn/!svn/ver/326/trunk/src/test
+END
+example.database
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/150/trunk/src/test/example.database
+END
+example-server.c
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/289/trunk/src/test/example-server.c
+END
+test-full.proto
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/276/trunk/src/test/test-full.proto
+END
+test.proto
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/124/trunk/src/test/test.proto
+END
+test-rpc.c
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/289/trunk/src/test/test-rpc.c
+END
+test-generated-code.c
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/51/trunk/src/test/test-generated-code.c
+END
+test-generated-code2.c
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/276/trunk/src/test/test-generated-code2.c
+END
+example-client.c
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/289/trunk/src/test/example-client.c
+END
+Makefile.am
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/326/trunk/src/test/Makefile.am
+END
+common-test-arrays.h
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/207/trunk/src/test/common-test-arrays.h
+END
+cxx-generate-packed-data.cc
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/276/trunk/src/test/cxx-generate-packed-data.cc
+END
+CMakeLists.txt
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/276/trunk/src/test/CMakeLists.txt
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/224/trunk/src/test/README
+END

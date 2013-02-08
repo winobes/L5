@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 23
+/svn/!svn/ver/331/trunk
+END
+LICENSE
+K 25
+svn:wc:ra_dav:version-url
+V 31
+/svn/!svn/ver/284/trunk/LICENSE
+END
+configure.ac
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/!svn/ver/331/trunk/configure.ac
+END
+TODO
+K 25
+svn:wc:ra_dav:version-url
+V 28
+/svn/!svn/ver/329/trunk/TODO
+END
+ChangeLog
+K 25
+svn:wc:ra_dav:version-url
+V 33
+/svn/!svn/ver/329/trunk/ChangeLog
+END
+Makefile.am
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/!svn/ver/324/trunk/Makefile.am
+END
+autogen.sh
+K 25
+svn:wc:ra_dav:version-url
+V 33
+/svn/!svn/ver/28/trunk/autogen.sh
+END
+bootstrap
+K 25
+svn:wc:ra_dav:version-url
+V 33
+/svn/!svn/ver/186/trunk/bootstrap
+END
+pkgwriteinfo.in
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/!svn/ver/69/trunk/pkgwriteinfo.in
+END
+CMakeLists.txt
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/!svn/ver/276/trunk/CMakeLists.txt
+END
+libprotobuf-c.pc.in
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/220/trunk/libprotobuf-c.pc.in
+END

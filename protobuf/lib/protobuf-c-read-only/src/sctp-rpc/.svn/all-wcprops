@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/!svn/ver/104/trunk/src/sctp-rpc
+END
+rfc-protobuf-sctp.ms
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/104/trunk/src/sctp-rpc/rfc-protobuf-sctp.ms
+END
+example.proto
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/104/trunk/src/sctp-rpc/example.proto
+END
+protobuf-c-sctp.h
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/104/trunk/src/sctp-rpc/protobuf-c-sctp.h
+END
+example-server-2.c
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/104/trunk/src/sctp-rpc/example-server-2.c
+END
+example-word-funcs-service.c
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/104/trunk/src/sctp-rpc/example-word-funcs-service.c
+END
+sctp-channel.c
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/104/trunk/src/sctp-rpc/sctp-channel.c
+END
+example-server.c
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/104/trunk/src/sctp-rpc/example-server.c
+END
+example-word-funcs-service.h
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/104/trunk/src/sctp-rpc/example-word-funcs-service.h
+END
+render-rfc
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/104/trunk/src/sctp-rpc/render-rfc
+END
+example-client.c
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/104/trunk/src/sctp-rpc/example-client.c
+END
