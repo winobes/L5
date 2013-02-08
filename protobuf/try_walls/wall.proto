@@ -1,0 +1,23 @@
+message Wall {
+  optional float health=1;
+  optional bool exists=2;
+  optional bool solid=3;
+  optional bool hot=4;
+  optional float w=5;
+  optional float h=6;
+  optional float d=7;
+  optional Extension ext=8;
+  optional string sprite_name=9;
+}
+
+
+message Extension {
+  optional int32 nverts=1;
+  repeated Vertex vert=2;
+}
+
+
+message Vertex {
+  optional float x=1;
+  optional float y=2;
+}

@@ -1,0 +1,15 @@
+K 10
+svn:ignore
+V 144
+Makefile.in
+test-generated-code
+cxx-generate-packed-data
+test-generated-code2
+generated-code
+.libs
+.deps
+Makefile
+example-client
+example-server
+
+END

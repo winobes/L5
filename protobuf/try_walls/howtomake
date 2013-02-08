@@ -1,0 +1,37 @@
+C source on google code
+
+
+http://code.google.com/p/protobuf-c/
+
+compilation uses automake
+
+http://inti.sourceforge.net/tutorial/libinti/autotoolsproject.html
+may need to (http://lists.gnu.org/archive/html/automake/2009-03/msg00027.html)
+:$ aclocal || echo $?
+:$ autoconf || echo $?
+:$ autoconf || echo $?
+:$ autoreconf || echo $?
+:$ autoreconf || echo $?
+:$ automake --add-missing || echo $?
+
+to make this simple message example
+
+protoc-c --c_out=. amessage.proto
+
+(this will create amessage.pb-c.c and amessage.pb-c.h)
+gcc -o create_amessage amessage.pb-c.c create_amessage.c -lprotobuf-c
+gcc -o read_amessage amessage.pb-c.c read_amessage.c -lprotobuf-c
+
+(then create the proto with the write routine and pipe it to the read)
+./create_amessage 42 28 | ./read_amessage
+
+
+the walls message
+
+make the C interface
+protoc-c --c_out=. walls.proto
+# write code that utilizes the input and output functions
+# compile it similar to the gcc comands above
+
+make python interface
+protoc --python_out=. walls.proto

@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/330/trunk/src/google/protobuf-c
+END
+protobuf-c.h
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/328/trunk/src/google/protobuf-c/protobuf-c.h
+END
+protobuf-c-rpc.h
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/289/trunk/src/google/protobuf-c/protobuf-c-rpc.h
+END
+gsklistmacros.h
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/121/trunk/src/google/protobuf-c/gsklistmacros.h
+END
+protobuf-c-private.h
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/329/trunk/src/google/protobuf-c/protobuf-c-private.h
+END
+protobuf-c-dispatch.c
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/330/trunk/src/google/protobuf-c/protobuf-c-dispatch.c
+END
+protobuf-c-data-buffer.c
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/276/trunk/src/google/protobuf-c/protobuf-c-data-buffer.c
+END
+protobuf-c-parser.h
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/284/trunk/src/google/protobuf-c/protobuf-c-parser.h
+END
+protobuf-c.c
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/327/trunk/src/google/protobuf-c/protobuf-c.c
+END
+protobuf-c-dispatch.h
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/284/trunk/src/google/protobuf-c/protobuf-c-dispatch.h
+END
+protobuf-c-rpc.c
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/289/trunk/src/google/protobuf-c/protobuf-c-rpc.c
+END
+gskrbtreemacros.h
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/114/trunk/src/google/protobuf-c/gskrbtreemacros.h
+END
+protobuf-c-data-buffer.h
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/284/trunk/src/google/protobuf-c/protobuf-c-data-buffer.h
+END

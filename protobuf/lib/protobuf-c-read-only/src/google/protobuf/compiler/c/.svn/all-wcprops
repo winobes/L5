@@ -1,0 +1,179 @@
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/329/trunk/src/google/protobuf/compiler/c
+END
+c_service.cc
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/189/trunk/src/google/protobuf/compiler/c/c_service.cc
+END
+c_helpers.cc
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/276/trunk/src/google/protobuf/compiler/c/c_helpers.cc
+END
+c_service.h
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/189/trunk/src/google/protobuf/compiler/c/c_service.h
+END
+c_enum.cc
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/329/trunk/src/google/protobuf/compiler/c/c_enum.cc
+END
+c_helpers.h
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/276/trunk/src/google/protobuf/compiler/c/c_helpers.h
+END
+c_enum.h
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/2/trunk/src/google/protobuf/compiler/c/c_enum.h
+END
+c_enum_field.cc
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/241/trunk/src/google/protobuf/compiler/c/c_enum_field.cc
+END
+c_string_field.cc
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/241/trunk/src/google/protobuf/compiler/c/c_string_field.cc
+END
+c_enum_field.h
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/82/trunk/src/google/protobuf/compiler/c/c_enum_field.h
+END
+c_primitive_field.cc
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/241/trunk/src/google/protobuf/compiler/c/c_primitive_field.cc
+END
+c_string_field.h
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/82/trunk/src/google/protobuf/compiler/c/c_string_field.h
+END
+c_bootstrap_unittest.cc
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/2/trunk/src/google/protobuf/compiler/c/c_bootstrap_unittest.cc
+END
+c_extension.cc
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/2/trunk/src/google/protobuf/compiler/c/c_extension.cc
+END
+c_primitive_field.h
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/82/trunk/src/google/protobuf/compiler/c/c_primitive_field.h
+END
+c_extension.h
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/2/trunk/src/google/protobuf/compiler/c/c_extension.h
+END
+c_file.cc
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/241/trunk/src/google/protobuf/compiler/c/c_file.cc
+END
+c_unittest.cc
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/2/trunk/src/google/protobuf/compiler/c/c_unittest.cc
+END
+c_file.h
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/2/trunk/src/google/protobuf/compiler/c/c_file.h
+END
+main.cc
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/2/trunk/src/google/protobuf/compiler/c/main.cc
+END
+c_field.cc
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/223/trunk/src/google/protobuf/compiler/c/c_field.cc
+END
+c_message.cc
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/276/trunk/src/google/protobuf/compiler/c/c_message.cc
+END
+c_field.h
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/82/trunk/src/google/protobuf/compiler/c/c_field.h
+END
+c_message.h
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/194/trunk/src/google/protobuf/compiler/c/c_message.h
+END
+c_generator.cc
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/276/trunk/src/google/protobuf/compiler/c/c_generator.cc
+END
+c_message_field.cc
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/241/trunk/src/google/protobuf/compiler/c/c_message_field.cc
+END
+c_generator.h
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/2/trunk/src/google/protobuf/compiler/c/c_generator.h
+END
+c_bytes_field.cc
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/241/trunk/src/google/protobuf/compiler/c/c_bytes_field.cc
+END
+c_message_field.h
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/82/trunk/src/google/protobuf/compiler/c/c_message_field.h
+END
+c_bytes_field.h
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/82/trunk/src/google/protobuf/compiler/c/c_bytes_field.h
+END
