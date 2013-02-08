@@ -26,6 +26,9 @@ void get_input(ALLEGRO_EVENT *event, bool *keys, bool *exit_game)
 			case ALLEGRO_KEY_LCTRL:
 				keys[LCTRL] = true;
 				break;
+			case ALLEGRO_KEY_LSHIFT:
+				keys[LSHIFT] = true;
+				break;
 			case ALLEGRO_KEY_A:
 				keys[KEYA] = true;
 				break;
@@ -55,6 +58,9 @@ void get_input(ALLEGRO_EVENT *event, bool *keys, bool *exit_game)
 				break;
 			case ALLEGRO_KEY_LCTRL:
 				keys[LCTRL] = false;
+				break;
+			case ALLEGRO_KEY_LSHIFT:
+				keys[LSHIFT] = false;
 				break;
 			case ALLEGRO_KEY_A:
 				keys[KEYA] = false;
@@ -247,11 +253,45 @@ void run_animatics (Animatic* ani, void (**ani_func) (Animatic*, int), int nanim
     return;
 }
 
+
+int fire_weapons(Weapon *weapon, int nweapons, Bullet *bullet_array, int nbullets, int current_bullet, int room, Position pos, Motion mot) {
+
+    int i;
+    float temp;
+
+    for (i = 0; i < nweapons; i++) {
+
+        if (weapon[i].fire && (weapon[i].timer <= 0)) { //if the triger is pulled and the reload time is complete, the weapon fires
+
+            weapon[i].timer = weapon[i].reload_time;
+            copy_bullet(weapon[i].bullet_temp, &(bullet_array[current_bullet]));
+            bullet_array[current_bullet].room = room; 
+            temp = bullet_array[current_bullet].pos.cx;
+            bullet_array[current_bullet].pos.cx = (bullet_array[current_bullet].pos.cx * cos(pos.cd) - bullet_array[current_bullet].pos.cy * sin(pos.cd)) + pos.cx;
+            bullet_array[current_bullet].pos.cd = pos.cd;
+            bullet_array[current_bullet].pos.cy = (temp * sin(pos.cd) + bullet_array[current_bullet].pos.cy * cos(pos.cd)) + pos.cy;
+            bullet_array[current_bullet].mot.dx += mot.dx + weapon[i].initial_velocity * cos(pos.cd- PI/2);
+            bullet_array[current_bullet].mot.dy += mot.dy + weapon[i].initial_velocity * sin(pos.cd- PI/2);
+
+            bullet_array[current_bullet].exist = true;
+            
+            if (current_bullet < nbullets) { 
+                current_bullet++;
+            } 
+            if (current_bullet >= nbullets) {
+                current_bullet = 0;
+            }
+           
+        }
+    }
+
+    return current_bullet;
+}
+
 void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 {
 
 	int i, j;
-    float temp;
 
     //bool check_again = true;
 
@@ -264,6 +304,7 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
     //Updating player logic 
         //turning player maneuvers on and off
         for ( i = 0; i < gs->player->nmaneuvers; i++) {
+
             //passing key input to maneuvers
             if (gs->player->man[i].state == 0) {
             //turn the maneuver off if it has reached the end of a cycle. Reset the maneuver state when it is turned off.
@@ -281,6 +322,20 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 
         run_active_maneuvers(gs->player->man, gs->player->man_func, gs->player->nmaneuvers, &(gs->player->pos), &(gs->player->mot));
 
+
+        for (i = 0; i < gs->player->nweapons; i++) {
+
+            if (gs->player->weapon[i].timer > 0) {
+                gs->player->weapon[i].timer--;
+            }
+        
+            if (keys[gs->player->weapon[i].key]) {
+                gs->player->weapon[i].fire = true; //pressing the key pulls the trigerr
+            }  else { 
+                gs->player->weapon[i].fire = false;
+            }
+        }
+
         update_position(&(gs->player->pos), gs->player->mot);
 
 		//recalculating the player vertices
@@ -291,68 +346,57 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
         //updating NPC logic
 		for (i = 0; i < gs->nnpcs; i++) {
 
-          for ( j = 0; j < gs->npc[i].nmaneuvers; j++) {
-            if (gs->npc[i].man[j].state == 0) {
-            //turn the maneuver off if it has reached the end of a cycle. Reset the maneuver state.
-               gs->npc[i].man[j].on = false;
-               gs->npc[i].man[j].state = 1;
+            if (gs->npc[i].health <= 0) {
+                gs->npc[i].exist = false;
+            }
+
+            if (gs->npc[i].exist) {
+
+                for ( j = 0; j < gs->npc[i].nmaneuvers; j++) {
+                if (gs->npc[i].man[j].state == 0) {
+                //turn the maneuver off if it has reached the end of a cycle. Reset the maneuver state.
+                   gs->npc[i].man[j].on = false;
+                   gs->npc[i].man[j].state = 1;
+                    }
+                }
+                // ai functions have the power to turn maneuvers on (like keys for the player)
+			    switch (gs->npc[i].ai) {
+			    case 0:
+				    break;
+			    case 1:
+				    ai1(&gs->npc[i], gs->player->ext, gs->current_room);
+				    break;
+			    }
+
+                //performing the active maneuver functions
+                run_active_maneuvers(gs->npc[i].man, gs->npc[i].man_func, gs->npc[i].nmaneuvers, &(gs->npc[i].pos), &(gs->npc[i].mot));
+
+
+            for (j = 0; j < gs->npc[i].nweapons; j++) {
+
+                if (gs->npc[i].weapon[i].timer > 0) {
+                    gs->npc[i].weapon[i].timer--;
+                }
+            
+                if (keys[gs->npc[i].weapon[j].key]) {
+                    gs->npc[i].weapon[j].fire = true; //pressing the key pulls the trigerr
+                }  else { 
+                    gs->npc[i].weapon[j].fire = false;
                 }
             }
-            // ai functions have the power to turn maneuvers on (like keys for the player)
-			switch (gs->npc[i].ai) {
-			case 0:
-				break;
-			case 1:
-				ai1(&gs->npc[i], gs->player->ext, gs->current_room);
-				break;
-			}
 
-            //performing the active maneuver functions
-            run_active_maneuvers(gs->npc[i].man, gs->npc[i].man_func, gs->npc[i].nmaneuvers, &(gs->npc[i].pos), &(gs->npc[i].mot));
+                update_position(&gs->npc[i].pos, gs->npc[i].mot);
 
-            update_position(&gs->npc[i].pos, gs->npc[i].mot);
-
-			//recalculating the NPC vertices
-			calculate_verts(&gs->npc[i].ext, gs->npc[i].pos.cx, gs->npc[i].pos.cy, gs->npc[i].pos.cd);
+			    //recalculating the NPC vertices
+			    calculate_verts(&gs->npc[i].ext, gs->npc[i].pos.cx, gs->npc[i].pos.cy, gs->npc[i].pos.cd);
+            }
 		}
            
                 
     //updating player bullets
         //creating new bullets when the weapon fires
-        for (i = 0; i < gs->player->nweapons; i++) {
+        gs->current_pb = fire_weapons(gs->player->weapon, gs->player->nweapons, gs->player_bullet, gs->n_player_bullets, gs->current_pb, gs->current_room, gs->player->pos, gs->player->mot);
 
-            if (gs->player->weapon[i].timer > 0) {
-                gs->player->weapon[i].timer--;
-            }
-        
-            if (keys[gs->player->weapon[i].key]) {
-                gs->player->weapon[i].fire = true; //pressing the key pulls the triger
-            }  else { 
-                gs->player->weapon[i].fire = false;
-            }
-
-            if (gs->player->weapon[i].fire && (gs->player->weapon[i].timer <= 0)) { //if the triger is pulled and the reload time is complete, the weapon fires
-                gs->player->weapon[i].timer = gs->player->weapon[i].reload_time;
-                copy_bullet(gs->player->weapon[i].bullet_temp, &(gs->player_bullet[gs->current_pb]));
-                gs->player_bullet[gs->current_pb].room = gs->current_room; 
-                temp = gs->player_bullet[gs->current_pb].pos.cx;
-                gs->player_bullet[gs->current_pb].pos.cx = (gs->player_bullet[gs->current_pb].pos.cx * cos(gs->player->pos.cd) - gs->player_bullet[gs->current_pb].pos.cy * sin(gs->player->pos.cd)) + gs->player->pos.cx;
-                gs->player_bullet[gs->current_pb].pos.cy = (temp * sin(gs->player->pos.cd) + gs->player_bullet[gs->current_pb].pos.cy * cos(gs->player->pos.cd)) + gs->player->pos.cy;
-                gs->player_bullet[gs->current_pb].mot.dx += gs->player->mot.dx + gs->player->weapon[i].initial_velocity * cos(gs->player->pos.cd- PI/2);
-                gs->player_bullet[gs->current_pb].mot.dy += gs->player->mot.dy + gs->player->weapon[i].initial_velocity * sin(gs->player->pos.cd- PI/2);
-
-                gs->player_bullet[gs->current_pb].exist = true;
-
-                if (gs->current_pb < gs->n_player_bullets) { 
-                    gs->current_pb++;
-                } 
-                if (gs->current_pb >= gs->n_player_bullets) {
-                    gs->current_pb = 0;
-                }
-               
-            }
-        }
-        
         for (i = 0; i < gs->n_player_bullets; i++) {
         if (gs->player_bullet[i].exist) {
             run_active_maneuvers(gs->player_bullet[i].man, gs->player_bullet[i].man_func, gs->player_bullet[i].nmaneuvers, &(gs->player_bullet[i].pos), &(gs->player_bullet[i].mot));
@@ -363,6 +407,29 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 		    calculate_verts(&gs->player_bullet[i].ext, gs->player_bullet[i].pos.cx, gs->player_bullet[i].pos.cy, gs->player_bullet[i].pos.cd);
 	    }
         }
+
+    // updating NPC bullets
+        //(bool) npc[i].weapon.fire is switched on and off by AI 
+
+        gs->npc[0].weapon[0].fire = true;
+
+        for (i = 0; i < gs->nnpcs; i++) {
+            gs->current_nb = fire_weapons(gs->npc[i].weapon, gs->npc[i].nweapons, gs->npc_bullet, gs->n_npc_bullets, gs->current_nb, gs->current_room, gs->npc[i].pos, gs->npc[i].mot);
+        }
+
+
+
+        for (i = 0; i < gs->n_npc_bullets; i++) {
+        if (gs->npc_bullet[i].exist) {
+            run_active_maneuvers(gs->npc_bullet[i].man, gs->npc_bullet[i].man_func, gs->npc_bullet[i].nmaneuvers, &(gs->npc_bullet[i].pos), &(gs->npc_bullet[i].mot));
+
+            update_position(&gs->npc_bullet[i].pos, gs->npc_bullet[i].mot);
+
+		        //recalculating the bullet vertices
+            calculate_verts(&gs->npc_bullet[i].ext, gs->npc_bullet[i].pos.cx, gs->npc_bullet[i].pos.cy, gs->npc_bullet[i].pos.cd);
+        }
+        }
+
 
    
 	    //player collisions with walls
@@ -436,6 +503,7 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
         if (gs->player_bullet[i].exist && gs->npc[j].exist && gs->player_bullet[i].room == gs->npc[j].room) {
         if (collide(gs->player_bullet[i].ext, gs->npc[j].ext, penetration_vector, &penetration_scalar)) {
             gs->player_bullet[i].exist = false;
+            gs->npc[j].health -= gs->player_bullet[i].damage;
         }
         }
         }
@@ -444,7 +512,7 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 //player bullet collisions with walls
         for ( i = 0; i < gs->n_player_bullets; i++) {
         for (j = 0; j < gs->room[gs->current_room]->nwalls; j++) {
-        if (gs->player_bullet[i].exist && gs->room[gs->current_room]->wall[i]->exist) {
+        if (gs->player_bullet[i].exist && gs->room[gs->current_room]->wall[j]->exist) {
         if (collide(gs->player_bullet[i].ext, gs->room[gs->current_room]->wall[j]->ext, penetration_vector, &penetration_scalar)) {
             gs->player_bullet[i].exist = false;
         }
@@ -467,6 +535,11 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
         }
         }
 
+        for (i = 0; i < gs->n_npc_bullets; i++) {
+        if (gs->npc_bullet[i].exist == true) {
+            run_animatics(gs->npc_bullet[i].ani, gs->npc_bullet[i].ani_func, gs->npc_bullet[i].nanimatics, gs->npc_bullet[i].man, gs->npc_bullet[i].nmaneuvers);
+        }
+        }
 
 // updating parallax background varriables
 		for (i = 0; i < gs->room[gs->current_room]->nbackgrounds; i++) {

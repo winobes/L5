@@ -93,6 +93,8 @@ typedef struct {
     int nmaneuvers;
     Maneuver *man;
     void (**man_func) (Position*, Motion*, Maneuver*, int);
+    int nweapons;
+    Weapon *weapon;
 } NPC;
 
 typedef struct {
@@ -163,8 +165,8 @@ typedef struct {
     int n_npc_bullets;
 } GameState;
 
-int NKEYS = 9;
-enum KEYS{UP, DOWN, LEFT, RIGHT, LCTRL, KEYA, KEYW, KEYS, KEYD};
+int NKEYS = 10;
+enum KEYS{UP, DOWN, LEFT, RIGHT, LCTRL, LSHIFT, KEYA, KEYW, KEYS, KEYD};
 
 const int width = 800;
 const int height = 600;

@@ -113,8 +113,6 @@ void do_graphics_update(GameState *gs, bool *redraw)
 
 
 
-
-
 		for (i = 0; i < gs->n_player_bullets; i++) {
 
 			if (gs->player_bullet[i].room == gs->current_room && gs->player_bullet[i].exist) {
@@ -152,6 +150,46 @@ void do_graphics_update(GameState *gs, bool *redraw)
 				);
 			}
 		}
+
+		for (i = 0; i < gs->n_npc_bullets; i++) {
+
+			if (gs->npc_bullet[i].room == gs->current_room && gs->npc_bullet[i].exist) {
+				al_set_target_bitmap(gs->npc_bullet[i].sprite);
+				al_clear_to_color(al_map_rgba(0,0,0,0));
+				//drawing the NPC animatics to its spritesheet
+				for (j = 0; j < gs->npc_bullet[i].nanimatics; j++) {
+					if (gs->npc_bullet[i].ani[j].draw) {
+						al_draw_tinted_scaled_rotated_bitmap_region(
+							gs->npc_bullet[i].spritesheet,
+							gs->npc_bullet[i].ani[j].frame * gs->npc_bullet[i].ani[j].w + gs->npc_bullet[i].ani[j].source_x,
+							gs->npc_bullet[i].ani[j].source_y,
+							gs->npc_bullet[i].ani[j].w,
+							gs->npc_bullet[i].ani[j].h,
+							gs->npc_bullet[i].ani[j].tint,
+							gs->npc_bullet[i].ani[j].pivot_x,
+							gs->npc_bullet[i].ani[j].pivot_y,
+							gs->npc_bullet[i].ani[j].destination_x,
+							gs->npc_bullet[i].ani[j].destination_y,
+							gs->npc_bullet[i].ani[j].scale_x,
+							gs->npc_bullet[i].ani[j].scale_y,
+							0,0);
+					}
+				}
+				al_set_target_backbuffer(gs->display);
+				//drawing the gs->npc_bullet[i] to the display
+				al_draw_scaled_rotated_bitmap(
+					gs->npc_bullet[i].sprite,
+					gs->npc_bullet[i].gfx_w/2, gs->npc_bullet[i].gfx_h/2, //center x,y
+					gs->npc_bullet[i].pos.cx - (gs->player->pos.cx - width/2), 
+					gs->npc_bullet[i].pos.cy - (gs->player->pos.cy - height/2), // destination of point center x,y
+					1, 1, //x scale, y scale
+					gs->npc_bullet[i].pos.cd, // angle		
+					0 //flags
+				);
+			}
+		}
+
+
 
 		//drawing animatics to the gs->player's sprite
 		al_set_target_bitmap(gs->player->sprite);
@@ -193,6 +231,21 @@ void do_graphics_update(GameState *gs, bool *redraw)
 		al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 5*12, ALLEGRO_ALIGN_RIGHT,"x = %f", gs->player->pos.cx);
 	al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 7*12, ALLEGRO_ALIGN_RIGHT,"npc[0].health = %f", gs->npc[0].health);
 al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 8*12, ALLEGRO_ALIGN_RIGHT,"npc[1].health = %f", gs->npc[1].health);
+
+
+
+//debugging player bullets
+/*
+for (i = 0; i < gs->n_player_bullets; i++) {
+if (gs->player_bullet[i].exist) {
+for (j = 0; j < gs->player_bullet[i].ext.nverts; j++) {
+    al_draw_pixel(gs->player_bullet[i].ext.vert[j][0]-(gs->player->pos.cx - width/2), gs->player_bullet[i].ext.vert[j][1]-(gs->player->pos.cy - height/2), al_map_rgb(0,255,0));
+
+al_draw_pixel(gs->player_bullet[i].pos.cx-(gs->player->pos.cx - width/2), gs->player_bullet[i].pos.cy-(gs->player->pos.cy - height/2), al_map_rgb(255,0,255));  
+  
+}}}*/
+
+
 
 
  

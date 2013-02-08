@@ -33,7 +33,12 @@ int game_loop() {
         gs->player_bullet[i].exist = false;
     }
     gs->current_pb = 0;
-    gs->npc_bullet = malloc(100 * sizeof(Bullet)); //TODO FREE
+
+    gs->n_npc_bullets = 100;
+    gs->npc_bullet = malloc(gs->n_npc_bullets * sizeof(Bullet)); //TODO FREE
+    for (i = 0; i < gs->n_npc_bullets; i++) {
+        gs->npc_bullet[i].exist = false;
+    }
     gs->current_nb = 0;
 	gs->font10 = al_load_font("fonts/Roboto-Black.ttf", 10,0);
 

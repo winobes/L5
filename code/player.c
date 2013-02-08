@@ -237,13 +237,17 @@ Player *init_player()
     player->ani[6].nframes = 4;
 
 
-	player->nweapons = 1;
+	player->nweapons = 2;
 
     player->weapon = malloc(player->nweapons * sizeof (Weapon)); //TODO FREE
 
     player->weapon[0].bullet_temp.nmaneuvers = 0;
     player->weapon[0].bullet_temp.nanimatics = 1;
     player->weapon[0].bullet_temp.ext.nverts = 4;
+
+    player->weapon[1].bullet_temp.nmaneuvers = 0;
+    player->weapon[1].bullet_temp.nanimatics = 2;
+    player->weapon[1].bullet_temp.ext.nverts = 4;
 
     for (i = 0; i < player->nweapons; i++) {
 
@@ -269,7 +273,6 @@ Player *init_player()
 
         for (j = 0; j < player->weapon[i].bullet_temp.nanimatics; j++) {
             player->weapon[i].bullet_temp.ani[j].source_x = 0;
-            player->weapon[i].bullet_temp.ani[j].source_y = 0;
             player->weapon[i].bullet_temp.ani[j].frame = 0;
             player->weapon[i].bullet_temp.ani[j].scale_x = 1;
             player->weapon[i].bullet_temp.ani[j].scale_y = 1;
@@ -303,7 +306,7 @@ Player *init_player()
     player->weapon[0].bullet_temp.mot.side_speed = 0;
     player->weapon[0].bullet_temp.gfx_w = 5;
     player->weapon[0].bullet_temp.gfx_h = 5;
-    player->weapon[0].bullet_temp.damage = 5;
+    player->weapon[0].bullet_temp.damage = 1;
     player->weapon[0].bullet_temp.ext.x[0] = -2.5;
     player->weapon[0].bullet_temp.ext.y[0] = -2.5;
     player->weapon[0].bullet_temp.ext.x[1] = 2.5;
@@ -324,6 +327,65 @@ Player *init_player()
     player->weapon[0].bullet_temp.ani[0].nframes = 6;
     player->weapon[0].bullet_temp.ani[0].frame_rate = 3;
     player->weapon[0].bullet_temp.ani_func[0] = &default_on_loop;
+    player->weapon[0].bullet_temp.ani[0].is_running = true;
+    player->weapon[0].bullet_temp.ani[0].destination_x = 0;
+    player->weapon[0].bullet_temp.ani[0].destination_y = 0;
+    player->weapon[0].bullet_temp.ani[0].frame = 0;
+
+
+
+    player->weapon[1].key = LSHIFT;
+    player->weapon[1].reload_time = 300;
+    player->weapon[1].initial_velocity = 1;
+    player->weapon[1].bullet_temp.spritesheet = al_load_bitmap("gfx/missile1.png");
+    player->weapon[1].bullet_temp.pos.cx = 0;
+    player->weapon[1].bullet_temp.pos.cy = 50;
+    player->weapon[1].bullet_temp.pos.cd = 0;
+    player->weapon[1].bullet_temp.mot.forward_speed = 0;
+    player->weapon[1].bullet_temp.mot.turn_speed = 0;
+    player->weapon[1].bullet_temp.mot.warp_speed = 0;
+    player->weapon[1].bullet_temp.mot.side_speed = 0;
+    player->weapon[1].bullet_temp.gfx_w = 32;
+    player->weapon[1].bullet_temp.gfx_h = 144;
+    player->weapon[1].bullet_temp.damage = 10;
+    player->weapon[1].bullet_temp.ext.x[0] = -4;
+    player->weapon[1].bullet_temp.ext.y[0] = -69;//-28-72;
+    player->weapon[1].bullet_temp.ext.x[1] = 4;
+    player->weapon[1].bullet_temp.ext.y[1] = -69;
+    player->weapon[1].bullet_temp.ext.x[2] = 6;
+    player->weapon[1].bullet_temp.ext.y[2] = 0;
+    player->weapon[1].bullet_temp.ext.x[3] = -6;
+    player->weapon[1].bullet_temp.ext.y[3] = 0;
+
+
+
+
+    //maneuver key & animaitcs would go here.
+    //man_func would go here.
+
+    player->weapon[1].bullet_temp.ani[0].w = 32;
+    player->weapon[1].bullet_temp.ani[0].h = 73;
+    player->weapon[1].bullet_temp.ani[0].nframes = 1;
+    player->weapon[1].bullet_temp.ani[0].frame_rate = 0;
+    player->weapon[1].bullet_temp.ani_func[0] = &default_on_static;
+    player->weapon[1].bullet_temp.ani[0].is_running = true;
+    player->weapon[1].bullet_temp.ani[0].source_y = 0;
+    player->weapon[1].bullet_temp.ani[0].destination_x = 0;
+    player->weapon[1].bullet_temp.ani[0].destination_y = 0;
+    player->weapon[1].bullet_temp.ani[0].frame = 0;
+
+
+    player->weapon[1].bullet_temp.ani[1].w = 20;
+    player->weapon[1].bullet_temp.ani[1].h = 80;
+    player->weapon[1].bullet_temp.ani[1].nframes = 4;
+    player->weapon[1].bullet_temp.ani[1].frame_rate = 15;
+    player->weapon[1].bullet_temp.ani_func[1] = &default_on_loop;
+    player->weapon[1].bullet_temp.ani[1].is_running = true;
+    player->weapon[1].bullet_temp.ani[1].is_running = true;
+    player->weapon[1].bullet_temp.ani[1].source_y = 74;
+    player->weapon[1].bullet_temp.ani[1].destination_x = 7;
+    player->weapon[1].bullet_temp.ani[1].destination_y = 74;
+    player->weapon[1].bullet_temp.ani[1].frame = 0;
 
 	return player;
 }
