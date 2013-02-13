@@ -141,7 +141,7 @@ void ai1 (NPC *npc, Extension target, int current_room) {
 				150,
 				200);
 
-	if (npc->room == current_room) {
+	if (npc->pos.room == current_room) {
 		// going after the player if it is ahead
 		if (collide(visLeftCentre, target, penetration_vector, &penetration_scalar)) {
             rotate_left(&npc->pos, &npc->mot, npc->man, 2);

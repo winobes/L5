@@ -17,34 +17,34 @@ void do_graphics_update(GameState *gs, bool *redraw)
 		//drawing the background tiles to the screen (there are maximum of four tiles for each layer)
 
 
-		for (i = 0; i < gs->room[gs->current_room]->nbackgrounds; i++) {
-			if (gs->room[gs->current_room]->background[i].is_tiled == true) {
-				al_draw_bitmap(gs->room[gs->current_room]->background[i].background_image,
-					-gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->pos.cx-gs->room[0]->w/2) + gs->room[gs->current_room]->background[i].x1*width,
-					-gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->pos.cy-gs->room[0]->h/2) + gs->room[gs->current_room]->background[i].y1*height,
+		for (i = 0; i < gs->room[gs->player->pos.room]->nbackgrounds; i++) {
+			if (gs->room[gs->player->pos.room]->background[i].is_tiled == true) {
+				al_draw_bitmap(gs->room[gs->player->pos.room]->background[i].background_image,
+					-gs->room[gs->player->pos.room]->background[i].parallax_rate*(gs->player->pos.cx-gs->room[0]->w/2) + gs->room[gs->player->pos.room]->background[i].x1*width,
+					-gs->room[gs->player->pos.room]->background[i].parallax_rate*(gs->player->pos.cy-gs->room[0]->h/2) + gs->room[gs->player->pos.room]->background[i].y1*height,
 					0);
 
-				al_draw_bitmap(gs->room[gs->current_room]->background[i].background_image,
-					-gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->pos.cx-gs->room[0]->w/2) + gs->room[gs->current_room]->background[i].x2*width,
-					-gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->pos.cy-gs->room[0]->h/2) + gs->room[gs->current_room]->background[i].y2*height,
+				al_draw_bitmap(gs->room[gs->player->pos.room]->background[i].background_image,
+					-gs->room[gs->player->pos.room]->background[i].parallax_rate*(gs->player->pos.cx-gs->room[0]->w/2) + gs->room[gs->player->pos.room]->background[i].x2*width,
+					-gs->room[gs->player->pos.room]->background[i].parallax_rate*(gs->player->pos.cy-gs->room[0]->h/2) + gs->room[gs->player->pos.room]->background[i].y2*height,
 					0);
 
-				al_draw_bitmap(gs->room[gs->current_room]->background[i].background_image,
-					-gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->pos.cx-gs->room[0]->w/2) + gs->room[gs->current_room]->background[i].x1*width,
-					-gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->pos.cy-gs->room[0]->h/2) + gs->room[gs->current_room]->background[i].y2*height,
+				al_draw_bitmap(gs->room[gs->player->pos.room]->background[i].background_image,
+					-gs->room[gs->player->pos.room]->background[i].parallax_rate*(gs->player->pos.cx-gs->room[0]->w/2) + gs->room[gs->player->pos.room]->background[i].x1*width,
+					-gs->room[gs->player->pos.room]->background[i].parallax_rate*(gs->player->pos.cy-gs->room[0]->h/2) + gs->room[gs->player->pos.room]->background[i].y2*height,
 					0);
 
-				al_draw_bitmap(gs->room[gs->current_room]->background[i].background_image,
-					-gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->pos.cx-gs->room[0]->w/2) + gs->room[gs->current_room]->background[i].x2*width,
-					-gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->pos.cy-gs->room[0]->h/2) + gs->room[gs->current_room]->background[i].y1*height,
+				al_draw_bitmap(gs->room[gs->player->pos.room]->background[i].background_image,
+					-gs->room[gs->player->pos.room]->background[i].parallax_rate*(gs->player->pos.cx-gs->room[0]->w/2) + gs->room[gs->player->pos.room]->background[i].x2*width,
+					-gs->room[gs->player->pos.room]->background[i].parallax_rate*(gs->player->pos.cy-gs->room[0]->h/2) + gs->room[gs->player->pos.room]->background[i].y1*height,
 					0);
 
 			}
 			
 			else {
-				al_draw_bitmap(gs->room[gs->current_room]->background[i].background_image,
-					gs->room[gs->current_room]->background[i].x1 - gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->pos.cx-gs->room[0]->w/2),
-					gs->room[gs->current_room]->background[i].y1 - gs->room[gs->current_room]->background[i].parallax_rate*(gs->player->pos.cy-gs->room[0]->h/2),
+				al_draw_bitmap(gs->room[gs->player->pos.room]->background[i].background_image,
+					gs->room[gs->player->pos.room]->background[i].x1 - gs->room[gs->player->pos.room]->background[i].parallax_rate*(gs->player->pos.cx-gs->room[0]->w/2),
+					gs->room[gs->player->pos.room]->background[i].y1 - gs->room[gs->player->pos.room]->background[i].parallax_rate*(gs->player->pos.cy-gs->room[0]->h/2),
 					0);
 			}
 
@@ -53,7 +53,7 @@ void do_graphics_update(GameState *gs, bool *redraw)
 			
 
 		for (i = 0; i < gs->nnpcs; i++) {
-			if (gs->npc[i].room == gs->current_room && gs->npc[i].exist) {
+			if (gs->npc[i].pos.room == gs->player->pos.room && gs->npc[i].exist) {
 				al_set_target_bitmap(gs->npc[i].sprite);
 				al_clear_to_color(al_map_rgba(0,0,0,0));
 				//drawing the NPC animatics to its spritesheet
@@ -89,23 +89,23 @@ void do_graphics_update(GameState *gs, bool *redraw)
 			}
 		}
 		//drawing the walls in the current room
-		for (i = 0; i < gs->room[gs->current_room]->nwalls; i++) {
+		for (i = 0; i < gs->room[gs->player->pos.room]->nwalls; i++) {
 			//all of the walls in the current room
 			// TODO check line break does not affect logic
-			if (gs->room[gs->current_room]->wall[i]->exist &&
-				gs->room[gs->current_room]->wall[i]->ext.vert[0][0] - gs->player->pos.cx < width/2 +
-					gs->room[gs->current_room]->wall[i]->h + gs->room[gs->current_room]->wall[i]->w &&
-				gs->room[gs->current_room]->wall[i]->ext.vert[0][1] - gs->player->pos.cy < height/2 +
-					gs->room[gs->current_room]->wall[i]->w + gs->room[gs->current_room]->wall[i]->h) {
+			if (gs->room[gs->player->pos.room]->wall[i]->exist &&
+				gs->room[gs->player->pos.room]->wall[i]->ext.vert[0][0] - gs->player->pos.cx < width/2 +
+					gs->room[gs->player->pos.room]->wall[i]->h + gs->room[gs->player->pos.room]->wall[i]->w &&
+				gs->room[gs->player->pos.room]->wall[i]->ext.vert[0][1] - gs->player->pos.cy < height/2 +
+					gs->room[gs->player->pos.room]->wall[i]->w + gs->room[gs->player->pos.room]->wall[i]->h) {
 				//only draw if it exist and is close enough to the gs->player that it might possibly be in view of the screen
 				al_draw_scaled_rotated_bitmap(
-					gs->room[gs->current_room]->wall[i]->sprite,
+					gs->room[gs->player->pos.room]->wall[i]->sprite,
 					0, //center x,y
 					0,
-					gs->room[gs->current_room]->wall[i]->ext.vert[0][0] - (gs->player->pos.cx - width/2),
-					gs->room[gs->current_room]->wall[i]->ext.vert[0][1] - (gs->player->pos.cy - height/2), //destination of point center x,y
+					gs->room[gs->player->pos.room]->wall[i]->ext.vert[0][0] - (gs->player->pos.cx - width/2),
+					gs->room[gs->player->pos.room]->wall[i]->ext.vert[0][1] - (gs->player->pos.cy - height/2), //destination of point center x,y
 					1, 1, //x scale, y scale
-					gs->room[gs->current_room]->wall[i]->d, // angle		
+					gs->room[gs->player->pos.room]->wall[i]->d, // angle		
 					0 //flags
 				);
 			}
@@ -115,7 +115,7 @@ void do_graphics_update(GameState *gs, bool *redraw)
 
 		for (i = 0; i < gs->n_player_bullets; i++) {
 
-			if (gs->player_bullet[i].room == gs->current_room && gs->player_bullet[i].exist) {
+			if (gs->player_bullet[i].pos.room == gs->player->pos.room && gs->player_bullet[i].exist) {
 				al_set_target_bitmap(gs->player_bullet[i].sprite);
 				al_clear_to_color(al_map_rgba(0,0,0,0));
 				//drawing the NPC animatics to its spritesheet
@@ -153,7 +153,7 @@ void do_graphics_update(GameState *gs, bool *redraw)
 
 		for (i = 0; i < gs->n_npc_bullets; i++) {
 
-			if (gs->npc_bullet[i].room == gs->current_room && gs->npc_bullet[i].exist) {
+			if (gs->npc_bullet[i].pos.room == gs->player->pos.room && gs->npc_bullet[i].exist) {
 				al_set_target_bitmap(gs->npc_bullet[i].sprite);
 				al_clear_to_color(al_map_rgba(0,0,0,0));
 				//drawing the NPC animatics to its spritesheet

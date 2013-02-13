@@ -16,6 +16,7 @@ typedef struct {
 typedef struct {
 	// current x, current y, direction
 	float cx, cy, cd;
+    int room;
 } Position;
 
 typedef struct {
@@ -59,7 +60,6 @@ typedef struct {
     Extension ext;
     ALLEGRO_BITMAP *spritesheet, *sprite;
     int gfx_w, gfx_h;
-    int room;
     int nanimatics;
     Animatic *ani;
     void (**ani_func) (Animatic*, int);
@@ -83,7 +83,7 @@ typedef struct {
 	float health;
 	Position pos;
 	float bouncy;  // bounce elasticity
-	int room, ai, gfx_w, gfx_h;
+	int ai, gfx_w, gfx_h;
 	Extension ext;
 	Motion mot;
 	int nanimatics;
@@ -121,11 +121,11 @@ typedef struct {
 typedef struct {
 	float health;
 	bool exist, solid, hot;
-	// the wall's location is fully and independenly described by verts.
 	// w and h are good for initializing.
 	// d is used for drawing the sprite appropriately.
 	float w, h, d; 
 	Extension ext;
+    // wall does not need a position struct since it does not move and is a part of the room in which it exists
 	ALLEGRO_BITMAP *sprite;
 } Wall;
 

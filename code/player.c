@@ -19,6 +19,7 @@ Player *init_player()
 	player->pos.cx = 20;
 	player->pos.cy = 20;
 	player->pos.cd = 0;
+    player->pos.room = 0;
 
 	player->ext.nverts = 8;
 

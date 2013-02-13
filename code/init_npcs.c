@@ -15,10 +15,10 @@ NPC *init_npcs(GameState *gs)
 	npc[0].pos.cx = 0;
 	npc[0].pos.cy = 0;
 	npc[0].pos.cd = PI/2;
+	npc[0].pos.room = 0;
 	npc[0].bouncy = 100;
 	npc[0].gfx_w = 15;
 	npc[0].gfx_h = 15;
-	npc[0].room = 0;
 	npc[0].ai = 1;
 	npc[0].mot.dx = 0;
 	npc[0].mot.dy = -1;
@@ -253,10 +253,11 @@ npc[0].man_func = malloc(npc[0].nmaneuvers * sizeof (void (*)(Position*, Motion*
 	npc[1].pos.cx = 10;
 	npc[1].pos.cy = 10;
 	npc[1].pos.cd = PI/2;
+	npc[1].pos.room = 0;
 	npc[1].bouncy = 100;
 	npc[1].gfx_w = 15;
 	npc[1].gfx_h = 15;
-	npc[1].room = 0;
+
 	npc[1].ai = 1;
 	npc[1].mot.dx = 0;
 	npc[1].mot.dy = -1;
