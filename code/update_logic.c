@@ -432,20 +432,19 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 	    //player collisions with walls
 	    gs->player->hit_wall = -1;
 	    for (i = 0; i < gs->room[gs->player->pos.room]->nwalls; i++) {
-		    if (gs->room[gs->player->pos.room]->wall[i]->exist) {
+	    if (gs->room[gs->player->pos.room]->wall[i]->exist) {
+	    if (collide(gs->player->ext, gs->room[gs->player->pos.room]->wall[i]->ext, penetration_vector, &penetration_scalar)) {
 
-			    if (collide(gs->player->ext, gs->room[gs->player->pos.room]->wall[i]->ext, penetration_vector, &penetration_scalar)) {
+	        gs->player->hit_wall = i;
 
-				    gs->player->hit_wall = i;
-			
-				    if (gs->room[gs->player->pos.room]->wall[i]->solid) {
-					    gs->player->pos.cx += penetration_vector[0] * penetration_scalar;
-					    gs->player->pos.cy += penetration_vector[1] * penetration_scalar;
-			
-					    reflect(&gs->player->mot.dx, &gs->player->mot.dy, penetration_vector);
-				    }
-			    }
-		    }
+	        if (gs->room[gs->player->pos.room]->wall[i]->solid) {
+		        gs->player->pos.cx += penetration_vector[0] * penetration_scalar;
+		        gs->player->pos.cy += penetration_vector[1] * penetration_scalar;
+		        reflect(&gs->player->mot.dx, &gs->player->mot.dy, penetration_vector);
+	        }
+
+	    }
+	    }
 	    }
 
 		//player collisions with NPCs
@@ -484,9 +483,9 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 		    if (collide(gs->npc[i].ext, gs->room[gs->npc[i].pos.room]->wall[j]->ext, penetration_vector, &penetration_scalar)) {
 		    if (gs->room[gs->npc[i].pos.room]->wall[j]->solid) {
 			    gs->npc[i].pos.cx += penetration_vector[0] * penetration_scalar;
-				    gs->npc[i].pos.cy += penetration_vector[1] * penetration_scalar;
+			    gs->npc[i].pos.cy += penetration_vector[1] * penetration_scalar;
 	
-				    reflect(&gs->npc[i].mot.dx, &gs->npc[i].mot.dy, penetration_vector);
+			    reflect(&gs->npc[i].mot.dx, &gs->npc[i].mot.dy, penetration_vector);
 		    }
 		    }
 		}
@@ -540,16 +539,19 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 
 // updating parallax background varriables
 		for (i = 0; i < gs->room[gs->player->pos.room]->nbackgrounds; i++) {
-			if (gs->room[gs->player->pos.room]->background[i].is_tiled == true) {
-				update_background(&gs->room[gs->player->pos.room]->background[i],
-									gs->player->pos.cx,
-									gs->player->pos.cy,
-									gs->room[gs->player->pos.room]->w,
-									gs->room[gs->player->pos.room]->h);
-			}
+		if (gs->room[gs->player->pos.room]->background[i].is_tiled == true) {
+			update_background(
+                &gs->room[gs->player->pos.room]->background[i],
+			    gs->player->pos.cx,
+			    gs->player->pos.cy,
+			    gs->room[gs->player->pos.room]->w,
+			    gs->room[gs->player->pos.room]->h);
 		}
+		}
+
+
+
 	}
-	
 }
 
 
