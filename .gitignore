@@ -16,6 +16,8 @@
 *.out
 *.app
 a
+protobuf/try_walls/create_amessage
+protobuf/try_walls/read_amessage
 
 # Temporary Files
 *~
