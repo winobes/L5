@@ -157,7 +157,7 @@ npc[0].man_func = malloc(npc[0].nmaneuvers * sizeof (void (*)(Position*, Motion*
 
     npc[0].nweapons = 1;
 
-    npc[0].weapon = malloc(npc[0].nweapons * sizeof (Weapon)); //TODO FREE
+    npc[0].weapon = malloc(npc[0].nweapons * sizeof (Weapon)); 
 
     npc[0].weapon[0].bullet_temp.nmaneuvers = 0;
     npc[0].weapon[0].bullet_temp.nanimatics = 1;
@@ -167,16 +167,16 @@ npc[0].man_func = malloc(npc[0].nmaneuvers * sizeof (void (*)(Position*, Motion*
 
         npc[0].weapon[i].timer = 0;
         npc[0].weapon[i].fire = false;
-        npc[0].weapon[i].bullet_temp.ani = malloc(npc[0].weapon[i].bullet_temp.nanimatics * sizeof (Animatic)); //TODO FREE
+        npc[0].weapon[i].bullet_temp.ani = malloc(npc[0].weapon[i].bullet_temp.nanimatics * sizeof (Animatic)); 
         npc[0].weapon[i].bullet_temp.ani_func = malloc(npc[0].weapon[i].bullet_temp.nanimatics * sizeof (void (*)(Animatic*, int)));
-        npc[0].weapon[i].bullet_temp.man = malloc(npc[0].weapon[i].bullet_temp.nmaneuvers * sizeof (Maneuver)); //TODO FREE
-        npc[0].weapon[i].bullet_temp.man_func = malloc(npc[0].weapon[i].bullet_temp.nanimatics * sizeof (void (*)(Position*, Motion*, Maneuver, int))); //TODO free
+        npc[0].weapon[i].bullet_temp.man = malloc(npc[0].weapon[i].bullet_temp.nmaneuvers * sizeof (Maneuver)); 
+        npc[0].weapon[i].bullet_temp.man_func = malloc(npc[0].weapon[i].bullet_temp.nanimatics * sizeof (void (*)(Position*, Motion*, Maneuver, int)));
 	    npc[0].weapon[i].bullet_temp.ext.vert = malloc(npc[0].weapon[i].bullet_temp.ext.nverts * sizeof(float*));
-        	npc[0].weapon[i].bullet_temp.ext.x = malloc(npc[0].weapon[i].bullet_temp.ext.nverts * sizeof(float));  //TODO FREE
-	        npc[0].weapon[i].bullet_temp.ext.y = malloc(npc[0].weapon[i].bullet_temp.ext.nverts * sizeof(float)); //TODO FREE
+        	npc[0].weapon[i].bullet_temp.ext.x = malloc(npc[0].weapon[i].bullet_temp.ext.nverts * sizeof(float));  
+	        npc[0].weapon[i].bullet_temp.ext.y = malloc(npc[0].weapon[i].bullet_temp.ext.nverts * sizeof(float)); 
 
 	    for (j = 0; j < npc[0].weapon[i].bullet_temp.ext.nverts; j++) {
-		    npc[0].weapon[i].bullet_temp.ext.vert[j] = malloc(2 * sizeof(float)); //TODO FREE
+		    npc[0].weapon[i].bullet_temp.ext.vert[j] = malloc(2 * sizeof(float)); 
 	    }
 
         for (j = 0; j < npc[0].weapon[i].bullet_temp.nmaneuvers; j++) {
@@ -390,6 +390,7 @@ npc[0].man_func = malloc(npc[0].nmaneuvers * sizeof (void (*)(Position*, Motion*
 	npc[1].ani[2].tint = al_map_rgba_f(1,1,1,1);
 
     npc[1].nweapons = 0;
+    npc[1].weapon = NULL;
 
 	return npc;
 }
