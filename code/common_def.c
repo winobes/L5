@@ -31,13 +31,14 @@ typedef struct {
 	float turn_speed;
 	float warp_speed;
 	float side_speed;
+    float movement_angle;
 } Motion;
 
 typedef struct {
     bool on;
     bool has_run; //ensures that Maneuvers turned on by other Maneuvers start in the same loop that they are turned on.
     int state; //keeps track of where we were in the maneuver function. 1 is the beginning of a loop, 0 is the end.
-    int *animatic; //array of indexes of animations linked with this maneuver
+    int *animatic; //array of indexes of animations linked to this maneuver
     int nanimatics; //number of animations this maneuver triggers
     int key; //consider changing this to an array for key-combo moves
 } Maneuver;

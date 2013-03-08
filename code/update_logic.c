@@ -199,7 +199,7 @@ void update_position(Position* pos, Motion mot) {
 		pos->cd += 2*PI;
 	}
 
-	//updating player position based on dx and dy
+	//updating position based on dx and dy
 	pos->cx += mot.dx;
 	pos->cy += mot.dy;
 
@@ -335,7 +335,13 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 		//recalculating the player vertices
 		calculate_verts(&gs->player->ext, gs->player->pos.cx, gs->player->pos.cy, gs->player->pos.cd);
 
+        gs->player->mot.movement_angle = get_velangle(gs->player->mot.dx, gs->player->mot.dy);
 
+        gs->player->mot.spd = calculate_speed(gs->player->mot.dx, gs->player->mot.dy);
+	
+/*	if (gs->player->mot.spd > 10) {
+		gs->player.mot.dx = */
+		
 
         //updating NPC logic
 		for (i = 0; i < gs->nnpcs; i++) {
@@ -466,8 +472,8 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 				    &gs->player->mot.dy,
 				    &gs->npc[i].mot.dx,
 				    &gs->npc[i].mot.dy);
-		    calculate_speed(gs->player->mot.dx, gs->player->mot.dy, &gs->player->mot.spd);
-		    calculate_speed(gs->npc[i].mot.dx, gs->npc[i].mot.dy, &gs->npc[i].mot.spd);
+		    gs->player->mot.spd = calculate_speed(gs->player->mot.dx, gs->player->mot.dy);
+		    gs->npc[i].mot.spd = calculate_speed(gs->npc[i].mot.dx, gs->npc[i].mot.dy);
 		}
 		}
 		}
