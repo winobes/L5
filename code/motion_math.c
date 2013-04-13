@@ -33,8 +33,8 @@ void normalize(float* v) {
 }
 
 
-void calculate_speed(float dy, float dx, float* s) {
-	*s = sqrt(dy*dy+dx*dx);
+float calculate_speed(float dy, float dx) {
+	return sqrt(dy*dy+dx*dx);
 }
 
 

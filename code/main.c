@@ -18,7 +18,6 @@
 #include "game_loop.c"
 
 
-
 int main (int argc, char* argv[]) {
 
 	game_loop();

@@ -98,11 +98,11 @@ void copy_bullet (Bullet source, Bullet* dest) {
     dest->mot.side_speed = source.mot.side_speed;
 
     dest->ext.nverts = source.ext.nverts;
-    dest->ext.vert = malloc(dest->ext.nverts * sizeof (float*));//TODO FREE
-    dest->ext.x = malloc(dest->ext.nverts * sizeof (float));//TODO FREE
-    dest->ext.y = malloc(dest->ext.nverts * sizeof (float));//TODO FREE
+    dest->ext.vert = malloc(dest->ext.nverts * sizeof (float*));
+    dest->ext.x = malloc(dest->ext.nverts * sizeof (float));
+    dest->ext.y = malloc(dest->ext.nverts * sizeof (float));
     for (i = 0; i < dest->ext.nverts; i++) {
-        dest->ext.vert[i] = malloc(2 * sizeof(float));//TODO FREE
+        dest->ext.vert[i] = malloc(2 * sizeof(float));
         dest->ext.x[i] = source.ext.x[i];
         dest->ext.y[i] = source.ext.y[i];
     }
@@ -117,8 +117,8 @@ void copy_bullet (Bullet source, Bullet* dest) {
     dest->sprite = al_create_bitmap(dest->gfx_w, dest->gfx_h);
 
     dest->nanimatics = source.nanimatics;
-    dest->ani = malloc(dest->nanimatics * sizeof(Animatic)); //TODO FREE
-    dest->ani_func = malloc(dest->nanimatics * sizeof (void (*)(Animatic*, int))); //TODO FREE
+    dest->ani = malloc(dest->nanimatics * sizeof(Animatic));
+    dest->ani_func = malloc(dest->nanimatics * sizeof (void (*)(Animatic*, int)));
     for (i = 0; i < dest->nanimatics; i++) {
         dest->ani[i].source_x = source.ani[i].source_x;
         dest->ani[i].source_y = source.ani[i].source_y;
@@ -143,22 +143,19 @@ void copy_bullet (Bullet source, Bullet* dest) {
     }
 
     dest->nmaneuvers = source.nmaneuvers;
-    dest->man = malloc(dest->nmaneuvers * sizeof (Maneuver)); //TODO FREE
-    dest->man_func = malloc(dest->nmaneuvers * sizeof (void (*) (Position*, Motion*, Maneuver*, int)));//TODO FREE
+    dest->man = malloc(dest->nmaneuvers * sizeof (Maneuver));
+    dest->man_func = malloc(dest->nmaneuvers * sizeof (void (*) (Position*, Motion*, Maneuver*, int)));
     for (i = 0; i < dest->nmaneuvers; i++) {
         dest->man[i].on = source.man[i].on;
         dest->man[i].has_run = source.man[i].has_run;
         dest->man[i].state = source.man[i].state;
         dest->man[i].key = source.man[i].key;
         dest->man[i].nanimatics = source.man[i].nanimatics;
-        dest->man[i].animatic = malloc(dest->man[i].nanimatics * sizeof (int)); //TODO FREE
+        dest->man[i].animatic = malloc(dest->man[i].nanimatics * sizeof (int));
         for (j = 0; j < dest->man[i].nanimatics; j++) {
             dest->man[i].animatic[j] = source.man[i].animatic[j];
         }
     }
-
-    dest->exist = true;
-    dest->damage = source.damage;
 
 return;
 }
@@ -202,7 +199,7 @@ void update_position(Position* pos, Motion mot) {
 		pos->cd += 2*PI;
 	}
 
-	//updating player position based on dx and dy
+	//updating position based on dx and dy
 	pos->cx += mot.dx;
 	pos->cy += mot.dy;
 
@@ -338,7 +335,13 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 		//recalculating the player vertices
 		calculate_verts(&gs->player->ext, gs->player->pos.cx, gs->player->pos.cy, gs->player->pos.cd);
 
+        gs->player->mot.movement_angle = get_velangle(gs->player->mot.dx, gs->player->mot.dy);
 
+        gs->player->mot.spd = calculate_speed(gs->player->mot.dx, gs->player->mot.dy);
+	
+/*	if (gs->player->mot.spd > 10) {
+		gs->player.mot.dx = */
+		
 
         //updating NPC logic
 		for (i = 0; i < gs->nnpcs; i++) {
@@ -469,8 +472,8 @@ void update_logic(ALLEGRO_EVENT *event, bool *keys, GameState *gs)
 				    &gs->player->mot.dy,
 				    &gs->npc[i].mot.dx,
 				    &gs->npc[i].mot.dy);
-		    calculate_speed(gs->player->mot.dx, gs->player->mot.dy, &gs->player->mot.spd);
-		    calculate_speed(gs->npc[i].mot.dx, gs->npc[i].mot.dy, &gs->npc[i].mot.spd);
+		    gs->player->mot.spd = calculate_speed(gs->player->mot.dx, gs->player->mot.dy);
+		    gs->npc[i].mot.spd = calculate_speed(gs->npc[i].mot.dx, gs->npc[i].mot.dy);
 		}
 		}
 		}

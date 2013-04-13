@@ -243,6 +243,9 @@ Room **init_rooms(GameState *gs)
 		
 	for (i = 0; i < gs->nrooms; i++) {
 		for (j = 0; j < room[i]->nwalls; j++) {
+            room[i]->wall[j]->ext.x = NULL;
+            room[i]->wall[j]->ext.y = NULL;
+            //calculate_verts_wall does not use x and y.
 			calculate_verts_wall(&room[i]->wall[j]->ext, room[i]->wall[j]->w, room[i]->wall[j]->h, room[i]->wall[j]->d);
 		}
 	}

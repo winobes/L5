@@ -232,7 +232,17 @@ void do_graphics_update(GameState *gs, bool *redraw)
 	al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 7*12, ALLEGRO_ALIGN_RIGHT,"npc[0].health = %f", gs->npc[0].health);
 al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 8*12, ALLEGRO_ALIGN_RIGHT,"npc[1].health = %f", gs->npc[1].health);
 
+al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 10*12, ALLEGRO_ALIGN_RIGHT,"Player Speed = %f", sqrt(gs->player->mot.dx*gs->player->mot.dx + gs->player->mot.dy*gs->player->mot.dy));
 
+al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 11*12, ALLEGRO_ALIGN_RIGHT,"Player Direc = %f", gs->player->pos.cd);
+
+al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 12*12, ALLEGRO_ALIGN_RIGHT,"Player VAngl = %f", gs->player->mot.movement_angle);
+
+al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 13*12, ALLEGRO_ALIGN_RIGHT,"cos(d)*s = %f", -cos(gs->player->mot.movement_angle)*sqrt(gs->player->mot.dx*gs->player->mot.dx + gs->player->mot.dy*gs->player->mot.dy));
+al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 14*12, ALLEGRO_ALIGN_RIGHT,"sin(d)*s = %f", sin(gs->player->mot.movement_angle)*sqrt(gs->player->mot.dx*gs->player->mot.dx + gs->player->mot.dy*gs->player->mot.dy));
+
+al_draw_textf(gs->font10, al_map_rgb(83, 207, 46), width, 15*12, ALLEGRO_ALIGN_RIGHT,"Player Speed = %f", gs->player->mot.spd);
+ 
 
 //debugging player bullets
 /*

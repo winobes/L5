@@ -240,7 +240,7 @@ Player *init_player()
 
 	player->nweapons = 2;
 
-    player->weapon = malloc(player->nweapons * sizeof (Weapon)); //TODO FREE
+    player->weapon = malloc(player->nweapons * sizeof (Weapon));
 
     player->weapon[0].bullet_temp.nmaneuvers = 0;
     player->weapon[0].bullet_temp.nanimatics = 1;
@@ -254,16 +254,16 @@ Player *init_player()
 
         player->weapon[i].timer = 0;
         player->weapon[i].fire = false;
-        player->weapon[i].bullet_temp.ani = malloc(player->weapon[i].bullet_temp.nanimatics * sizeof (Animatic)); //TODO FREE
+        player->weapon[i].bullet_temp.ani = malloc(player->weapon[i].bullet_temp.nanimatics * sizeof (Animatic));
         player->weapon[i].bullet_temp.ani_func = malloc(player->weapon[i].bullet_temp.nanimatics * sizeof (void (*)(Animatic*, int)));
-        player->weapon[i].bullet_temp.man = malloc(player->weapon[i].bullet_temp.nmaneuvers * sizeof (Maneuver)); //TODO FREE
-        player->weapon[i].bullet_temp.man_func = malloc(player->weapon[i].bullet_temp.nanimatics * sizeof (void (*)(Position*, Motion*, Maneuver, int))); //TODO free
+        player->weapon[i].bullet_temp.man = malloc(player->weapon[i].bullet_temp.nmaneuvers * sizeof (Maneuver));
+        player->weapon[i].bullet_temp.man_func = malloc(player->weapon[i].bullet_temp.nanimatics * sizeof (void (*)(Position*, Motion*, Maneuver, int)));
 	    player->weapon[i].bullet_temp.ext.vert = malloc(player->weapon[i].bullet_temp.ext.nverts * sizeof(float*));
-        	player->weapon[i].bullet_temp.ext.x = malloc(player->weapon[i].bullet_temp.ext.nverts * sizeof(float));  //TODO FREE
-	        player->weapon[i].bullet_temp.ext.y = malloc(player->weapon[i].bullet_temp.ext.nverts * sizeof(float)); //TODO FREE
+        	player->weapon[i].bullet_temp.ext.x = malloc(player->weapon[i].bullet_temp.ext.nverts * sizeof(float)); 
+	        player->weapon[i].bullet_temp.ext.y = malloc(player->weapon[i].bullet_temp.ext.nverts * sizeof(float));
 
 	    for (j = 0; j < player->weapon[i].bullet_temp.ext.nverts; j++) {
-		    player->weapon[i].bullet_temp.ext.vert[j] = malloc(2 * sizeof(float)); //TODO FREE
+		    player->weapon[i].bullet_temp.ext.vert[j] = malloc(2 * sizeof(float));
 	    }
 
         for (j = 0; j < player->weapon[i].bullet_temp.nmaneuvers; j++) {
