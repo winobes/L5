@@ -14,16 +14,21 @@ f = open(sys.argv[1], 'rb')
 awall.ParseFromString(f.read())
 f.close()
 
-print awall.health
-print awall.exists
-print awall.solid
-print awall.hot
-print awall.w
-print awall.h
-print awall.d
+print 'health: ', awall.health
+print 'exists: ', awall.exists
+print 'solid: ', awall.solid
+print 'hot: ', awall.hot
+print 'w: ', awall.w
+print 'h: ', awall.h
+print 'd: ', awall.d
 ext = awall.ext
-print ext.nverts
-vert = ext.vert[0]
-print vert.x
-print vert.y
-print awall.sprite_name
+if ext:
+  print 'ext: ~ True'
+print 'ext.nverts: ', ext.nverts
+for ind in xrange(0, ext.nverts):
+  vert = ext.vert[ind]
+  if vert:
+    print 'vert[%d]: ~ True' % ind
+  print 'x: ', vert.x
+  print 'y: ', vert.y
+print 'sprite: ', awall.sprite_name
