@@ -156,8 +156,11 @@ void copy_bullet (Bullet source, Bullet* dest) {
             dest->man[i].animatic[j] = source.man[i].animatic[j];
         }
     }
-
-return;
+/*
+    dest->exist = true;
+    dest->damage = source.damage;
+*/
+    return;
 }
 
 void run_active_maneuvers (Maneuver *man, void (**man_func) (Position*, Motion*, Maneuver*, int), int nmaneuvers, Position *pos, Motion *mot) {
