@@ -2,7 +2,7 @@
 #include "log.h"
 #include "error.h"
 
-void init_allegro(core_components *core) {
+void init_allegro(engine_core *core) {
     log_msg(LOADING, "Initializing core components...");
 
     core->timer = NULL;
@@ -60,7 +60,7 @@ void init_allegro(core_components *core) {
 }
 
 
-void game_loop(core_components *core) {
+void game_loop(engine_core *core) {
 
     bool exit_game = false;
 
@@ -70,16 +70,13 @@ void game_loop(core_components *core) {
     int i = 0;
     log_msg(LOADING, "Starting game loop.");
     while(!exit_game) {
+        al_wait_for_event(core->queue, &event);
+        if (event.type == ALLEGRO_EVENT_TIMER) {
+            log_msg(GAME, "tick %i", i);
+            i++;
+        }
 
-    al_wait_for_event(core->queue, &event);
-
-    if (event.type == ALLEGRO_EVENT_TIMER) {
-        log_msg(GAME, "tick %i", i);
-        i++;
-    }
-
-    if (i == 10)
-        exit_game = true;
+    if (i == 10) exit_game = true;
 
     // get input
 
@@ -92,7 +89,7 @@ void game_loop(core_components *core) {
 }
 
 
-void game_shutdown(core_components *core) {
+void game_shutdown(engine_core *core) {
 
     log_msg(LOADING, "Shutting down core components...");
 

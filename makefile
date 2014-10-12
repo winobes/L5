@@ -1,19 +1,22 @@
-objects = main.o core.o log.o error.o
+objects = main.o core.o log.o error.o physics.o
 
 game : $(objects)
-	gcc -Wall -o "L5 Arena" $(objects) `pkg-config --libs allegro_main-5.0 allegro_dialog-5.0` 
+	gcc -std=c99 -Wall -o "L5 Arena" $(objects) `pkg-config --libs allegro_main-5.0 allegro_dialog-5.0` -lm
 
 main.o : main.c core.h 
-	gcc -Wall -c -o main.o main.c
+	gcc -std=c99 -Wall -c -o main.o main.c
 
 core.o : core.c core.h
-	gcc -Wall `pkg-config --cflags allegro_main-5.0` -c -o core.o core.c
+	gcc -std=c99 -Wall `pkg-config --cflags allegro_main-5.0` -c -o core.o core.c
 
 log.o : log.c log.h
-	gcc -Wall -c -o log.o log.c `pkg-config --cflags`
+	gcc -std=c99 -Wall -c -o log.o log.c `pkg-config --cflags`
 
 error.o : error.c error.h
-	gcc -Wall -c -o error.o error.c
+	gcc -std=c99 -Wall -c -o error.o error.c
+
+physics.o : physics.c physics.h
+	gcc -std=c99 -Wall -c -o physics.o physics.c
 
 .PHONY : clean
 clean : 
