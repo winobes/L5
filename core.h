@@ -9,14 +9,14 @@
 #define DISPLAY_HEIGHT 600
 #define BPS 60
 
-typedef struct engine_core {
+typedef struct Engine_Core {
         ALLEGRO_TIMER *timer;
         ALLEGRO_EVENT_QUEUE *queue;
         ALLEGRO_DISPLAY *display;
-} engine_core;
+} Engine_Core;
 
-void init_allegro(engine_core *core);
-void game_loop(engine_core *core);
-void game_shutdown(engine_core *core);
+void init_allegro(Engine_Core *core);
+void game_loop(Engine_Core *core);
+void game_shutdown(Engine_Core *core);
 
 #endif /* CORE_H */

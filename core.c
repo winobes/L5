@@ -2,7 +2,7 @@
 #include "log.h"
 #include "error.h"
 
-void init_allegro(engine_core *core) {
+void init_allegro(Engine_Core *core) {
     log_msg(LOADING, "Initializing core components...");
 
     core->timer = NULL;
@@ -60,7 +60,7 @@ void init_allegro(engine_core *core) {
 }
 
 
-void game_loop(engine_core *core) {
+void game_loop(Engine_Core *core) {
 
     bool exit_game = false;
 
@@ -89,7 +89,7 @@ void game_loop(engine_core *core) {
 }
 
 
-void game_shutdown(engine_core *core) {
+void game_shutdown(Engine_Core *core) {
 
     log_msg(LOADING, "Shutting down core components...");
 

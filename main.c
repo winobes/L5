@@ -2,7 +2,7 @@
 
 int main (int argc, char* argv[]) {
 
-        engine_core core; 
+        Engine_Core core; 
 
         init_allegro(&core); 
         game_loop(&core);

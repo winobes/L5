@@ -3,15 +3,20 @@
 
 #include <stdbool.h>
 
-typedef struct vector {
+typedef struct Point {
     double x;
     double y;
-} vector;
+} Point;
 
-typedef struct line {
-    vector p1;
-    vector p2;
-} line;
+typedef struct Vector {
+    double direction;
+    double magnitude;
+} Vector;
+
+typedef struct Line {
+    Point p1;
+    Point p2;
+} Line;
 
 /* A polygon's vertices are described by their position relative to its
  * center. It may be important that the center point is actually inside 
@@ -19,10 +24,10 @@ typedef struct line {
  * for the separating axis theorem to work.)
  */
 typedef struct polygon {
-    vector center;
+    Point center;
     double direction;
     int n_verts;
-    vector* verts;
+    Point* verts;
 } polygon;
 
 /* If two convex polygons aren't intersecting, then there we can draw a line
@@ -30,6 +35,6 @@ typedef struct polygon {
  * the case, one of the edges of the polygon actually is such a line. If the
  * polygons are intersecting, then the vector `penetration` is set. 
  */
-bool separated(polygon a, polygon b, vector* penetration);
+bool separated(polygon a, polygon b, Vector* penetration);
 
 #endif /* PHYSICS_H */
