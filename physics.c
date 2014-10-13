@@ -1,59 +1,93 @@
 #include "physics.h" 
 #include "math.h"
 
-Point pnt_add(Point v1, Point v2) {
-    Point w = { .x = v1.x + v2.x, .y = v1.y + v2.y };
-    return w;
+Point pnt_add(Point p1, Point p2) {
+    Point q = { .x = p1.x + p2.x, .y = p1.y + p2.y };
+    return q;
 }
 
-Point pnt_subtract(Point v1, Point v2) {
-    Point w = { .x = v1.x - v2.x, .y = v1.y - v2.y };
-    return w;
+Point pnt_subtract(Point p1, Point p2) {
+    Point q = { .x = p1.x - p2.x, .y = p1.y - p2.y };
+    return q;
 }
 
 /* Returns a Point vector perpendicular to v. */
-Point pnt_perp(Point v) {
-    Point w = { .x = -v.x, .y =v.y };
+Point pnt_perp(Point p) {
+    Point q = { .x = -p.x, .y =p.y };
+    return q;
+}
+
+/* Scales the x and y coordinates of Point p by m. */
+Point pnt_scale(Point p, double m) {
+    Point q = { .x = p.x * m, .y = p.y * m };
+    return q;
+}
+
+/* Scales the magnitude of Vector v by m. */
+Vector vec_scale(Vector v, double m) {
+    Vector w = { .d = v.d, .m = v.m * m };
     return w;
 }
 
-/* Scales the Pint vector v by m. */
-Point pnt_scale(Point v, double m) {
-    Point w = { .x = v.x * m, .y = v.y * m };
-    return w ;
+/* Gives the unit normalization of p. */
+Point pnt_normalize(Point p) {
+    double normalizer = sqrt(p.x * p.x + p.y * p.y);
+    return pnt_scale(p, 1/normalizer);
 }
 
-/* Gives the unit normalization of v. */
-Point pnt_normalize(Point v) {
-    double normalizer = sqrt(v.x * v.x + v.y * v.y);
-    return pnt_scale(v, 1/normalizer);
+/* Gives the dotproduct of p1 and p2. */
+double pnt_dot(Point p1, Point p2) {
+    return p1.x * p2.x + p1.y * p2.y;
 }
 
-/* Gives the dotproduct of v1 and v2. */
-double pnt_dot(Point v1, Point v2) {
-    return v1.x * v2.x + v1.y * v2.y;
+double pnt_dist(Point p1, Point p2) {
+    double x = p1.x - p2.x;
+    double y = p1.y - p2.y;
+    return sqrt(x*x + y*y);
 }
 
+/* Converts a point (considered as a vector with its tail at (0,0)
+ * to its corresponding Euclinean vector.
+ */
+Vector pnt_to_vec(Point p) {
+    Point origin = { .x = 0, .y = 0};
+    double d; 
+    if (p.x == 0 && p.y == 0) d = 0;
+    else d = atan2(p.x, p.y);
+    double m = pnt_dist(p, origin);
+    Vector v = { .d = d, .m = m };
+    return v;
+}
+
+/* Takes a Polygon and supplies verts with the absolute positions of its 
+ * vertices (i.e. not relative to the center point. verts must be allocated
+ * to the correct size (the number of vertices in the polygon).
+ */
+void abs_pos_verts(Polygon s, Point* verts) {
+    for (int i = 0; i < s.n_verts; i++) {
+        verts[i] = pnt_add(s.center, s.verts[i]);
+    }
+}
 
 /* Checks if two ranges in the form of Points are overlapping. Assumes 
  * that .x < .y for both Points.
  */ 
-double pnt_overlap(Point v1, Point v2) {
-    if ((v1.y < v2.x) || (v2.y < v1.x)) 
+double pnt_overlap(Point p1, Point p2) {
+    if ((p1.y < p2.x) || (p2.y < p1.x)) 
         return 0;
-    else if (v1.x < v2.x) {
-        if (v1.y < v2.y) return v1.y - v2.x;
-        else return v2.y - v2.x;
+    else if (p1.x < p2.x) {
+        if (p1.y < p2.y) return p1.y - p2.x;
+        else return p2.y - p2.x;
     }
-    else { // v2.x < v1.x
-        if (v2.y < v1.y) return v2.y - v1.x;
-        else return v1.y - v1.x;
+    else { // p2.x < p1.x
+        if (p2.y < p1.y) return p2.y - p1.x;
+        else return p1.y - p1.x;
     }
 }
 
 
 /* Gives the projection of v onto the provided axis. */
-Point project(polygon s, Point axis) {
+Point project(Polygon s, Point axis) {
     double min = pnt_dot(s.verts[0], axis);
     double max = min;
     for (int i = 1; i < s.n_verts; i++) {
@@ -66,7 +100,7 @@ Point project(polygon s, Point axis) {
 }
     
 
-bool separated(polygon a, polygon b, Vector* penetration) {
+bool separated(Polygon a, Polygon b, Vector* penetration) {
 
     double min_overlap = 10000; //TODO unmagic this
     Point min_overlap_axis;
@@ -100,11 +134,9 @@ bool separated(polygon a, polygon b, Vector* penetration) {
         }
     }
    
-    //TODO need to convert to a direction vector 
-    //*penetration = pnt_scale(min_overlap_axis, min_overlap);
-    penetration->direction = min_overlap_axis.x; 
-    penetration->magnitude = min_overlap;
-    return true;
+    *penetration = pnt_to_vec(min_overlap_axis);
+    *penetration = vec_scale(*penetration, min_overlap); 
+    return penetration;
 }
 
 
