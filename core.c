@@ -1,6 +1,41 @@
 #include "core.h"
 #include "log.h"
 #include "error.h"
+#include "game_data.h"
+#include "graphics.h"
+
+void game_loop(Engine_Core *core) {
+    
+    Game_Data* g = init_game_data();
+    bool exit_game = false;
+    bool redraw = true;
+
+    ALLEGRO_EVENT event;
+    al_start_timer(core->timer);
+
+    log_msg(LOADING, "Starting game loop.");
+    while(!exit_game) {
+
+        al_wait_for_event(core->queue, &event);
+        switch(event.type) {
+        case ALLEGRO_EVENT_TIMER:
+            // update logic
+            redraw = true;
+            break;
+        case ALLEGRO_EVENT_KEY_DOWN:
+        case ALLEGRO_EVENT_KEY_UP:
+        case ALLEGRO_EVENT_DISPLAY_CLOSE:
+            // get input
+            break;
+        }
+        if (redraw && al_event_queue_is_empty(core->queue)) {
+            update_graphics(core->display, g);
+            redraw = false;
+        }
+    }
+
+}
+
 
 void init_allegro(Engine_Core *core) {
     log_msg(LOADING, "Initializing core components...");
@@ -56,35 +91,6 @@ void init_allegro(Engine_Core *core) {
         al_get_display_event_source(core->display));
     } else
         error("Could not create Allegro display.");
-
-}
-
-
-void game_loop(Engine_Core *core) {
-
-    bool exit_game = false;
-
-    ALLEGRO_EVENT event;
-    al_start_timer(core->timer);
-
-    int i = 0;
-    log_msg(LOADING, "Starting game loop.");
-    while(!exit_game) {
-        al_wait_for_event(core->queue, &event);
-        if (event.type == ALLEGRO_EVENT_TIMER) {
-            log_msg(GAME, "tick %i", i);
-            i++;
-        }
-
-    if (i == 10) exit_game = true;
-
-    // get input
-
-    // update logic
-
-    // if timer update graphics
-    
-    }
 
 }
 

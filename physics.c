@@ -1,6 +1,8 @@
 #include "physics.h" 
 #include "math.h"
 
+const Point ORIGIN = { .x = 0, .y = 0 };
+
 Point pnt_add(Point p1, Point p2) {
     Point q = { .x = p1.x + p2.x, .y = p1.y + p2.y };
     return q;
@@ -50,11 +52,10 @@ double pnt_dist(Point p1, Point p2) {
  * to its corresponding Euclinean vector.
  */
 Vector pnt_to_vec(Point p) {
-    Point origin = { .x = 0, .y = 0};
     double d; 
     if (p.x == 0 && p.y == 0) d = 0;
     else d = atan2(p.x, p.y);
-    double m = pnt_dist(p, origin);
+    double m = pnt_dist(p, ORIGIN);
     Vector v = { .d = d, .m = m };
     return v;
 }

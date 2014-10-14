@@ -1,4 +1,4 @@
-#ifndef PHISICS_H
+#ifndef PHYSICS_H
 #define PHYSICS_H
 
 #include <stdbool.h>
@@ -10,6 +10,8 @@ typedef struct Point {
     double x;
     double y;
 } Point;
+
+extern const Point ORIGIN;
 
 /* Traditional Euclidean vectors with direction (in radians) and a magnitude 
  * for things like velocity, etc. 
@@ -30,6 +32,8 @@ typedef struct Polygon {
     int n_verts;
     Point* verts;
 } Polygon;
+
+void abs_pos_verts(Polygon s, Point* verts);
 
 /* If two convex polygons aren't intersecting, then there we can draw a line
  * that separates them. The separating axis theorem says that any time this is
