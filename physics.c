@@ -4,61 +4,71 @@
 
 const Point ORIGIN = { .x = 0, .y = 0 };
 
-Point pnt_add(Point p1, Point p2) {
-    Point q = { .x = p1.x + p2.x, .y = p1.y + p2.y };
-    return q;
+Point point_add(Point p1, Point p2) {
+    return (Point) { p1.x + p2.x, p1.y + p2.y };
 }
 
-Point pnt_subtract(Point p1, Point p2) {
-    Point q = { .x = p1.x - p2.x, .y = p1.y - p2.y };
-    return q;
+Point point_subtract(Point p1, Point p2) {
+    return (Point) { p1.x - p2.x, p1.y - p2.y };
 }
 
 /* Returns a Point vector perpendicular to v. */
-Point pnt_perp(Point p) {
-    Point q = { .x = -p.x, .y =p.y };
-    return q;
+Point point_perp(Point p) {
+    return (Point) { -p.x, p.y };
 }
 
 /* Scales the x and y coordinates of Point p by m. */
-Point pnt_scale(Point p, double m) {
+Point point_scale(Point p, double m) {
     Point q = { .x = p.x * m, .y = p.y * m };
     return q;
 }
 
-/* Scales the magnitude of Vector v by m. */
-Vector vec_scale(Vector v, double m) {
-    Vector w = { .d = v.d, .m = v.m * m };
-    return w;
+/* Converts a polar vector (Vector) to a euclidean (Point) vector. */ 
+Point vector_to_point(Vector v) {
+    Point p;
+    p.x = v.m *  sin(v.d);
+    p.y = v.m * -cos(v.d);
+    return p;
 }
 
-/* Gives the unit normalization of p. */
-Point pnt_normalize(Point p) {
-    double normalizer = sqrt(p.x * p.x + p.y * p.y);
-    return pnt_scale(p, 1/normalizer);
-}
-
-/* Gives the dotproduct of p1 and p2. */
-double pnt_dot(Point p1, Point p2) {
-    return p1.x * p2.x + p1.y * p2.y;
-}
-
-double pnt_dist(Point p1, Point p2) {
+/* Gives the distance between two points */
+double point_dist(Point p1, Point p2) {
     double x = p1.x - p2.x;
     double y = p1.y - p2.y;
     return sqrt(x*x + y*y);
 }
 
-/* Converts a point (considered as a vector with its tail at (0,0)
- * to its corresponding Euclinean vector.
- */
-Vector pnt_to_vec(Point p) {
-    double d; 
-    if (p.x == 0 && p.y == 0) d = 0;
-    else d = atan2(p.x, p.y);
-    double m = pnt_dist(p, ORIGIN);
-    Vector v = { .d = d, .m = m };
+/* Converts a euclidean (Point) vector to a polar vector (Vector). */
+Vector point_to_vector(Point p) {
+    Vector v;
+    if (p.x == 0 && p.y == 0) 
+        v.d = 0;
+    else 
+        v.d = atan2(p.y, p.x) + M_PI/2;
+    v.m = point_dist(p, ORIGIN);
     return v;
+}
+
+void vector_add_to(Vector *v1, Vector v2) {
+    Point p1 = vector_to_point(*v1);
+    Point p2 = vector_to_point(v2);
+    *v1 = point_to_vector(point_add(p1,p2));
+}
+
+void move_by(Point *p, Vector v) {
+    p->x += v.m *  sin(v.d);
+    p->y += v.m * -cos(v.d);
+}
+
+/* Gives the unit normalization of p. */
+Point point_normalize(Point p) {
+    double normalizer = sqrt(p.x * p.x + p.y * p.y);
+    return point_scale(p, 1/normalizer);
+}
+
+/* Gives the dotproduct of p1 and p2. */
+double point_dot(Point p1, Point p2) {
+    return p1.x * p2.x + p1.y * p2.y;
 }
 
 /* Takes a Polygon and supplies verts with the absolute positions of its 
@@ -67,14 +77,14 @@ Vector pnt_to_vec(Point p) {
  */
 void abs_pos_verts(Polygon s, Point location, Point* verts) {
     for (int i = 0; i < s.n_verts; i++) {
-        verts[i] = pnt_add(location, s.verts[i]);
+        verts[i] = point_add(location, s.verts[i]);
     }
 }
 
 /* Checks if two ranges in the form of Points are overlapping. Assumes 
  * that .x < .y for both Points.
  */ 
-double pnt_overlap(Point p1, Point p2) {
+double point_overlap(Point p1, Point p2) {
     if ((p1.y < p2.x) || (p2.y < p1.x)) 
         return 0;
     else if (p1.x < p2.x) {
@@ -90,10 +100,10 @@ double pnt_overlap(Point p1, Point p2) {
 
 /* Gives the projection of v onto the provided axis. */
 Point project(Polygon s, Point axis) {
-    double min = pnt_dot(s.verts[0], axis);
+    double min = point_dot(s.verts[0], axis);
     double max = min;
     for (int i = 1; i < s.n_verts; i++) {
-        double next = pnt_dot(s.verts[i], axis);
+        double next = point_dot(s.verts[i], axis);
         if (next < min) min = next;
         else if (next > max) max = next;
     }
@@ -113,10 +123,10 @@ bool separated(Polygon a, Point loc_a,
     for (int i = 0; i < a.n_verts; i++) {
         int j = i + 1;
         if (j == a.n_verts) j = 0;
-        Point axis = pnt_normalize(pnt_perp(pnt_subtract(
-                        pnt_add(a.verts[i], loc_a), 
-                        pnt_add(a.verts[j], loc_a))));
-        double overlap = pnt_overlap(project(a, axis), project(b, axis));
+        Point axis = point_normalize(point_perp(point_subtract(
+                        point_add(a.verts[i], loc_a), 
+                        point_add(a.verts[j], loc_a))));
+        double overlap = point_overlap(project(a, axis), project(b, axis));
         if (overlap == 0) return false;
         else if (overlap < min_overlap) {
             min_overlap = overlap;
@@ -127,10 +137,10 @@ bool separated(Polygon a, Point loc_a,
     for (int i = 0; i < b.n_verts; i++) {
         int j = i + 1;
         if (j == b.n_verts) j = 0;
-        Point axis = pnt_normalize(pnt_perp(pnt_subtract(
-                        pnt_add(b.verts[i], loc_b), 
-                        pnt_add(b.verts[j], loc_b))));
-        double overlap = pnt_overlap(project(a, axis), project(b, axis));
+        Point axis = point_normalize(point_perp(point_subtract(
+                        point_add(b.verts[i], loc_b), 
+                        point_add(b.verts[j], loc_b))));
+        double overlap = point_overlap(project(a, axis), project(b, axis));
         if (overlap == 0) return false;
         else if (overlap < min_overlap) {
             min_overlap = overlap;
@@ -138,8 +148,8 @@ bool separated(Polygon a, Point loc_a,
         }
     }
    
-    *penetration = pnt_to_vec(min_overlap_axis);
-    *penetration = vec_scale(*penetration, min_overlap); 
+    *penetration = point_to_vector(min_overlap_axis);
+    penetration->d *= min_overlap;
     return penetration;
 }
 

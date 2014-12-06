@@ -7,7 +7,7 @@
 #define M_PI 3.14159265358979323846264338327
 
 /* Usually points are treated like coordinates on the euclidean plane
- * but sometimes we need them to behave like vectors with x and y components.
+ * but sometimes we need them to  like component vectors. 
  */
 typedef struct Point {
     double x;
@@ -16,7 +16,7 @@ typedef struct Point {
 
 extern const Point ORIGIN;
 
-/* Traditional Euclidean vectors with direction (in radians) and a magnitude 
+/* Polar vectors with direction (in radians) and a magnitude 
  * for things like velocity, etc. 
  */
 typedef struct Vector {
@@ -36,6 +36,17 @@ typedef struct Polygon {
 } Polygon;
 
 void abs_pos_verts(Polygon s, Point loc, Point* verts);
+
+/* Given a point `p` and a vector `v`, moves the point `p` in the direction
+ * and by the magnitude given by `v`.
+ */
+void move_by(Point *p, Vector v);
+
+Point vector_to_point(Vector v);
+Vector point_to_vector(Point p);
+
+/* Adds polar vector `v2` in place to `v1`.. */
+void vector_add_to(Vector *v1, Vector v2);
 
 /* If two convex polygons aren't intersecting, then there we can draw a line
  * that separates them. The separating axis theorem says that any time this is

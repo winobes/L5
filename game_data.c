@@ -43,11 +43,11 @@ Game_Data* init_game_data() {
     g->ships[0].shape = create_regular_polygon(5,50);
     g->ships[0].sprite = create_polygon_sprite(g->ships[0].shape, al_map_rgb(154,0,154));
     g->ships[0].health = 100;
-    g->ships[0].acc = 10;
+    g->ships[0].acc = 0.1;
     g->ships[1].shape = create_regular_polygon(3,50);
     g->ships[1].sprite = create_polygon_sprite(g->ships[1].shape, al_map_rgb(154,154,0));
     g->ships[1].health = 200;
-    g->ships[1].acc = 10;
+    g->ships[1].acc = 0.1;
 
     g->n_players = 3;
     g->players = malloc(sizeof(Player) * g->n_players);
