@@ -11,26 +11,33 @@ typedef enum {
     SHIP_RIGHT,
     WEAPON_1,
     WEAPON_2,
-    N_ACTIONS
-} Ship_Actions;
+    N_PLAYER_ACTIONS
+} Player_Actions;
 
-typedef struct Ship {
-    Polygon shape;
+typedef enum {
+    COMPUTER,
+    LOCAL,
+    N_PLAYER_TYPES
+} Player_Types;
+
+typedef struct Player {
+    int type;
+    bool actions[N_PLAYER_ACTIONS];
+    Polygon ext;
     ALLEGRO_BITMAP* sprite;
-    double forward_thrust;
-    double backward_thrust;
-    double rotational_thrust;
+    double forward_acc;
+    double backward_acc;
+    double rotational_acc;
     Vector velocity;
     long max_health;
     long health;
-} Ship;
+} Player;
 
 typedef struct Game_Data { 
-    Point display_center;
-    Ship player;
-    bool player_controls[N_ACTIONS];
-    Ship* enemies;
-    size_t n_enemies;
+    Point* display_center;
+    bool player_controls[N_PLAYER_ACTIONS];
+    Player* players;
+    size_t n_players;
 } Game_Data;
 
 Game_Data* init_game_data();
