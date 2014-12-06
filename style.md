@@ -1,5 +1,5 @@
-Here I will keep a list of the conventions that I'm loosing so that I don't 
-loose track. Generally I'll follow the linux kernel style with som exceptions.
+Here is list of style conventions. 
+Generally we follow the linux kernel style with some exceptions.
 
 # Naming #
 
@@ -17,22 +17,19 @@ loose track. Generally I'll follow the linux kernel style with som exceptions.
 
 ## Misc. ##
 * The names of arrays shall be plural. (E.g., `Point* vertices`)
-* When declaring a pointer, the `*` is part of the type (I.e. NOT `Point 
-  *vertices`).
+* Any function allocating memory (e.g. with malloc) should start with `create_`
+  and should have a corresponding `destroy_` function.
 
 # Spacing #
-
 - Two empty lines between functions
 - One empty line after function declaration and before the final brace
-- Inside functions, one empty line can be inserted between blocks of code for 
+- Inside functions, one empty line may be inserted between blocks of code for 
   readability.
 - Tabs are four spaces
 
-
 # Headers #
-
-- ever .c file should have a header file excetp for main.c
-- header declare only functions and macros that they need to export
+- every .c file should have a header file except for main.c
+- the header should declare only functions and macros that need to be exposed
 
 
 - 
