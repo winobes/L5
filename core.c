@@ -7,7 +7,9 @@
 
 void game_loop(Engine_Core *core) {
 
+    log_msg(LOADING, "Loading default settings.");
     Settings t = load_default_settings();
+    log_msg(LOADING, "Initializing game data.");
     Game_Data* g = init_game_data();
 
     bool exit_game = false;

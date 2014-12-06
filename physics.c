@@ -65,9 +65,9 @@ Vector pnt_to_vec(Point p) {
  * vertices (i.e. not relative to the center point. verts must be allocated
  * to the correct size (the number of vertices in the polygon).
  */
-void abs_pos_verts(Polygon s, Point* verts) {
+void abs_pos_verts(Polygon s, Point location, Point* verts) {
     for (int i = 0; i < s.n_verts; i++) {
-        verts[i] = pnt_add(s.center, s.verts[i]);
+        verts[i] = pnt_add(location, s.verts[i]);
     }
 }
 
@@ -102,7 +102,9 @@ Point project(Polygon s, Point axis) {
 }
     
 
-bool separated(Polygon a, Polygon b, Vector* penetration) {
+bool separated(Polygon a, Point loc_a, 
+               Polygon b, Point loc_b,
+               Vector* penetration) {
 
     double min_overlap = 10000; //TODO unmagic this
     Point min_overlap_axis;
@@ -112,8 +114,8 @@ bool separated(Polygon a, Polygon b, Vector* penetration) {
         int j = i + 1;
         if (j == a.n_verts) j = 0;
         Point axis = pnt_normalize(pnt_perp(pnt_subtract(
-                        pnt_add(a.verts[i], a.center), 
-                        pnt_add(a.verts[j], a.center))));
+                        pnt_add(a.verts[i], loc_a), 
+                        pnt_add(a.verts[j], loc_a))));
         double overlap = pnt_overlap(project(a, axis), project(b, axis));
         if (overlap == 0) return false;
         else if (overlap < min_overlap) {
@@ -126,8 +128,8 @@ bool separated(Polygon a, Polygon b, Vector* penetration) {
         int j = i + 1;
         if (j == b.n_verts) j = 0;
         Point axis = pnt_normalize(pnt_perp(pnt_subtract(
-                        pnt_add(b.verts[i], b.center), 
-                        pnt_add(b.verts[j], b.center))));
+                        pnt_add(b.verts[i], loc_b), 
+                        pnt_add(b.verts[j], loc_b))));
         double overlap = pnt_overlap(project(a, axis), project(b, axis));
         if (overlap == 0) return false;
         else if (overlap < min_overlap) {
@@ -155,7 +157,6 @@ Polygon create_regular_polygon(int n_verts, double size) {
     }
 
     Polygon s;
-    s.center = ORIGIN;
     s.direction = 0;
     s.n_verts = n_verts;
     s.verts = verts;

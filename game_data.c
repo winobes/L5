@@ -6,35 +6,45 @@
 #include "physics.h" //create_regular_polygon
 #include <math.h> // sin, cos
 
-Player create_player(Point location, 
-                 Polygon ext, 
-                 ALLEGRO_COLOR color,
-                 long max_health) {
+Player create_player(Point location, Ship_Template* ship, int type) {
 
-    Player s;
-    s.max_health = max_health;
-    s.sprite = create_polygon_sprite(ext, color);
-    s.ext = ext;
-    s.ext.center = location;
+    Player player;
 
-    return s;
+    player.ship.base = ship;
+    player.ship.loc = location;
+    player.ship.vel = (Vector) {0, 0};
+    player.ship.dir = 0;
+    player.ship.health = ship->health;
+
+    player.type = type;
+    for (int i = 0; i < N_PLAYER_ACTIONS; i++)
+        player.actions[i] = false;
+
+    return player;
 }
 
 Game_Data* init_game_data() {
+
     Game_Data* g = malloc(sizeof(Game_Data));
 
-    g->n_players = 4;
-    g->players = malloc(sizeof(Player) * g->n_players);
-    g->players[0] = create_player(ORIGIN, create_regular_polygon(4, 100),
-            al_map_rgb(154,154,0), 1000);
-    g->players[1] = create_player((Point){200,-100},  create_regular_polygon(5, 50),
-            al_map_rgb(154,0,154), 1000);
-    g->players[2] = create_player((Point){-300,-250}, create_regular_polygon(5, 300),
-            al_map_rgb(154,0,154), 1000);
-    g->players[3] = create_player((Point){50,100}, create_regular_polygon(5, 5),
-            al_map_rgb(154,0,154), 1000);
+    g->n_ships = 2;
+    g->ships = malloc(sizeof(Ship_Template) * g->n_ships);
+    g->ships[0].shape = create_regular_polygon(5,50);
+    g->ships[0].sprite = create_polygon_sprite(g->ships[0].shape, al_map_rgb(154,0,154));
+    g->ships[0].health = 100;
+    g->ships[0].acc = 10;
+    g->ships[1].shape = create_regular_polygon(3,50);
+    g->ships[1].sprite = create_polygon_sprite(g->ships[1].shape, al_map_rgb(154,154,0));
+    g->ships[1].health = 200;
+    g->ships[1].acc = 10;
 
-    g->display_center = &g->players[0].ext.center;
+    g->n_players = 3;
+    g->players = malloc(sizeof(Player) * g->n_players);
+    g->players[0] = create_player((Point) {0,0}, &g->ships[1], LOCAL);
+    g->players[1] = create_player((Point) {100,-50}, &g->ships[0], COMPUTER);
+    g->players[2] = create_player((Point) {-150, 100}, &g->ships[0], COMPUTER);
+
+    g->display_center = &g->players[0].ship.loc;
 
     return g;
 }
