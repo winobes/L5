@@ -51,5 +51,6 @@ typedef struct Game_Data {
 } Game_Data;
 
 Game_Data* init_game_data();
+void destroy_game_data(Game_Data *g);
 
 #endif /* GAME_DATA_H */

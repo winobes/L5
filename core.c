@@ -44,6 +44,8 @@ void game_loop(Engine_Core *core) {
         }
     }
 
+    destroy_game_data(g);
+    free(g);
 }
 
 
@@ -61,11 +63,11 @@ void init_allegro(Engine_Core *core) {
         error("Allegro failed to Initialize.");
 
     /* Native Dialog */
-    log_msg(LOADING, "Initializing Allegro Native Dialog Addon...");
-    if (al_init_native_dialog_addon())
-        log_version("Native Dialog Addon", al_get_allegro_native_dialog_version());
-    else
-        log_msg(WARNING, "Allegro Native Dialog Addon failed to initialize.");
+    /*log_msg(LOADING, "Initializing Allegro Native Dialog Addon...");*/
+    /*if (al_init_native_dialog_addon())*/
+        /*log_version("Native Dialog Addon", al_get_allegro_native_dialog_version());*/
+    /*else*/
+        /*log_msg(WARNING, "Allegro Native Dialog Addon failed to initialize.");*/
     
     /* Event queue */
     log_msg(LOADING, "Creating event queue...");
@@ -110,19 +112,22 @@ void game_shutdown(Engine_Core *core) {
     log_msg(LOADING, "Shutting down core components...");
 
     if (core->timer != NULL) {
-        log_msg(LOADING, "Destroying timer");
+        log_msg(LOADING, "Destroying timer.");
         al_destroy_timer(core->timer);
     }
 
     if (core->display != NULL) {
-        log_msg(LOADING, "Destroying display");
+        log_msg(LOADING, "Destroying display.");
         al_destroy_display(core->display);
     }
 
     if (core->queue != NULL) {
-        log_msg(LOADING, "Destroying event queue");
+        log_msg(LOADING, "Destroying event queue.");
         al_destroy_event_queue(core->queue);
     }
+
+    log_msg(LOADING, "Uninstalling keyboard.");
+    al_uninstall_keyboard();
 
     log_msg(LOADING, "Uninstalling Allegro");
     al_uninstall_system();

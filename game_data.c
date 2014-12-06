@@ -23,6 +23,17 @@ Player create_player(Point location, Ship_Template* ship, int type) {
     return player;
 }
 
+
+void destroy_player(Player *p) {
+    // nothing malloc'd in player for now...
+}
+
+
+void destroy_ship_template(Ship_Template s) {
+    free(s.shape.verts);
+}
+
+
 Game_Data* init_game_data() {
 
     Game_Data* g = malloc(sizeof(Game_Data));
@@ -52,4 +63,10 @@ Game_Data* init_game_data() {
     return g;
 }
 
-// TODO destroy game data
+
+void destroy_game_data(Game_Data *g) {
+    for (int i = 0; i < g->n_ships; i++)
+        destroy_ship_template(g->ships[i]);
+    free(g->players);
+    free(g->ships);
+}
