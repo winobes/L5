@@ -1,5 +1,6 @@
 #include "physics.h" 
 #include "math.h"
+#include "error.h"
 
 const Point ORIGIN = { .x = 0, .y = 0 };
 
@@ -140,4 +141,26 @@ bool separated(Polygon a, Polygon b, Vector* penetration) {
     return penetration;
 }
 
+
+Polygon create_regular_polygon(int n_verts, double size) {
+
+    if (n_verts < 3)
+        error("Polygon must have at least 3 n_verts.");
+
+    Point* verts = malloc(sizeof(Point) * n_verts);
+
+    for (int i = 0; i < n_verts; i++) {
+        verts[i].x = size *  sin(2 * i * M_PI / n_verts);
+        verts[i].y = size * -cos(2 * i * M_PI / n_verts);
+    }
+
+    Polygon s;
+    s.center = ORIGIN;
+    s.direction = 0;
+    s.n_verts = n_verts;
+    s.verts = verts;
+
+    return s;
+
+}
 

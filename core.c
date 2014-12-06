@@ -3,10 +3,13 @@
 #include "error.h"
 #include "game_data.h"
 #include "graphics.h"
+#include "game_logic.h"
 
 void game_loop(Engine_Core *core) {
-    
+
+    Settings t = load_default_settings();
     Game_Data* g = init_game_data();
+
     bool exit_game = false;
     bool redraw = true;
 
@@ -19,15 +22,19 @@ void game_loop(Engine_Core *core) {
         al_wait_for_event(core->queue, &event);
         switch(event.type) {
         case ALLEGRO_EVENT_TIMER:
-            // update logic
             redraw = true;
             break;
         case ALLEGRO_EVENT_KEY_DOWN:
+            process_key(event.keyboard.keycode, true, t, g);
+            break;
         case ALLEGRO_EVENT_KEY_UP:
+            process_key(event.keyboard.keycode, true, t, g);
+            break;
         case ALLEGRO_EVENT_DISPLAY_CLOSE:
-            // get input
+            exit_game = true;
             break;
         }
+
         if (redraw && al_event_queue_is_empty(core->queue)) {
             update_graphics(core->display, g);
             redraw = false;
