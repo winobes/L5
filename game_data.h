@@ -42,12 +42,12 @@ typedef struct Player {
 } Player;
 
 typedef struct Game_Data { 
-    Point* display_center;
-    bool player_controls[N_PLAYER_ACTIONS];
     Player* players;
     size_t n_players;
     Ship_Template* ships;
     size_t n_ships;
+    Point* display_center;
+    bool keyboard[ALLEGRO_KEY_MAX];
 } Game_Data;
 
 Game_Data* init_game_data();

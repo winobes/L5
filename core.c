@@ -8,7 +8,7 @@
 void game_loop(Engine_Core *core) {
 
     log_msg(LOADING, "Loading default settings.");
-    Settings t = load_default_settings();
+    Settings t = default_settings();
     log_msg(LOADING, "Initializing game data.");
     Game_Data* g = init_game_data();
 
@@ -24,13 +24,14 @@ void game_loop(Engine_Core *core) {
         al_wait_for_event(core->queue, &event);
         switch(event.type) {
         case ALLEGRO_EVENT_TIMER:
+            update_game(g, t);
             redraw = true;
             break;
         case ALLEGRO_EVENT_KEY_DOWN:
-            process_key(event.keyboard.keycode, true, t, g);
+            g->keyboard[event.keyboard.keycode] = true;
             break;
         case ALLEGRO_EVENT_KEY_UP:
-            process_key(event.keyboard.keycode, true, t, g);
+            g->keyboard[event.keyboard.keycode] = false;
             break;
         case ALLEGRO_EVENT_DISPLAY_CLOSE:
             exit_game = true;

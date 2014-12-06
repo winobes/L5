@@ -46,6 +46,9 @@ Game_Data* init_game_data() {
 
     g->display_center = &g->players[0].ship.loc;
 
+    for (int i = 0; i < ALLEGRO_KEY_MAX; i++)
+        g->keyboard[i] = false;
+
     return g;
 }
 
