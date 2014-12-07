@@ -3,136 +3,112 @@
 #include "error.h"
 #include "log.h"
 
-const Point ORIGIN = { .x = 0, .y = 0 };
+const Vector ORIGIN = { .x = 0, .y = 0 };
 
-Point point_add(Point p1, Point p2) {
-    return (Point) { p1.x + p2.x, p1.y + p2.y };
+Vector vec_add(Vector v1, Vector v2) {
+    return (Vector) { v1.x + v2.x, v1.y + v2.y };
 }
 
-Point point_subtract(Point p1, Point p2) {
-    return (Point) { p1.x - p2.x, p1.y - p2.y };
+Vector vec_subtract(Vector v1, Vector v2) {
+    return (Vector) { v1.x - v2.x, v1.y - v2.y };
 }
 
-/* Returns a Point vector perpendicular to v. */
-Point point_perp(Point p) {
-    return (Point) { -p.y, p.x };
+/* Returns a Vector vector perpendicular to v. */
+Vector vec_perp(Vector v) {
+    return (Vector) { -v.y, v.x };
 }
 
-/* Scales the x and y coordinates of Point p by m. */
-Point point_scale(Point p, double m) {
-    return (Point) { p.x * m, p.y * m };
-}
-
-/* Converts a polar vector (Vector) to a euclidean (Point) vector. */ 
-Point vector_to_point(Vector v) {
-    Point p;
-    p.x = v.m *  sin(v.d);
-    p.y = v.m * -cos(v.d);
-    return p;
+/* Scales the x and y coordinates of Vector v by m. */
+Vector vec_scale(Vector v, double m) {
+    return (Vector) { v.x * m, v.y * m };
 }
 
 /* Gives the distance between two points */
-double point_dist(Point p1, Point p2) {
+double vec_dist(Vector p1, Vector p2) {
     double x = p1.x - p2.x;
     double y = p1.y - p2.y;
     return sqrt(x*x + y*y);
 }
 
-/* Converts a euclidean (Point) vector to a polar vector (Vector). */
-Vector point_to_vector(Point p) {
-    Vector v;
-    if (p.x == 0 && p.y == 0) 
-        v.d = 0;
-    else 
-        v.d = atan2(p.y, p.x) + M_PI/2;
-    v.m = point_dist(p, ORIGIN);
-    return v;
-}
-
-void vector_add_to(Vector *v1, Vector v2) {
-    Point p1 = vector_to_point(*v1);
-    Point p2 = vector_to_point(v2);
-    *v1 = point_to_vector(point_add(p1,p2));
-}
-
-void move_by(Point *p, Vector v) {
-    p->x += v.m *  sin(v.d);
-    p->y += v.m * -cos(v.d);
-}
-
 /* Rotates the point around the origin. */
-Point point_rotate(Point p, double r) {
-    return (Point) { p.x * cos(r) - p.y * sin(r) , p.x * sin(r) + p.y * cos(r) };
+Vector vec_rotate(Vector p, double r) {
+    return (Vector) { p.x * cos(r) - p.y * sin(r) , p.x * sin(r) + p.y * cos(r) };
 }
 
-Point point_rotate_around(Point p, Point q, double r) {
-    return point_add(point_rotate(point_subtract(p, q), r), q);
+Vector vec_rotate_around(Vector p, Vector q, double r) {
+    return vec_add(vec_rotate(vec_subtract(p, q), r), q);
 }
 
-/* Gives the unit normalization of p. */
-Point point_normalize(Point p) {
-    double normalizer = sqrt(p.x * p.x + p.y * p.y);
-    return point_scale(p, 1/normalizer);
+/* Converts a polar vector to a euclidean `Vector`. */ 
+Vector polar_to_vec(double d, double m) {
+    return (Vector) { m * sin(d), m * -cos(d) };
 }
 
-/* Gives the dotproduct of p1 and p2. */
-double point_dot(Point p1, Point p2) {
-    return p1.x * p2.x + p1.y * p2.y;
+
+/* Gives the unit normalization of v. */
+Vector vec_normalize(Vector v) {
+    double normalizer = sqrt(v.x * v.x + v.y * v.y);
+    return vec_scale(v, 1/normalizer);
 }
 
-/* Checks if two ranges in the form of Points are overlapping. Assumes 
- * that .x < .y for both Points.
+/* Gives the dotproduct of v1 and v2. */
+double vec_dot(Vector v1, Vector v2) {
+    return v1.x * v2.x + v1.y * v2.y;
+}
+
+/* Checks if two ranges in the form of Vectors are overlapping. Assumes 
+ * that .x < .y for both Vectors.
  */ 
-double point_overlap(Point p1, Point p2) {
-    if ((p1.y < p2.x) || (p2.y < p1.x)) 
+double vec_overlap(Vector v1, Vector v2) {
+    if ((v1.y < v2.x) || (v2.y < v1.x)) 
         return 0;
-    else if (p1.x < p2.x) {
-        if (p1.y < p2.y) return p1.y - p2.x;
-        else return p2.y - p2.x;
+    else if (v1.x < v2.x) {
+        if (v1.y < v2.y) return v1.y - v2.x;
+        else return v2.y - v2.x;
     }
-    else { // p2.x < p1.x
-        if (p2.y < p1.y) return p2.y - p1.x;
-        else return p1.y - p1.x;
+    else { // v2.x < v1.x
+        if (v2.y < v1.y) return v2.y - v1.x;
+        else return v1.y - v1.x;
     }
 }
 
 
 /* Gives the projection of v onto the provided axis. */
-Point project(Polygon s, Point axis) {
-    double min = point_dot(s.verts[0], axis);
+Vector project(Polygon s, Vector axis) {
+    double min = vec_dot(s.verts[0], axis);
     double max = min;
     for (int i = 1; i < s.n_verts; i++) {
-        double next = point_dot(s.verts[i], axis);
+        double next = vec_dot(s.verts[i], axis);
         if (next < min) min = next;
         else if (next > max) max = next;
     }
-    Point projection = { .x = min, .y = max };
+    Vector projection = { .x = min, .y = max };
     return projection;
 }
    
 
-void polygon_translate(Polygon *s, double r, Point pos) {
+void polygon_translate(Polygon *s, double r, Vector pos) {
     for (int i = 0; i < s->n_verts; i++)
-        s->verts[i] = point_add(point_rotate(s->verts[i], r), pos);
+        s->verts[i] = vec_add(vec_rotate(s->verts[i], r), pos);
 }
 
 
-bool polygon_intersect(Polygon a, Polygon b, Vector* penetration) {
+bool polygon_intersect(Polygon a, Polygon b, Vector *collision_vec) {
 
     double min_overlap = 10000; //TODO unmagic this
-    Point min_overlap_axis;
+    Vector min_overlap_axis;
 
     // check for separating axes from a's edges
     for (int i = 0; i < a.n_verts; i++) {
         int j = i + 1;
         if (j == a.n_verts) 
             j = 0;
-        Point axis = point_normalize(point_perp(point_subtract(
+        Vector axis = vec_normalize(vec_perp(vec_subtract(
                         a.verts[i], a.verts[j])));
         /*printf("axis %d x = %f y = %f\n", i, axis.x, axis.y);*/
-        double overlap = point_overlap(project(a, axis), project(b, axis));
+        double overlap = vec_overlap(project(a, axis), project(b, axis));
         if (overlap == 0) {
-            penetration = NULL;
+            collision_vec = NULL;
             return false;
         }
         else if (overlap < min_overlap) {
@@ -144,11 +120,11 @@ bool polygon_intersect(Polygon a, Polygon b, Vector* penetration) {
     for (int i = 0; i < b.n_verts; i++) {
         int j = i + 1;
         if (j == b.n_verts) j = 0;
-        Point axis = point_normalize(point_perp(point_subtract(
+        Vector axis = vec_normalize(vec_perp(vec_subtract(
                         b.verts[i], b.verts[j])));
-        double overlap = point_overlap(project(a, axis), project(b, axis));
+        double overlap = vec_overlap(project(a, axis), project(b, axis));
         if (overlap == 0) {
-            penetration = NULL;
+            collision_vec = NULL;
             return false;
         }
         else if (overlap < min_overlap) {
@@ -157,7 +133,7 @@ bool polygon_intersect(Polygon a, Polygon b, Vector* penetration) {
         }
     }
    
-    *penetration = point_to_vector(point_scale(min_overlap_axis, min_overlap));
+    *collision_vec = vec_scale(min_overlap_axis, min_overlap);
     return true;
 }
 
@@ -167,7 +143,7 @@ Polygon create_regular_polygon(int n_verts, double size) {
     if (n_verts < 3)
         error("Polygon must have at least 3 vertices.");
 
-    Point* verts = malloc(sizeof(Point) * n_verts);
+    Vector* verts = malloc(sizeof(Vector) * n_verts);
 
     for (int i = 0; i < n_verts; i++) {
         verts[i].x = size *  sin(2 * i * M_PI / n_verts);

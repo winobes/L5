@@ -2,7 +2,7 @@
 #include <allegro5/allegro_primitives.h>
 
 #include "game_data.h" // GAME_DATA
-#include "physics.h" // Point
+#include "physics.h" // Vector
 #include "core.h" // DISPLAY_WIDTH, HEIGHT
 
 ALLEGRO_BITMAP* create_polygon_sprite(Polygon shape, 
@@ -36,7 +36,7 @@ ALLEGRO_BITMAP* create_polygon_sprite(Polygon shape,
 
 }
 
-void draw_ship(Ship s, Point display_center) {
+void draw_ship(Ship s, Vector display_center) {
     int x, y; // location of the upper left-hand corner of the bitmap on the display
     int sprite_width  = al_get_bitmap_width(s.base->sprite);
     int sprite_height = al_get_bitmap_height(s.base->sprite);

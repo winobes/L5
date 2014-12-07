@@ -1,16 +1,16 @@
 #include "game_logic.h"
 #include "log.h"
 
-bool check_collision(Polygon shape_a, Point pos_a, double dir_a,
-                     Polygon shape_b, Point pos_b, double dir_b,
-                     Vector* penetration) {
+bool check_collision(Polygon shape_a, Vector pos_a, double dir_a,
+                     Polygon shape_b, Vector pos_b, double dir_b,
+                     Vector *collision_vec) {
 
     // create the absolute-position polygons to check against
-    Point verts_a[shape_a.n_verts]; 
+    Vector verts_a[shape_a.n_verts]; 
     Polygon a = { shape_a.n_verts, verts_a};
     for (int i = 0; i < a.n_verts; i++)
         a.verts[i] = shape_a.verts[i];
-    Point verts_b[shape_b.n_verts]; 
+    Vector verts_b[shape_b.n_verts]; 
     Polygon b = { shape_b.n_verts, verts_b};
     for (int i = 0; i < b.n_verts; i++)
         b.verts[i] = shape_b.verts[i];
@@ -19,15 +19,20 @@ bool check_collision(Polygon shape_a, Point pos_a, double dir_a,
     polygon_translate(&a, dir_a, pos_a);
     polygon_translate(&b, dir_b, pos_b);
 
-    return polygon_intersect(a, b, penetration);
+    return polygon_intersect(a, b, collision_vec);
 
 }
 
 
+Vector reflect(Vector v, Vector axis) {
+    double a = (axis.x * axis.x - axis.y * axis.y) / (axis.x * axis.x + axis.y * axis.y);
+    double b = 2 * axis.x * axis.y / (axis.x * axis.x + axis.y * axis.y);
+    double x = a * (v.x - 
+
 void update_game(Game_Data* g, Settings t) {
 
 
-    Vector penetration;
+    Vector collision_vec;
 
     for (int i = 0; i < g->n_players; i++) {
 
@@ -35,8 +40,9 @@ void update_game(Game_Data* g, Settings t) {
         for (int j = i+1; j < g -> n_players; j++) {
             Ship *s2 = &g->players[j].ship;
             if (check_collision(s1->base->shape, s1->pos, s1->dir,
-                s2->base->shape, s2->pos, s2->dir, &penetration)) {
-                move_by(&s1->pos, penetration);
+                s2->base->shape, s2->pos, s2->dir, &collision_vec)) {
+                s1->pos = vec_add(s1->pos, collision_vec);
+                s1->vel = reflect(s1->vel, collision_vec);
                 /*vector_add_to(&s1->vel, penetration);*/
             }
         }
@@ -62,12 +68,12 @@ void update_game(Game_Data* g, Settings t) {
 
         // update ship velocitity
         if (p->actions[SHIP_FORWARD])
-            vector_add_to(&p->ship.vel, (Vector) {p->ship.dir, p->ship.base->acc});
+            p->ship.vel = vec_add(p->ship.vel, polar_to_vec(p->ship.dir, p->ship.base->acc));
         if (p->actions[SHIP_BACKWARD])
-            vector_add_to(&p->ship.vel, (Vector) {p->ship.dir, -p->ship.base->acc});
+            p->ship.vel = vec_add(p->ship.vel, polar_to_vec(p->ship.dir, -p->ship.base->acc));
 
         // update ship position
-        move_by(&p->ship.pos, p->ship.vel);
+        p->ship.pos = vec_add(p->ship.pos, p->ship.vel);
         
     }
 }

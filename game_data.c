@@ -5,7 +5,7 @@
 #include "log.h"
 #include "physics.h" //create_regular_polygon
 
-Player create_player(Point location, Ship_Template* ship, int type) {
+Player create_player(Vector location, Ship_Template* ship, int type) {
 
     Player player;
 
@@ -51,9 +51,9 @@ Game_Data* init_game_data() {
 
     g->n_players = 3;
     g->players = malloc(sizeof(Player) * g->n_players);
-    g->players[0] = create_player((Point) {0,0}, &g->ships[1], LOCAL);
-    g->players[1] = create_player((Point) {100,-50}, &g->ships[1], COMPUTER);
-    g->players[2] = create_player((Point) {-150, 100}, &g->ships[0], COMPUTER);
+    g->players[0] = create_player((Vector) {0,0}, &g->ships[1], LOCAL);
+    g->players[1] = create_player((Vector) {100,-50}, &g->ships[1], COMPUTER);
+    g->players[2] = create_player((Vector) {-150, 100}, &g->ships[0], COMPUTER);
 
     g->display_center = &g->players[0].ship.pos;
 

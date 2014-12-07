@@ -29,7 +29,7 @@ typedef struct Ship_Template {
 
 typedef struct Ship {
     Ship_Template* base;
-    Point pos;
+    Vector pos;
     Vector vel;
     double dir;
     long health;
@@ -46,7 +46,7 @@ typedef struct Game_Data {
     size_t n_players;
     Ship_Template* ships;
     size_t n_ships;
-    Point* display_center;
+    Vector* display_center;
     bool keyboard[ALLEGRO_KEY_MAX];
 } Game_Data;
 
