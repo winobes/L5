@@ -1,6 +1,7 @@
 #include "physics.h" 
 #include "math.h"
 #include "error.h"
+#include "log.h"
 
 const Point ORIGIN = { .x = 0, .y = 0 };
 
@@ -14,13 +15,12 @@ Point point_subtract(Point p1, Point p2) {
 
 /* Returns a Point vector perpendicular to v. */
 Point point_perp(Point p) {
-    return (Point) { -p.x, p.y };
+    return (Point) { -p.y, p.x };
 }
 
 /* Scales the x and y coordinates of Point p by m. */
 Point point_scale(Point p, double m) {
-    Point q = { .x = p.x * m, .y = p.y * m };
-    return q;
+    return (Point) { p.x * m, p.y * m };
 }
 
 /* Converts a polar vector (Vector) to a euclidean (Point) vector. */ 
@@ -60,6 +60,15 @@ void move_by(Point *p, Vector v) {
     p->y += v.m * -cos(v.d);
 }
 
+/* Rotates the point around the origin. */
+Point point_rotate(Point p, double r) {
+    return (Point) { p.x * cos(r) - p.y * sin(r) , p.x * sin(r) + p.y * cos(r) };
+}
+
+Point point_rotate_around(Point p, Point q, double r) {
+    return point_add(point_rotate(point_subtract(p, q), r), q);
+}
+
 /* Gives the unit normalization of p. */
 Point point_normalize(Point p) {
     double normalizer = sqrt(p.x * p.x + p.y * p.y);
@@ -69,16 +78,6 @@ Point point_normalize(Point p) {
 /* Gives the dotproduct of p1 and p2. */
 double point_dot(Point p1, Point p2) {
     return p1.x * p2.x + p1.y * p2.y;
-}
-
-/* Takes a Polygon and supplies verts with the absolute positions of its 
- * vertices (i.e. not relative to the center point. verts must be allocated
- * to the correct size (the number of vertices in the polygon).
- */
-void abs_pos_verts(Polygon s, Point location, Point* verts) {
-    for (int i = 0; i < s.n_verts; i++) {
-        verts[i] = point_add(location, s.verts[i]);
-    }
 }
 
 /* Checks if two ranges in the form of Points are overlapping. Assumes 
@@ -110,11 +109,15 @@ Point project(Polygon s, Point axis) {
     Point projection = { .x = min, .y = max };
     return projection;
 }
-    
+   
 
-bool separated(Polygon a, Point loc_a, 
-               Polygon b, Point loc_b,
-               Vector* penetration) {
+void polygon_translate(Polygon *s, double r, Point pos) {
+    for (int i = 0; i < s->n_verts; i++)
+        s->verts[i] = point_add(point_rotate(s->verts[i], r), pos);
+}
+
+
+bool polygon_intersect(Polygon a, Polygon b, Vector* penetration) {
 
     double min_overlap = 10000; //TODO unmagic this
     Point min_overlap_axis;
@@ -122,12 +125,16 @@ bool separated(Polygon a, Point loc_a,
     // check for separating axes from a's edges
     for (int i = 0; i < a.n_verts; i++) {
         int j = i + 1;
-        if (j == a.n_verts) j = 0;
+        if (j == a.n_verts) 
+            j = 0;
         Point axis = point_normalize(point_perp(point_subtract(
-                        point_add(a.verts[i], loc_a), 
-                        point_add(a.verts[j], loc_a))));
+                        a.verts[i], a.verts[j])));
+        /*printf("axis %d x = %f y = %f\n", i, axis.x, axis.y);*/
         double overlap = point_overlap(project(a, axis), project(b, axis));
-        if (overlap == 0) return false;
+        if (overlap == 0) {
+            penetration = NULL;
+            return false;
+        }
         else if (overlap < min_overlap) {
             min_overlap = overlap;
             min_overlap_axis = axis;
@@ -138,26 +145,27 @@ bool separated(Polygon a, Point loc_a,
         int j = i + 1;
         if (j == b.n_verts) j = 0;
         Point axis = point_normalize(point_perp(point_subtract(
-                        point_add(b.verts[i], loc_b), 
-                        point_add(b.verts[j], loc_b))));
+                        b.verts[i], b.verts[j])));
         double overlap = point_overlap(project(a, axis), project(b, axis));
-        if (overlap == 0) return false;
+        if (overlap == 0) {
+            penetration = NULL;
+            return false;
+        }
         else if (overlap < min_overlap) {
             min_overlap = overlap;
             min_overlap_axis = axis;
         }
     }
    
-    *penetration = point_to_vector(min_overlap_axis);
-    penetration->d *= min_overlap;
-    return penetration;
+    *penetration = point_to_vector(point_scale(min_overlap_axis, min_overlap));
+    return true;
 }
 
 
 Polygon create_regular_polygon(int n_verts, double size) {
 
     if (n_verts < 3)
-        error("Polygon must have at least 3 n_verts.");
+        error("Polygon must have at least 3 vertices.");
 
     Point* verts = malloc(sizeof(Point) * n_verts);
 
@@ -167,7 +175,6 @@ Polygon create_regular_polygon(int n_verts, double size) {
     }
 
     Polygon s;
-    s.direction = 0;
     s.n_verts = n_verts;
     s.verts = verts;
 

@@ -30,7 +30,6 @@ typedef struct Vector {
  * for the separating axis theorem to work.)
  */
 typedef struct Polygon {
-    double direction;
     size_t n_verts;
     Point* verts;
 } Polygon;
@@ -45,15 +44,18 @@ void move_by(Point *p, Vector v);
 Point vector_to_point(Vector v);
 Vector point_to_vector(Point p);
 
-/* Adds polar vector `v2` in place to `v1`.. */
+/* Adds polar vector `v2` in place to `v1`. */
 void vector_add_to(Vector *v1, Vector v2);
+
+/* Moves a polygon by `pos` and rotates it by `r` */
+void polygon_translate(Polygon *s, double r, Point pos);
 
 /* If two convex polygons aren't intersecting, then there we can draw a line
  * that separates them. The separating axis theorem says that any time this is
  * the case, one of the edges of the polygon actually is such a line. If the
  * polygons are intersecting, then the vector `penetration` is set. 
  */
-bool separated(Polygon a, Point loc_a, Polygon b, Point loc_b, Vector* penetration);
+bool polygon_intersect(Polygon a, Polygon b, Vector* penetration);
 
 /* n_verts is the number of vertices (or equivallently sides)
  * size is the distance (in pixles) of each vertex from the center
