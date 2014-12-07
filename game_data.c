@@ -4,7 +4,6 @@
 #include "graphics.h"
 #include "log.h"
 #include "physics.h" //create_regular_polygon
-#include <math.h> // sin, cos
 
 Player create_player(Point location, Ship_Template* ship, int type) {
 
@@ -31,6 +30,7 @@ void destroy_player(Player *p) {
 
 void destroy_ship_template(Ship_Template s) {
     free(s.shape.verts);
+    al_destroy_bitmap(s.sprite);
 }
 
 
@@ -52,7 +52,7 @@ Game_Data* init_game_data() {
     g->n_players = 3;
     g->players = malloc(sizeof(Player) * g->n_players);
     g->players[0] = create_player((Point) {0,0}, &g->ships[1], LOCAL);
-    g->players[1] = create_player((Point) {100,-50}, &g->ships[0], COMPUTER);
+    g->players[1] = create_player((Point) {100,-50}, &g->ships[1], COMPUTER);
     g->players[2] = create_player((Point) {-150, 100}, &g->ships[0], COMPUTER);
 
     g->display_center = &g->players[0].ship.loc;
@@ -69,4 +69,5 @@ void destroy_game_data(Game_Data *g) {
         destroy_ship_template(g->ships[i]);
     free(g->players);
     free(g->ships);
+    // TODO destroy bitmaps
 }
