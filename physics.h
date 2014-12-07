@@ -34,7 +34,7 @@ typedef struct Polygon {
     Point* verts;
 } Polygon;
 
-void abs_pos_verts(Polygon s, Point loc, Point* verts);
+void abs_pos_verts(Polygon s, Point pos, Point* verts);
 
 /* Given a point `p` and a vector `v`, moves the point `p` in the direction
  * and by the magnitude given by `v`.

@@ -29,7 +29,7 @@ typedef struct Ship_Template {
 
 typedef struct Ship {
     Ship_Template* base;
-    Point loc;
+    Point pos;
     Vector vel;
     double dir;
     long health;

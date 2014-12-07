@@ -34,9 +34,9 @@ void update_game(Game_Data* g, Settings t) {
         Ship *s1 = &g->players[i].ship;
         for (int j = i+1; j < g -> n_players; j++) {
             Ship *s2 = &g->players[j].ship;
-            if (check_collision(s1->base->shape, s1->loc, s1->dir,
-                s2->base->shape, s2->loc, s2->dir, &penetration)) {
-                move_by(&s1->loc, penetration);
+            if (check_collision(s1->base->shape, s1->pos, s1->dir,
+                s2->base->shape, s2->pos, s2->dir, &penetration)) {
+                move_by(&s1->pos, penetration);
                 /*vector_add_to(&s1->vel, penetration);*/
             }
         }
@@ -67,7 +67,7 @@ void update_game(Game_Data* g, Settings t) {
             vector_add_to(&p->ship.vel, (Vector) {p->ship.dir, -p->ship.base->acc});
 
         // update ship position
-        move_by(&p->ship.loc, p->ship.vel);
+        move_by(&p->ship.pos, p->ship.vel);
         
     }
 }

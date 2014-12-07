@@ -10,7 +10,7 @@ Player create_player(Point location, Ship_Template* ship, int type) {
     Player player;
 
     player.ship.base = ship;
-    player.ship.loc = location;
+    player.ship.pos = location;
     player.ship.vel = (Vector) {0, 0};
     player.ship.dir = 0;
     player.ship.health = ship->health;
@@ -55,7 +55,7 @@ Game_Data* init_game_data() {
     g->players[1] = create_player((Point) {100,-50}, &g->ships[1], COMPUTER);
     g->players[2] = create_player((Point) {-150, 100}, &g->ships[0], COMPUTER);
 
-    g->display_center = &g->players[0].ship.loc;
+    g->display_center = &g->players[0].ship.pos;
 
     for (int i = 0; i < ALLEGRO_KEY_MAX; i++)
         g->keyboard[i] = false;
@@ -69,5 +69,4 @@ void destroy_game_data(Game_Data *g) {
         destroy_ship_template(g->ships[i]);
     free(g->players);
     free(g->ships);
-    // TODO destroy bitmaps
 }

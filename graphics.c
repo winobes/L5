@@ -40,8 +40,8 @@ void draw_ship(Ship s, Point display_center) {
     int x, y; // location of the upper left-hand corner of the bitmap on the display
     int sprite_width  = al_get_bitmap_width(s.base->sprite);
     int sprite_height = al_get_bitmap_height(s.base->sprite);
-    x = (DISPLAY_WIDTH)/2  - display_center.x + s.loc.x;
-    y = (DISPLAY_HEIGHT)/2 - display_center.y + s.loc.y;
+    x = (DISPLAY_WIDTH)/2  - display_center.x + s.pos.x;
+    y = (DISPLAY_HEIGHT)/2 - display_center.y + s.pos.y;
     al_draw_rotated_bitmap(s.base->sprite, sprite_width/2, sprite_height/2, 
                            x, y, s.dir, 0);
 }
