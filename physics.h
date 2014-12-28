@@ -28,6 +28,7 @@ typedef struct Polygon {
 
 Vector vec_add(Vector p1, Vector p2);
 Vector polar_to_vec(double d, double m);
+Vector vec_reflect(Vector v, Vector ax);
 
 /* Moves a polygon by `pos` and rotates it by `r` */
 void polygon_translate(Polygon *s, double r, Vector pos);

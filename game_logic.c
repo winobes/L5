@@ -24,13 +24,8 @@ bool check_collision(Polygon shape_a, Vector pos_a, double dir_a,
 }
 
 
-Vector reflect(Vector v, Vector axis) {
-    double a = (axis.x * axis.x - axis.y * axis.y) / (axis.x * axis.x + axis.y * axis.y);
-    double b = 2 * axis.x * axis.y / (axis.x * axis.x + axis.y * axis.y);
-    double x = a * (v.x - 
 
 void update_game(Game_Data* g, Settings t) {
-
 
     Vector collision_vec;
 
@@ -42,8 +37,7 @@ void update_game(Game_Data* g, Settings t) {
             if (check_collision(s1->base->shape, s1->pos, s1->dir,
                 s2->base->shape, s2->pos, s2->dir, &collision_vec)) {
                 s1->pos = vec_add(s1->pos, collision_vec);
-                s1->vel = reflect(s1->vel, collision_vec);
-                /*vector_add_to(&s1->vel, penetration);*/
+                s1->vel = vec_reflect(s1->vel, collision_vec);
             }
         }
 

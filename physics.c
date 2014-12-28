@@ -30,6 +30,12 @@ double vec_dist(Vector p1, Vector p2) {
     return sqrt(x*x + y*y);
 }
 
+
+Vector vec_reflect(Vector v, Vector ax) {
+    double c = (ax.x*v.x + ax.y*v.y) / (ax.x*ax.x + ax.y*ax.y);
+    return (Vector) { v.x - 2*ax.x*c, v.y - 2*ax.y*c };
+}
+
 /* Rotates the point around the origin. */
 Vector vec_rotate(Vector p, double r) {
     return (Vector) { p.x * cos(r) - p.y * sin(r) , p.x * sin(r) + p.y * cos(r) };
