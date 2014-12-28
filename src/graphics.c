@@ -49,7 +49,7 @@ void draw_ship(Ship s, Vector display_center) {
 void update_graphics(ALLEGRO_DISPLAY* display, const Game_Data* g) {
     al_set_target_backbuffer(display);
 
-    al_clear_to_color(al_map_rgb(50,50,50)); // draw background
+    al_clear_to_color(al_map_rgb(5,5,15)); // draw background
 
     for (int i = 0; i < g->n_players; i++)
         draw_ship(g->players[i].ship, *g->display_center);

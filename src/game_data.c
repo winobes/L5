@@ -1,6 +1,5 @@
 #include "game_data.h"
 #include <stdlib.h>
-
 #include "graphics.h"
 #include "log.h"
 #include "physics.h" //create_regular_polygon
@@ -38,7 +37,7 @@ Game_Data* init_game_data() {
 
     Game_Data* g = malloc(sizeof(Game_Data));
 
-    g->n_ships = 2;
+    g->n_ships = 3;
     g->ships = malloc(sizeof(Ship_Template) * g->n_ships);
     g->ships[0].shape = create_regular_polygon(5,50);
     g->ships[0].sprite = create_polygon_sprite(g->ships[0].shape, al_map_rgb(154,0,154));
@@ -48,12 +47,17 @@ Game_Data* init_game_data() {
     g->ships[1].sprite = create_polygon_sprite(g->ships[1].shape, al_map_rgb(154,154,0));
     g->ships[1].health = 200;
     g->ships[1].acc = 0.1;
+    g->ships[2].shape = create_regular_polygon(3,30);
+    g->ships[2].sprite = al_load_bitmap("../assets/ships/Firefly.png");
+    g->ships[2].health = 200;
+    g->ships[2].acc = 0.1;
 
-    g->n_players = 3;
+    g->n_players = 4;
     g->players = malloc(sizeof(Player) * g->n_players);
-    g->players[0] = create_player((Vector) {0,0}, &g->ships[1], LOCAL);
+    g->players[0] = create_player((Vector) {0,0}, &g->ships[2], LOCAL);
     g->players[1] = create_player((Vector) {100,-50}, &g->ships[1], COMPUTER);
     g->players[2] = create_player((Vector) {-150, 100}, &g->ships[0], COMPUTER);
+    g->players[3] = create_player((Vector) {-10, 20}, &g->ships[0], COMPUTER);
 
     g->display_center = &g->players[0].ship.pos;
 

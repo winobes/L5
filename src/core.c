@@ -62,12 +62,12 @@ void init_allegro(Engine_Core *core) {
     else 
         error("Allegro failed to Initialize.");
 
-    /* Native Dialog */
-    /*log_msg(LOADING, "Initializing Allegro Native Dialog Addon...");*/
-    /*if (al_init_native_dialog_addon())*/
-        /*log_version("Native Dialog Addon", al_get_allegro_native_dialog_version());*/
-    /*else*/
-        /*log_msg(WARNING, "Allegro Native Dialog Addon failed to initialize.");*/
+     /*Native Dialog */
+    log_msg(LOADING, "Initializing Allegro Native Dialog Addon...");
+    if (al_init_native_dialog_addon())
+        log_version("Native Dialog Addon", al_get_allegro_native_dialog_version());
+    else
+        log_msg(WARNING, "Allegro Native Dialog Addon failed to initialize.");
     
     /* Event queue */
     log_msg(LOADING, "Creating event queue...");
@@ -104,6 +104,11 @@ void init_allegro(Engine_Core *core) {
     } else
         error("Could not create Allegro display.");
 
+    if (al_init_image_addon())
+        log_version("Image addon", al_get_allegro_image_version());
+    else
+        log_msg(ERROR, "Allegro Native Dialog Addon failed to initialize.");
+    
 }
 
 

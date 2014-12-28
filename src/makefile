@@ -2,7 +2,7 @@ cc = gcc -std=c11 -Wall
 objects = main.o core.o log.o error.o physics.o game_data.o graphics.o settings.o game_logic.o
 
 game : $(objects)
-	$(cc) -o "L5_Arena" $(objects) `pkg-config --libs allegro_main-5.0 allegro_dialog-5.0 allegro_primitives-5.0` -lm
+	$(cc) -o "L5_Arena" $(objects) `pkg-config --libs allegro_main-5.0 allegro_dialog-5.0 allegro_primitives-5.0 allegro_image-5.0` -lm
 
 main.o : main.c core.h 
 	$(cc) -c -o main.o main.c
